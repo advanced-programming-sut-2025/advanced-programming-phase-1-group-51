@@ -1,0 +1,5 @@
+package Models.Enums.Types;
+
+public enum StoreType {
+    BLACKSMITH,JOJAMART,PIERRE,CARPENTER_SHOP, FISH_SHOP,MARNIE_RANCH,STARDROP_SALOON;
+}
