@@ -2,8 +2,6 @@ package Models;
 
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.Skill;
-import Models.Map.Farm;
-import Models.Map.Position;
 
 import java.util.ArrayList;
 

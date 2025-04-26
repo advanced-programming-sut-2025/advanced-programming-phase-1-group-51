@@ -1,7 +1,7 @@
 package Models.Stores;
 
-import Models.Map.Cells;
 import Models.Enums.Types.StoreType;
+import Models.Map.Cells;
 import Models.NPCs.NPC;
 import Models.StoreProducts;
 

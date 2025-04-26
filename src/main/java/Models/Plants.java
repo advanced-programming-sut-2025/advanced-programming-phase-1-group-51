@@ -2,6 +2,7 @@ package Models;
 
 import Models.Enums.Types.TreeType;
 import Models.Enums.Others.Season;
+import Models.Map.Cells;
 
 public class Plants {
     private Season GrowthSeason;

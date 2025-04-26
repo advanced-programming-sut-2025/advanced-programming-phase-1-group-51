@@ -1,7 +1,5 @@
 package Models.Buildings;
 
-import Models.Map.Cells;
-
 import java.util.ArrayList;
 
 public abstract class Building {

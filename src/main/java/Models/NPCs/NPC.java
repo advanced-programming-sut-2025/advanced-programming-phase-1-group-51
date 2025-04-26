@@ -1,7 +1,6 @@
 package Models.NPCs;
 
 import Models.Items.Item;
-import Models.Map.Position;
 import Models.Quest;
 
 import java.util.ArrayList;
