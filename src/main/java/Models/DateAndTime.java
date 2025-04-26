@@ -1,6 +1,6 @@
 package Models;
 
-import Models.Enums.Types.SeasonType;
+import Models.Enums.Others.Season;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,7 @@ public class DateAndTime {
                 .withDayOfMonth(1)
                 .withHour(9)
                 .withMinute(0);
-        Game.setSeason(SeasonType.SPRING); // Initialize first season
+        Game.setSeason(Season.SPRING); // Initialize first season
     }
 
     public void increaseHours(int hours) {
@@ -50,7 +50,7 @@ public class DateAndTime {
     private void checkSeasonChange() {
         // Change season after 28 days
         if (daysInCurrentSeason >= 28) {
-            SeasonType[] seasons = SeasonType.values();
+            Season[] seasons = Season.values();
             int nextSeasonOrdinal = (Game.getSeason().ordinal() + 1) % seasons.length;
             Game.setSeason(seasons[nextSeasonOrdinal]);
             daysInCurrentSeason = 0; // Reset counter for new season

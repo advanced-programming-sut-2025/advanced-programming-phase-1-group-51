@@ -4,17 +4,55 @@ import Controllers.Controller;
 import Models.Enums.MenuComands.Menu;
 import Models.Game;
 import Models.Result;
+import Models.User;
 
 public class PreGameMenuController extends Controller {
 
 
     public Result showCurrentMenu(){
-        return new Result(true, Game.getCurrentMenu().name());
+        return new Result(true, "PreGame Menu");
     }
-    public Result newGame(String firstUsername,String secondUsername,String thirdUsername) {
 
+    public Result newGame(String firstUsername, String secondUsername, String thirdUsername, String extraInvalid) {
+        // Check for extra invalid players first
+        if (extraInvalid != null && !extraInvalid.isEmpty()) {
+            return new Result(false, "You can start a game with maximum 3 players");
+        }
+
+        // Validate at least one player exists
+        if (firstUsername == null || firstUsername.isEmpty()) {
+            return new Result(false, "You should start the game with at least one player!");
+        }
+
+        // Find and validate first user
+        User user1 = findUserByUsername(firstUsername);
+        if (user1 == null) {
+            return new Result(false, firstUsername + " doesn't exist");
+        }
+
+        // Initialize other users as null
+        User user2 = null;
+        User user3 = null;
+
+        // Check and validate second user if provided
+        if (secondUsername != null && !secondUsername.isEmpty()) {
+            user2 = findUserByUsername(secondUsername);
+            if (user2 == null) {
+                return new Result(false, secondUsername + " doesn't exist");
+            }
+        }
+
+        // Check and validate third user if provided
+        if (thirdUsername != null && !thirdUsername.isEmpty()) {
+            user3 = findUserByUsername(thirdUsername);
+            if (user3 == null) {
+                return new Result(false, thirdUsername + " doesn't exist");
+            }
+        }
+
+        // All validations passed - create game
         Game.setCurrentMenu(Menu.GameMenu);
-        return new Result(true, "New game created successfully, Write load game to enter the game.");
+        return new Result(true, "New game created successfully. Write 'load game' to enter the game.");
     }
 
     public Result gameMap(int mapNumber){
@@ -26,5 +64,15 @@ public class PreGameMenuController extends Controller {
 
         Game.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You are now in game");
+    }
+
+    private User findUserByUsername(String username) {
+
+        for (User user : User.users) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package Models.tap;
+package Models.Map;
 
 public class Cells {
 

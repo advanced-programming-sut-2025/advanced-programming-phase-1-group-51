@@ -9,7 +9,7 @@ public class MovementAndMapController extends Controller {
     }
 
 
-    public Result printMap() {
+    public Result printMap(int x, int y , int size) {
         return null;
     }
 

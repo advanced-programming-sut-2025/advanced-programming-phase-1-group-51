@@ -6,7 +6,7 @@ public enum GameMenuCommands implements Command {
 
     SHOW_CURRENT_MENU("show\\s*current\\s*menu"),
     EXIT_GAME("exit\\s*game"),
-    DELETE_GAME(""),
+    DELETE_GAME("delete\\s*game"),
     NEXT_TURN("next\\s*turn"),
 
     // date and time
@@ -54,7 +54,8 @@ public enum GameMenuCommands implements Command {
     // inventory
 
     INVENTORY_SHOW("inventory\\s*show"),
-    INVENTORY_TRASH("inventory\\s*trash\\s*-i\\s*(?<ItemName>.+)\\s*-n\\s*(?<number>.+)"),
+    INVENTORY_TRASH_FULL("inventory\\s*trash\\s*-i\\s*(?<ItemName>.+)\\s*"),
+    INVENTORY_TRASH_NOT_FULL("inventory\\s*trash\\s*-i\\s*(?<ItemName>.+)\\s*-n\\s*(?<number>.+)"),
 
     // Tools
 
@@ -85,7 +86,8 @@ public enum GameMenuCommands implements Command {
 
     //cooking
 
-    REFRIGERATOR("cooking\\s*refrigerator\\s*(put|pick)\\s*(?<item>.+)"),
+    REFRIGERATOR_PICK("cooking\\s*refrigerator\\s*pick\\s*(?<item>.+)"),
+    REFRIGERATOR_PUT("cooking\\s*refrigerator\\s*put\\s*(?<item>.+)"),
     SHOW_RECIPES("cooking\\s*show\\s*recipes"),
     PREPARE("cooking\\s*prepare\\s*(?<recipeName>.+)"),
 

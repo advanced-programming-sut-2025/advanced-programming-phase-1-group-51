@@ -1,33 +1,19 @@
 package Models;
 
-import Models.Enums.Types.SeasonType;
-
-public class Fishes {
-    private double R;
-    private double M;
-    private int UserSkill;
+public class Fish{
+    double R;
+    double M;
     private String FishName;
     private int FishPrice;
-    private SeasonType Season;
+    private Models.Enums.Others.Season Season;
 
 
-    public Fishes(String fishName, int fishPrice, SeasonType season) {
+    public Fish(String fishName, int fishPrice, Models.Enums.Others.Season season) {
         FishName = fishName;
         FishPrice = fishPrice;
         Season = season;
     }
 
-    public double getR() {
-        return R;
-    }
-
-    public double getM() {
-        return M;
-    }
-
-    public int getUserSkill() {
-        return UserSkill;
-    }
 
     public String getFishName() {
         return FishName;
@@ -37,20 +23,8 @@ public class Fishes {
         return FishPrice;
     }
 
-    public SeasonType getSeason() {
+    public Models.Enums.Others.Season getSeason() {
         return Season;
-    }
-
-    public void setR(double r) {
-        R = r;
-    }
-
-    public void setM(double m) {
-        M = m;
-    }
-
-    public void setUserSkill(int userSkill) {
-        UserSkill = userSkill;
     }
 
     public void setFishName(String fishName) {
@@ -61,7 +35,9 @@ public class Fishes {
         FishPrice = fishPrice;
     }
 
-    public void setSeason(SeasonType season) {
+    public void setSeason(Models.Enums.Others.Season season) {
         Season = season;
     }
+
+
 }

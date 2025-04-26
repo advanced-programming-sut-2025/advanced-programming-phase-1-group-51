@@ -3,29 +3,23 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.Result;
 
-public class Cooking extends Controller {
+public class Cooking extends Activity {
 
-    public Cooking() {
-    }
 
-    public Result TakeOutOfRefrigerator() {
+    public Result TakeOutOfRefrigerator(String itemName) {
         return null;
     }
 
-    public Result PutInRefrigerator() {
+    public Result PutInRefrigerator(String itemName) {
         return null;
     }
 
-    public Result ShowCookingRecipes() {
-        return null;
-    }
-
-    public Result prepare(){
+    public Result prepare(String recipeName){
 
         return null;
     }
 
-    public Result Eating(){
+    public Result Eating(String foodName){
         return null;
     }
 

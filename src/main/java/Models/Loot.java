@@ -4,28 +4,30 @@ import Models.Items.Item;
 
 public class Loot {
 
-    private Item nameOfThing;
-    int numberOfItems;
+    private Item item;
+    private int count;
 
-    public Loot(Item nameOfThing, int numberOfItems) {
-        this.nameOfThing = nameOfThing;
-        this.numberOfItems = numberOfItems;
+    public Loot(){}
+
+    public Loot(Item item, int count) {
+        this.item = item;
+        this.count = count;
     }
 
-
-    public Item getNameOfThing() {
-        return nameOfThing;
+    @Override
+    public String toString() {
+        return "Loot [header=" + item.getName() + ", count=" + count + "]";
     }
 
-    public void setNameOfThing(Item nameOfThing) {
-        this.nameOfThing = nameOfThing;
+    public Item getItem() {
+        return item;
     }
 
-    public int getNumberOfItems() {
-        return numberOfItems;
+    public int getCount() {
+        return count;
     }
 
-    public void setNumberOfItems(int numberOfItems) {
-        this.numberOfItems = numberOfItems;
+    public void setCount(int count) {
+        this.count = count;
     }
 }

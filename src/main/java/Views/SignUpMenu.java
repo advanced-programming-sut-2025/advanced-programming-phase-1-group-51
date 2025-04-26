@@ -27,12 +27,16 @@ public class SignUpMenu implements PlayMenu{
                     matcher.group("password").trim(), matcher.group("passwordConfirm").trim(),
                     matcher.group("nickname").trim(),matcher.group("email").trim(),matcher.group("gender").trim()));
         }
+        else if((matcher = SignUpMenuCommands.REGISTER_RANDOM_PASS.getMatcher(input)) != null){
+            System.out.println(controller.registerWithRandomPass(matcher.group("username").trim(),
+                    matcher.group("nickname").trim(),matcher.group("email").trim(),matcher.group("gender").trim()));
+        }
         else if((matcher = SignUpMenuCommands.PICK_QUESTION.getMatcher(input)) != null){
             System.out.println(controller.pickQuestion(Integer.parseInt(matcher.group("questionNumber").trim()),
                     matcher.group("answer").trim(), matcher.group("answerConfirm").trim()));
         }
-
-
-
+        else{
+            System.out.println("Invalid Command!");
+        }
     }
 }

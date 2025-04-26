@@ -3,26 +3,26 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.Result;
 
-public class Crafting extends Controller {
+public class Crafting extends Activity {
 
 
-    public Result craftInfo(){
+    public Result craftInfo(String name){
 
         return null;
     }
-    public Result handleShowCraftRecipes() {
+    public Result showCraftRecipes() {
         return null;
     }
 
-    public Result handleCraftingCraft() {
+    public Result craftingCraft(String name) {
         return null;
     }
 
-    public Result handlePlaceItem() {
+    public Result placeItem(String name, String direction) {
         return null;
     }
 
-    public Result handleAddItem() {
+    public Result addItem(String name, int count) {
         return null;
     }
 }

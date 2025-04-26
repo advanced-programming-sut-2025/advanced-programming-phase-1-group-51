@@ -10,16 +10,19 @@ import Models.User;
 public class LoginMenuController extends Controller {
 
     public Result showCurrentMenu() {
-        return new Result(true, Game.getCurrentMenu().name());
+        return new Result(true, "Login Menu");
     }
 
-    public Result login(String username, String password) {
+    public Result login(String username, String password, String LoggedInFlag) {
         User user = findUserByUsername(username);
         if (user == null) {
             return new Result(false, "username doesn't exist!");
         }
         if (!user.getPassword().equals(password)) {
             return new Result(false, "password is incorrect!");
+        }
+        if(LoggedInFlag != null){
+            //TODO
         }
         Game.setCurrentUser(user);
         Game.setCurrentMenu(Menu.MainMenu);
@@ -59,8 +62,20 @@ public class LoginMenuController extends Controller {
             return new Result(false, "User not found!");
         }
 
-        if (SignUpMenuCommands.PASSWORD.getMatcher(newPassword) == null) {
-            return new Result(false, "Password format is invalid!");
+        if (SignUpMenuCommands.PASSWORD_LENGTH.getMatcher(newPassword) == null) {
+            return new Result(false, "password must be longer that 8 characters!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_LETTERS.getMatcher(newPassword) == null) {
+            return new Result(false, "password must contain at least one lowercase and one uppercase!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_NUMBERS.getMatcher(newPassword) == null) {
+            return new Result(false, "password must contain at least one number!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_SPECIAL_CHARACTERS.getMatcher(newPassword) == null) {
+            return new Result(false, "password must contain at least one special character!");
         }
 
         user.setPassword(newPassword);
@@ -80,10 +95,6 @@ public class LoginMenuController extends Controller {
     public Result goToSignUpMenu() {
         Game.setCurrentMenu(Menu.SignUpMenu);
         return new Result(true, "You are now in Signup menu");
-    }
-
-    public Result setRandomPassword(String password) {
-        return null;
     }
 
 

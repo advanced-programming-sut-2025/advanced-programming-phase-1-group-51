@@ -1,4 +1,4 @@
-package Models.tap;
+package Models.Map;
 
 import java.util.ArrayList;
 

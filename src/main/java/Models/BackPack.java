@@ -1,23 +1,25 @@
 package Models;
 
-import Models.Enums.Types.BackPackType;
+import Models.Enums.Types.BackpackType;
 
 import java.util.ArrayList;
 
 public class BackPack {
-    private BackPackType type;
+    private BackpackType type;
     private ArrayList<Loot> lots = new ArrayList<>();
+    int numberOfGold;
+    int numberOfWood;
 
-    public BackPack(BackPackType type, ArrayList<Loot> lots) {
+    public BackPack(BackpackType type, ArrayList<Loot> lots) {
         this.type = type;
         this.lots = lots;
     }
 
-    public BackPackType getType() {
+    public BackpackType getType() {
         return type;
     }
 
-    public void setType(BackPackType type) {
+    public void setType(BackpackType type) {
         this.type = type;
     }
 
@@ -27,5 +29,21 @@ public class BackPack {
 
     public void setLots(ArrayList<Loot> lots) {
         this.lots = lots;
+    }
+
+    public int getNumberOfGold() {
+        return numberOfGold;
+    }
+
+    public void setNumberOfGold(int numberOfGold) {
+        this.numberOfGold = numberOfGold;
+    }
+
+    public int getNumberOfWood() {
+        return numberOfWood;
+    }
+
+    public void setNumberOfWood(int numberOfWood) {
+        this.numberOfWood = numberOfWood;
     }
 }

@@ -1,4 +1,4 @@
 package Models.Enums.Types;
 
-public class ForagingCropType {
+public enum ForagingCropType {
 }

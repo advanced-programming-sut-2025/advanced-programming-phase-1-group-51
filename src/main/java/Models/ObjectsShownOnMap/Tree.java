@@ -1,4 +1,4 @@
-package Models.ObjectsShownInMap;
+package Models.ObjectsShownOnMap;
 
 import Models.Enums.Types.TreeType;
 

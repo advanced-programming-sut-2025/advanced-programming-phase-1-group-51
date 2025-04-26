@@ -1,4 +1,4 @@
-package Models.ObjectsShownInMap;
+package Models.ObjectsShownOnMap;
 
 public abstract class ObjectOnMap {
 

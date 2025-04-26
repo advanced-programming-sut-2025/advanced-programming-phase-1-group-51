@@ -10,4 +10,9 @@ public class SavingAndTurnHandling extends Controller {
 
         return null;
     }
+
+    public Result DeleteGame(){
+
+        return null;
+    }
 }

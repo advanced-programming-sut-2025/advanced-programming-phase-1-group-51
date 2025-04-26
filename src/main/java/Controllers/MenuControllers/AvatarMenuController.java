@@ -8,6 +8,6 @@ public class AvatarMenuController extends Controller {
 
 
     public static Result showCurrentMenu(){
-        return new Result(true, Game.getCurrentMenu().name());
+        return new Result(true, "Avatar Menu");
     }
 }

@@ -1,4 +1,4 @@
-package Models.Enums;
+package Models.Enums.Recipes;
 
 public enum Recipes {
 }

@@ -37,5 +37,8 @@ public class ProfileMenu implements  PlayMenu {
         else if(ProfileMenuCommands.USER_INFO.getMatcher(input) != null){
             controller.showCurrentUserInfo();
         }
+        else{
+            System.out.println("Invalid Command!");
+        }
     }
 }

@@ -1,19 +1,17 @@
 package Models;
 
 import Models.Enums.Types.AnimalType;
-import Models.Enums.Types.BuildingType;
 import Models.Items.Item;
 import java.util.ArrayList;
 
-public class Animals {
+public class Animal {
 
     private int price;
     private String name;
     private AnimalType type;
-    private BuildingType AnimalBuilding;
     private ArrayList<Item> animalProducts;
 
-    public Animals(int price, String name, AnimalType type) {
+    public Animal(int price, String name, AnimalType type) {
         this.price = price;
         this.name = name;
         this.type = type;

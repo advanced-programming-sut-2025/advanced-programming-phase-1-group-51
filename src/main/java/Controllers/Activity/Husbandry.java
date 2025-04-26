@@ -2,16 +2,14 @@ package Controllers.Activity;
 
 import Models.Result;
 
-public class Husbandry {
+public class Husbandry extends Activity{
 
-    public Husbandry() {
-    }
 
-    public Result BuyAnimal() {
+    public Result BuyAnimal(String animalType, String animalName) {
         return null;
     }
 
-    public Result Pet() {
+    public Result Pet(String animalName) {
         return null;
     }
 
@@ -19,11 +17,11 @@ public class Husbandry {
         return null;
     }
 
-    public Result ShepherdAnimals() {
+    public Result ShepherdAnimals(String animalName, int x, int y) {
         return null;
     }
 
-    public Result FeedHay() {
+    public Result FeedHay(String animalName) {
         return null;
     }
 
@@ -31,19 +29,19 @@ public class Husbandry {
         return null;
     }
 
-    public Result CollectProduce() {
+    public Result CollectProduce(String name) {
         return null;
     }
 
-    public Result SellAnimal() {
+    public Result SellAnimal(String animalName) {
         return null;
     }
 
-    public Result fishing() {
+    public Result fishing(String fishingPole) {
         return null;
     }
 
-    public Result cheatSetFriendship() {
+    public Result cheatSetFriendship(String animalName, int amount) {
         return null;
     }
 }

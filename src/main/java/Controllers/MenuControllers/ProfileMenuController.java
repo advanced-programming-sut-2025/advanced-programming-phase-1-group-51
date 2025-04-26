@@ -10,7 +10,7 @@ public class ProfileMenuController extends Controller {
 
 
     public Result showCurrentMenu() {
-        return new Result(true, Game.getCurrentMenu().name());
+        return new Result(true, "Profile Menu");
     }
 
 
@@ -25,7 +25,6 @@ public class ProfileMenuController extends Controller {
         System.out.println("BEST SCORE : ");
         System.out.println("GAMES PLAYED : " + currentUser.getGamesPlayed());
     }
-
 
 
     public Result changeUsername(String newUsername) {
@@ -104,8 +103,20 @@ public class ProfileMenuController extends Controller {
             return new Result(false, "please enter a new email!");
         }
 
-        if (SignUpMenuCommands.PASSWORD.getMatcher(newPassword) == null) {
-            return new Result(false, "new username format is invalid!");
+        if (SignUpMenuCommands.PASSWORD_LENGTH.getMatcher(newPassword) == null) {
+            return new Result(false, "new password must be longer that 8 characters!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_LETTERS.getMatcher(newPassword) == null) {
+            return new Result(false, "new password must contain at least one lowercase and one uppercase!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_NUMBERS.getMatcher(newPassword) == null) {
+            return new Result(false, "new password must contain at least one number!");
+        }
+
+        if (SignUpMenuCommands.PASSWORD_SPECIAL_CHARACTERS.getMatcher(newPassword) == null) {
+            return new Result(false, "new password must contain at least one special character!");
         }
 
         currentUser.setPassword(newPassword);

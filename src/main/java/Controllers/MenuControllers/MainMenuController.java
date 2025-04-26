@@ -8,7 +8,7 @@ import Models.Enums.MenuComands.Menu;
 public class MainMenuController extends Controller {
 
     public Result showCurrentMenu(){
-        return new Result(true, Game.getCurrentMenu().name());
+        return new Result(true, "Main Menu");
     }
 
 

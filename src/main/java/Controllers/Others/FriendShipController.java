@@ -9,17 +9,17 @@ public class FriendShipController extends Controller {
         return null;
     }
 
-    public Result Talk() {
+    public Result Talk(String username, String message) {
         return null;
     }
 
-    public Result TalkHistory() {
+    public Result TalkHistory(String username) {
         return null;
     }
 
 
 
-    public Result Gift() {
+    public Result Gift(String username, String item, int amount) {
         return null;
     }
 
@@ -27,19 +27,19 @@ public class FriendShipController extends Controller {
         return null;
     }
 
-    public Result GiftRate() {
+    public Result GiftRate(int giftNumber, int giftRate) {
         return null;
     }
 
-    public Result GiftHistory() {
+    public Result GiftHistory(String username) {
         return null;
     }
 
-    public Result handleHug() {
+    public Result Hug(String username) {
         return null;
     }
 
-    public Result handleFlower() {
+    public Result Flower(String username) {
         return null;
     }
 

@@ -1,7 +1,6 @@
 package Controllers.Others;
 
-import Models.Enums.Types.SeasonType;
-import Models.Enums.Types.WeatherType;
+import Models.Enums.Others.Weather;
 import Models.Game;
 import Models.Result;
 
@@ -51,7 +50,7 @@ public class World {
         }
     }
 
-    public Result showCurrentSeason(SeasonType season) {
+    public Result showCurrentSeason() {
         return new Result(true, Game.getSeason().name());
     }
 
@@ -64,12 +63,14 @@ public class World {
         return null;
     }
 
-    public Result cheatTomorrowWeatherSet(WeatherType tomorrowWeather){
-        Game.setWeather(tomorrowWeather);
-        return new Result(true, "Tomorrow weather changed to " + Game.getWeather().name() + " successfully");
+    // set tomorrow weather
+    public Result cheatTomorrowWeatherSet(String weather){
+       Weather tomorrowWeather = Weather.getWeatherByName(weather);
+       Game.setWeather(tomorrowWeather);
+        return new Result(true, "Tomorrow weather changed to " + weather + " successfully");
     }
 
-    public Result CheatThor(){
+    public Result CheatThor(int x, int y){
         return null;
     }
 
@@ -77,12 +78,9 @@ public class World {
         return null;
     }
 
-    public Result BuildBuilding(){
+    public Result BuildBuilding(String buildingName, int x, int y){
         return null;
     }
 
-    public Result ToolUse(){
-        return null;
-    }
 
 }

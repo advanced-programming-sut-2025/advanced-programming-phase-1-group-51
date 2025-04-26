@@ -1,9 +1,9 @@
 package Models;
 
-import Models.Enums.Types.TrashcanType;
-import Models.Items.Tool;
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.Skill;
+import Models.Map.Farm;
+import Models.Map.Position;
 
 import java.util.ArrayList;
 
@@ -12,19 +12,32 @@ public class Player {
     private Farm farm;
     private ArrayList<FriendShip> friendShips;
     private ArrayList<Quest> quests;
-    private TrashcanType trashcanType;
-    private ArrayList<Animals> animals;
+    private TrashCan trashCan;
+    private ArrayList<Animal> animals;
     private int energy;
+    private final int MaxEnergy = 200;
     private ArrayList<NPCsFriendship> NPCsFriendships;
     private BackPack inventory;
     private int money;
     private ArrayList<Skill> skills;
     private User user;
+    private DateAndTime dateAndTime;
+    private boolean isPlayerFainted = false;
+
+
+
 
     public Player(Position position, int money ,Farm farm, User user, int energy) {
         this.position = position;
     }
 
+    public DateAndTime getDateAndTime() {
+        return dateAndTime;
+    }
+
+    public void setDateAndTime(DateAndTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
     public Position getPosition() {
         return position;
     }
@@ -57,19 +70,11 @@ public class Player {
         this.quests = quests;
     }
 
-    public TrashcanType getTrashcanType() {
-        return trashcanType;
-    }
-
-    public void setTrashcanType(TrashcanType trashcanType) {
-        this.trashcanType = trashcanType;
-    }
-
-    public ArrayList<Animals> getAnimals() {
+    public ArrayList<Animal> getAnimals() {
         return animals;
     }
 
-    public void setAnimals(ArrayList<Animals> animals) {
+    public void setAnimals(ArrayList<Animal> animals) {
         this.animals = animals;
     }
 
@@ -129,4 +134,28 @@ public class Player {
 
     }
 
+    public boolean isPlayerFainted() {
+        return isPlayerFainted;
+    }
+
+    public void setPlayerFainted(boolean playerFainted) {
+        isPlayerFainted = playerFainted;
+    }
+
+    public TrashCan getTrashCan() {
+        return trashCan;
+    }
+
+    public void setTrashCan(TrashCan trashCan) {
+        this.trashCan = trashCan;
+    }
+
+
+    public void increaseWood(int wood){
+
+    }
+
+    public void increaseGold(int Gold){
+
+    }
 }

@@ -2,10 +2,7 @@ package Controllers.Activity;
 
 import Models.Result;
 
-public class Dealing {
-
-    public Dealing() {
-    }
+public class Dealing extends Activity{
 
 
     public Result ShowAllProducts() {
@@ -16,15 +13,15 @@ public class Dealing {
         return null;
     }
 
-    public Result Purchase() {
+    public Result Purchase(String productName, int count) {
         return null;
     }
 
-    public Result Sell() {
+    public Result Sell(String productName, int count) {
         return null;
     }
 
-    public Result cheatAdd() {
+    public Result cheatAdd(int count) {
         return null;
     }
 

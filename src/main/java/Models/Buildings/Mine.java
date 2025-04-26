@@ -1,4 +1,4 @@
 package Models.Buildings;
 
-public class Mine {
+public class Mine extends Building{
 }

@@ -1,4 +1,4 @@
-package Models.Enums.Others;
+package Models.Enums.Recipes;
 
 import Models.Loot;
 

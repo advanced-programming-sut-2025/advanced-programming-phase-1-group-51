@@ -1,21 +1,19 @@
 package Models;
 
-import Models.Enums.Types.WeatherType;
-
 public class Weather {
 
-    private WeatherType weatherType;
+    private Models.Enums.Others.Weather weatherType;
 
 
-    public Weather(WeatherType weatherType) {
+    public Weather(Models.Enums.Others.Weather weatherType) {
         this.weatherType = weatherType;
     }
 
-    public WeatherType getWeatherType() {
+    public Models.Enums.Others.Weather getWeatherType() {
         return weatherType;
     }
 
-    public void setWeatherType(WeatherType weatherType) {
+    public void setWeatherType(Models.Enums.Others.Weather weatherType) {
         this.weatherType = weatherType;
     }
 

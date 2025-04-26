@@ -1,7 +1,9 @@
-package Models;
+package Models.Stores;
 
+import Models.Map.Cells;
 import Models.Enums.Types.StoreType;
 import Models.NPCs.NPC;
+import Models.StoreProducts;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

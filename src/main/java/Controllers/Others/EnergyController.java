@@ -1,22 +1,24 @@
 package Controllers.Others;
 
-import Models.Result;
+import Models.*;
+
+import java.util.Currency;
 
 public class EnergyController {
 
+    Player currentPlayer = Game.getCurrentPlayer();
 
-
-    public Result EnergyShow() {
-        return null;
+    public Result energyShow() {
+        return new Result(true , "Your Energy Is " + currentPlayer.getEnergy());
     }
 
-
-    public Result cheatEnergySet() {
-        return null;
+    public Result cheatEnergySet(int energy) {
+        currentPlayer.setEnergy(energy);
+        return new Result(true , "Your Energy Is " + currentPlayer.getEnergy());
     }
-
 
     public Result cheatEnergyUnlimited() {
-        return null;
+        currentPlayer.setEnergy(1_000_000_000);
+         return new Result(true, "Energy set unlimited successfully!");
     }
 }

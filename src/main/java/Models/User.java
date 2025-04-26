@@ -6,6 +6,7 @@ import Models.Items.Tool;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
 
@@ -116,5 +117,12 @@ public class User {
         User.users = users;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username);
+    }
 
 }

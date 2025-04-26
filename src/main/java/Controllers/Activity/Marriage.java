@@ -3,20 +3,15 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.Result;
 
-public class Marriage extends Controller {
+public class Marriage extends Activity {
 
 
-    public Marriage() {
-    }
 
-    public Result AskMarriage() {
+    public Result AskMarriage(String username, String ring) {
         return null;
     }
 
-    public Result RespondReject() {
-        return null;
-    }
-    public Result RespondAccept() {
+    public Result Respond(String respond,String username){
         return null;
     }
 

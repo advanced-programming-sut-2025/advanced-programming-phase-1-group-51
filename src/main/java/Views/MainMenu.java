@@ -33,5 +33,8 @@ public class MainMenu implements PlayMenu{
         else if(MainMenuCommands.GO_TO_PREGAME.getMatcher(input) != null){
             System.out.println(controller.goToPreGameMenu());
         }
+        else{
+            System.out.println("Invalid Command!");
+        }
     }
 }

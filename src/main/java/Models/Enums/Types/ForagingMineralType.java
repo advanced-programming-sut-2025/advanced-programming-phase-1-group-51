@@ -1,6 +1,6 @@
 package Models.Enums.Types;
 
-public enum MineralType {
+public enum ForagingMineralType {
 
     STONE("Stone",0),
     QUARTZ("Quartz",25),
@@ -24,7 +24,7 @@ public enum MineralType {
     private final int sellPrice;
     public final String name;
 
-    MineralType(String name ,int sellPrice) {
+    ForagingMineralType(String name , int sellPrice) {
         this.sellPrice = sellPrice;
         this.name = name;
     }

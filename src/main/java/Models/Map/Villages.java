@@ -1,4 +1,4 @@
-package Models.tap;
+package Models.Map;
 
 import Models.NPCs.NPC;
 import Models.Stores.Store;

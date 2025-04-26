@@ -1,6 +1,6 @@
 package Models.Buildings;
 
-public class PlayerHouse implements  Building{
+public class PlayerHouse extends  Building{
 
     public PlayerHouse() {
     }

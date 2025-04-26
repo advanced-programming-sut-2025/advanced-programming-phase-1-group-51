@@ -1,13 +1,13 @@
 package Models.Buildings;
 
-import Models.Animals;
+import Models.Animal;
 
 import java.util.ArrayList;
 
-public class Barn implements Building {
-    public ArrayList<Models.Animals> Animals = new ArrayList<>();
+public class Barn extends Building {
+    public ArrayList<Animal> Animals = new ArrayList<>();
 
-    public Barn(ArrayList<Models.Animals> animals) {
+    public Barn(ArrayList<Animal> animals) {
         Animals = animals;
     }
 }

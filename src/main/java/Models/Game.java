@@ -1,10 +1,11 @@
 package Models;
 
 import Models.Enums.MenuComands.Menu;
-import Models.Enums.Types.SeasonType;
-import Models.Enums.Types.WeatherType;
+import Models.Enums.Others.Season;
+import Models.Enums.Others.Weather;
+import Models.Map.Map;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,12 +15,21 @@ public class Game {
     private static Menu currentMenu = Menu.SignUpMenu;
     private static User currentUser = null;
     private static boolean isGameOver = false;
-    private static SeasonType season = SeasonType.SPRING;
+    private static Season season = Season.SPRING;
     private static Map map;
-    private static WeatherType weather = WeatherType.SUNNY;
+    private static Weather weather = Weather.SUNNY;
     private static DateAndTime currentDateAndTime;
+    private static Player currentPlayer = null;
+    public static List<Player> players = new ArrayList<>();
 
 
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public static void setCurrentPlayer(Player player) {
+        currentPlayer = player;
+    }
     public static Menu getCurrentMenu() {
         return currentMenu;
     }
@@ -44,11 +54,11 @@ public class Game {
         Game.isGameOver = isGameOver;
     }
 
-    public static SeasonType getSeason() {
+    public static Season getSeason() {
         return season;
     }
 
-    public static void setSeason(SeasonType season) {
+    public static void setSeason(Season season) {
         Game.season = season;
     }
 
@@ -68,11 +78,11 @@ public class Game {
         Game.map = map;
     }
 
-    public static WeatherType getWeather() {
+    public static Weather getWeather() {
         return weather;
     }
 
-    public static void setWeather(WeatherType weather) {
+    public static void setWeather(Weather weather) {
         Game.weather = weather;
     }
 
@@ -96,14 +106,14 @@ public class Game {
         // Implement weather change logic based on season/time
         // This is just an example - adjust probabilities as needed
         double rand = Math.random();
-        if (getSeason() == SeasonType.SPRING) {
-            setWeather(rand < 0.6 ? WeatherType.RAIN : WeatherType.SUNNY);
-        } else if (getSeason() == SeasonType.SUMMER) {
-            setWeather(rand < 0.1 ? WeatherType.STORM : WeatherType.SUNNY);
-        } else if (getSeason() == SeasonType.FALL) {
-            setWeather(rand < 0.4 ? WeatherType.RAIN : WeatherType.SUNNY);
+        if (getSeason() == Season.SPRING) {
+            setWeather(rand < 0.6 ? Weather.RAIN : Weather.SUNNY);
+        } else if (getSeason() == Season.SUMMER) {
+            setWeather(rand < 0.1 ? Weather.STORM : Weather.SUNNY);
+        } else if (getSeason() == Season.FALL) {
+            setWeather(rand < 0.4 ? Weather.RAIN : Weather.SUNNY);
         } else { // WINTER
-            setWeather(rand < 0.7 ? WeatherType.SNOW : WeatherType.SUNNY);
+            setWeather(rand < 0.7 ? Weather.SNOW : Weather.SUNNY);
         }
     }
 

@@ -1,23 +1,20 @@
 package Models.NPCs;
 
-import java.util.ArrayList;
+import Models.Items.Item;
 
 public class NPCRequest {
 
+    private Item[] requestedItems;
 
-    private ArrayList<String> NPCRequest;
-
-    public ArrayList<String> getNPCRequest() {
-        return NPCRequest;
+    public NPCRequest(Item[] requestedItems) {
+        this.requestedItems = requestedItems;
     }
 
-    public void setNPCQuest(ArrayList<String> NPCRequest) {
-        this.NPCRequest = NPCRequest;
+    public Item[] getRequestedItems() {
+        return requestedItems;
     }
 
-    public NPCRequest(ArrayList<String> NPCRequest) {
-        this.NPCRequest = NPCRequest;
-
-
+    public void setRequestedItems(Item[] requestedItems) {
+        this.requestedItems = requestedItems;
     }
 }

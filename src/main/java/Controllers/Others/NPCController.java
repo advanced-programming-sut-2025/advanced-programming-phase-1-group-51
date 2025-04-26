@@ -5,11 +5,11 @@ import Models.Result;
 
 public class NPCController extends Controller {
 
-    public Result NPCMeet() {
+    public Result NPCMeet(String NPCName) {
         return null;
     }
 
-    public Result NPCGift() {
+    public Result NPCGift(String NPCName, String item) {
         return null;
     }
 
@@ -21,7 +21,7 @@ public class NPCController extends Controller {
         return null;
     }
 
-    public Result QuestFinish() {
+    public Result QuestFinish(int index) {
         return null;
     }
 
