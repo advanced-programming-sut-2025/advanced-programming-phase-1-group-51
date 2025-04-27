@@ -6,13 +6,12 @@ import java.util.ArrayList;
 
 public class BackPack {
     private BackpackType type;
-    private ArrayList<Loot> lots = new ArrayList<>();
+    private ArrayList<Loot> loots = new ArrayList<>();
     int numberOfGold;
     int numberOfWood;
 
-    public BackPack(BackpackType type, ArrayList<Loot> lots) {
+    public BackPack(BackpackType type) {
         this.type = type;
-        this.lots = lots;
     }
 
     public BackpackType getType() {
@@ -23,12 +22,12 @@ public class BackPack {
         this.type = type;
     }
 
-    public ArrayList<Loot> getLots() {
-        return lots;
+    public ArrayList<Loot> getLoots() {
+        return loots;
     }
 
-    public void setLots(ArrayList<Loot> lots) {
-        this.lots = lots;
+    public void setLoots(ArrayList<Loot> lots) {
+        this.loots = lots;
     }
 
     public int getNumberOfGold() {

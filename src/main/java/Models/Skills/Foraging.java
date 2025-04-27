@@ -9,6 +9,9 @@ public class Foraging extends Skill {
         super.learnSkill();
     }
 
+    public Foraging() {
+    }
+
     public Foraging(int energyCost, int xp, SkillLevel level) {
         super(energyCost, xp, level);
     }

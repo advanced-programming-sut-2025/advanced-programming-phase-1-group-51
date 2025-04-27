@@ -9,6 +9,9 @@ public class Mining extends Skill {
         super.learnSkill();
     }
 
+    public Mining() {
+    }
+
     public Mining(int energyCost, int xp, SkillLevel level) {
         super(energyCost, xp, level);
     }

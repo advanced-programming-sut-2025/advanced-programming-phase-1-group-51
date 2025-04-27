@@ -3,6 +3,7 @@ package Controllers.Others;
 import Controllers.Controller;
 import Models.*;
 import Models.Enums.Types.BackpackType;
+import Models.Enums.Types.TrashcanType;
 
 import java.util.ArrayList;
 
@@ -20,13 +21,13 @@ public class InventoryController extends Controller {
         if (inventory.getType() == BackpackType.DELUXE) {
             output.append("Unlimited\n");
         } else {
-            output.append(inventory.getLots().size()).append("/")
+            output.append(inventory.getLoots().size()).append("/")
                     .append(inventory.getType().getCapacity()).append(" slots used\n");
         }
 
         // Show items in inventory
         output.append("\nInventory Items:\n");
-        ArrayList<Loot> items = inventory.getLots();
+        ArrayList<Loot> items = inventory.getLoots();
         if (items.isEmpty()) {
             output.append("Your inventory is empty.\n");
         } else {
@@ -41,8 +42,8 @@ public class InventoryController extends Controller {
 
     public Result inventoryTrashFull(String itemName) {
         BackPack inventory = currentPlayer.getInventory();
-        ArrayList<Loot> items = inventory.getLots();
-        TrashCan trashCan = currentPlayer.getTrashCan();
+        ArrayList<Loot> items = inventory.getLoots();
+        TrashCan trashCan = currentPlayer.getTrashcan();
 
         // Check if inventory is full (for non-deluxe backpacks)
         if (inventory.getType() != BackpackType.DELUXE &&
@@ -82,8 +83,8 @@ public class InventoryController extends Controller {
         }
 
         BackPack inventory = currentPlayer.getInventory();
-        ArrayList<Loot> items = inventory.getLots();
-        TrashCan trashCan = currentPlayer.getTrashCan();
+        ArrayList<Loot> items = inventory.getLoots();
+        TrashCan trashCan = currentPlayer.getTrashcan();
 
         // Find the item in inventory
         for (Loot loot : items) {

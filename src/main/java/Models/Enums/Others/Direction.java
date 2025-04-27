@@ -1,5 +1,8 @@
 package Models.Enums.Others;
 
+
+import Models.Position;
+
 public enum Direction {
 
     UP(0,-1),

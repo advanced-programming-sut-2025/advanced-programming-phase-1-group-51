@@ -9,6 +9,9 @@ public class Farming extends Skill {
         super.learnSkill();
     }
 
+    public Farming() {
+    }
+
     public Farming(int energyCost, int xp, SkillLevel level) {
         super(energyCost, xp, level);
     }

@@ -3,6 +3,7 @@ package Controllers.MenuControllers;
 import Controllers.Controller;
 import Models.Enums.MenuComands.Menu;
 import Models.Game;
+import Models.Player;
 import Models.Result;
 import Models.User;
 
@@ -50,7 +51,26 @@ public class PreGameMenuController extends Controller {
             }
         }
 
-        // All validations passed - create game
+        // Clear existing players list
+        Player.players.clear();
+
+        // Convert current user to Player if not already
+        Player currentPlayer = Game.getCurrentPlayer();
+        if (currentPlayer == null || !currentPlayer.getUser().equals(Game.getCurrentUser())) {
+            currentPlayer = new Player(Game.getCurrentUser());
+            Game.setCurrentPlayer(currentPlayer);
+        }
+        Player.players.add(currentPlayer);
+
+        // Convert and add other players
+        Player.players.add(new Player(user1));
+        if (user2 != null) {
+            Player.players.add(new Player(user2));
+        }
+        if (user3 != null) {
+            Player.players.add(new Player(user3));
+        }
+
         Game.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "New game created successfully. Write 'load game' to enter the game.");
     }

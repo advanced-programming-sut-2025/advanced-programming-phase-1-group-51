@@ -9,6 +9,9 @@ public class Fishing extends Skill {
         super.learnSkill();
     }
 
+    public Fishing() {
+    }
+
     public Fishing(int energyCost, int xp, SkillLevel level) {
         super(energyCost, xp, level);
     }

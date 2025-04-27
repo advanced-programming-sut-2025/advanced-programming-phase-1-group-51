@@ -20,7 +20,7 @@ public class User {
     private String securityAnswer;
     private Game currentGame;
     private int gamesPlayed = 0;
-
+    private int id;
 
 
     public User(String username, String password, String nickName,  String email, String gender) {
@@ -117,6 +117,13 @@ public class User {
         User.users = users;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
