@@ -1,6 +1,6 @@
 package Views;
 
-import Models.Enums.MenuComands.Menu;
+import Models.Enums.MenuCommands.Menu;
 import Models.Game;
 
 public class GameView {

@@ -1,18 +1,13 @@
-package Controllers.MenuControllers;
+package Controllers.Others;
 
 import Controllers.Controller;
-import Models.Enums.MenuComands.Menu;
+import Models.Enums.MenuCommands.Menu;
 import Models.Game;
 import Models.Player;
 import Models.Result;
 import Models.User;
 
-public class PreGameMenuController extends Controller {
-
-
-    public Result showCurrentMenu(){
-        return new Result(true, "PreGame Menu");
-    }
+public class turnAndSaveGameController extends Controller {
 
     public Result newGame(String firstUsername, String secondUsername, String thirdUsername, String extraInvalid) {
         // Check for extra invalid players first
@@ -70,8 +65,7 @@ public class PreGameMenuController extends Controller {
         if (user3 != null) {
             Player.players.add(new Player(user3));
         }
-
-        Game.setCurrentMenu(Menu.GameMenu);
+        Game.setGameStarterPlayer(currentPlayer);
         return new Result(true, "New game created successfully. Write 'load game' to enter the game.");
     }
 
@@ -81,9 +75,31 @@ public class PreGameMenuController extends Controller {
     }
 
     public Result loadGame(){
-
         Game.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You are now in game");
+    }
+
+
+    public Result deleteGame(){
+
+        return null;
+    }
+
+
+    public Result exitGame(){
+        Player currentPlayer = Game.getCurrentPlayer();
+        Game game = Game.getCurrentUser().getCurrentGame();
+        if(currentPlayer != Game.getGameStarterPlayer()){
+            return new Result(false, "only Starter player can exit the game!");
+        }
+
+        Game.setCurrentMenu(Menu.GameMenu);
+        return new Result(true, "you exit the game successfully!");
+    }
+
+    public Result nextTurn(){
+
+        return new Result(true,"its not next player's turn");
     }
 
     private User findUserByUsername(String username) {
@@ -95,4 +111,5 @@ public class PreGameMenuController extends Controller {
         }
         return null;
     }
+
 }

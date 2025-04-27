@@ -1,4 +1,4 @@
-package Models.Enums.MenuComands;
+package Models.Enums.MenuCommands;
 
 import Views.*;
 
@@ -11,7 +11,6 @@ public enum Menu {
     MainMenu(new MainMenu()),
     ProfileMenu(new ProfileMenu()),
     AvatarMenu(new AvatarMenu()),
-    PreGameMenu(new PreGameMenu()),
     GameMenu(new GameMenu()),
     ExitMenu(new ExitMenu());
 

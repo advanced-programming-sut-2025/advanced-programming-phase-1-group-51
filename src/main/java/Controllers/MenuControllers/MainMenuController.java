@@ -3,7 +3,7 @@ package Controllers.MenuControllers;
 import Controllers.Controller;
 import Models.Game;
 import Models.Result;
-import Models.Enums.MenuComands.Menu;
+import Models.Enums.MenuCommands.Menu;
 
 public class MainMenuController extends Controller {
 
@@ -25,8 +25,8 @@ public class MainMenuController extends Controller {
         Game.setCurrentMenu(Menu.ProfileMenu);
         return new Result(true, "You are now in Profile Menu");
     }
-    public Result goToPreGameMenu(){
-      Game.setCurrentMenu(Menu.PreGameMenu);
+    public Result goToGameMenu(){
+      Game.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You are now in PreGame Menu");
     }
 

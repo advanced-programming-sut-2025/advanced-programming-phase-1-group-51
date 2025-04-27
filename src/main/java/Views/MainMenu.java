@@ -1,9 +1,8 @@
 package Views;
 
 import Controllers.MenuControllers.MainMenuController;
-import Models.Enums.MenuComands.LoginMenuCommands;
-import Models.Enums.MenuComands.MainMenuCommands;
-import Models.Enums.MenuComands.SignUpMenuCommands;
+import Models.Enums.MenuCommands.MainMenuCommands;
+import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
 
 import java.util.Scanner;
@@ -31,7 +30,7 @@ public class MainMenu implements PlayMenu{
             System.out.println(controller.goToAvatarMenu());
         }
         else if(MainMenuCommands.GO_TO_PREGAME.getMatcher(input) != null){
-            System.out.println(controller.goToPreGameMenu());
+            System.out.println(controller.goToGameMenu());
         }
         else{
             System.out.println("Invalid Command!");

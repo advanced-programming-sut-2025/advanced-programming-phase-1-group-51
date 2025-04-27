@@ -1,6 +1,6 @@
 package Models;
 
-import Models.Enums.MenuComands.Menu;
+import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
 import Models.Map.Map;
@@ -14,6 +14,7 @@ public class Game {
     public static final Scanner scanner = new Scanner(System.in);
     private static Menu currentMenu = Menu.SignUpMenu;
     private static User currentUser = null;
+    private static Player GameStarterPlayer = null;
     private static boolean isGameOver = false;
     private static Season season = Season.SPRING;
     private static Map map;
@@ -88,6 +89,14 @@ public class Game {
 
     public static Result showCurrentMenu() {
         return new Result(true, currentMenu.name());
+    }
+
+    public static Player getGameStarterPlayer() {
+        return GameStarterPlayer;
+    }
+
+    public static void setGameStarterPlayer(Player gameStarterPlayer) {
+        GameStarterPlayer = gameStarterPlayer;
     }
 
     public static void advanceTime(int hours) {

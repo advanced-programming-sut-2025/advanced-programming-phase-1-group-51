@@ -1,4 +1,4 @@
-package Models.Enums.MenuComands;
+package Models.Enums.MenuCommands;
 
 public enum AvatarMenuCommands implements Command {
 

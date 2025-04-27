@@ -2,9 +2,8 @@ package Views;
 
 import Controllers.Activity.*;
 import Controllers.BuilldingsController.GreenHouseController;
-import Controllers.MenuControllers.GameMenuController;
 import Controllers.Others.*;
-import Models.Enums.MenuComands.GameMenuCommands;
+import Models.Enums.MenuCommands.GameMenuCommands;
 import Models.Game;
 
 import java.util.Scanner;
@@ -12,10 +11,9 @@ import java.util.regex.Matcher;
 
 public class GameMenu implements PlayMenu{
 
-    private final GameMenuController GameMenuController = new GameMenuController();
+    private final turnAndSaveGameController SavingNextTurnController = new turnAndSaveGameController();
     private final MovementAndMapController MovementAndMapController = new MovementAndMapController();
     private final GreenHouseController GreenHouseController = new GreenHouseController();
-    private final SavingAndTurnHandling SavingAndTurnHandling = new SavingAndTurnHandling();
     private final EnergyController EnergyController = new EnergyController();
     private final InventoryController InventoryController = new InventoryController();
     private final Farming Farming = new Farming();
@@ -34,17 +32,24 @@ public class GameMenu implements PlayMenu{
         String input = Game.scanner.nextLine();
         Matcher matcher;
 
-        if(GameMenuCommands.SHOW_CURRENT_MENU.getMatcher(input)!= null){
-            System.out.println(GameMenuController.showCurrentMenu());
+        if((matcher = GameMenuCommands.GAME_NEW.getMatcher(input)) != null){
+            System.out.println(SavingNextTurnController.newGame(matcher.group("username1").trim(),matcher.group("username2").trim(),
+                    matcher.group("username3").trim(),matcher.group("username4").trim()));
+        }
+        else if((matcher = GameMenuCommands.GAME_MAP.getMatcher(input)) != null){
+            System.out.println(SavingNextTurnController.gameMap(Integer.parseInt(matcher.group("mapNumber").trim())));
+        }
+        else if(GameMenuCommands.LOAD_GAME.getMatcher(input) != null){
+            System.out.println(SavingNextTurnController.loadGame());
         }
         else if((matcher = GameMenuCommands.EXIT_GAME.getMatcher(input)) != null){
-            System.out.println(GameMenuController.exitGame());
+            System.out.println(SavingNextTurnController.exitGame());
         }
         else if((matcher = GameMenuCommands.DELETE_GAME.getMatcher(input)) != null){
-            System.out.println(SavingAndTurnHandling.DeleteGame());
+            System.out.println(SavingNextTurnController.deleteGame());
         }
         else if ((matcher = GameMenuCommands.NEXT_TURN.getMatcher(input)) != null){
-            System.out.println(SavingAndTurnHandling.handleNextTurn());
+            System.out.println(SavingNextTurnController.nextTurn());
         }
         else if ((matcher = GameMenuCommands.TIME.getMatcher(input)) != null){
             System.out.println(World.Time());

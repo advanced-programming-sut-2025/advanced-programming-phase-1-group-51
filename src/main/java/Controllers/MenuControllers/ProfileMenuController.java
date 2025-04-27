@@ -1,7 +1,7 @@
 package Controllers.MenuControllers;
 
 import Controllers.Controller;
-import Models.Enums.MenuComands.SignUpMenuCommands;
+import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
 import Models.Result;
 import Models.User;

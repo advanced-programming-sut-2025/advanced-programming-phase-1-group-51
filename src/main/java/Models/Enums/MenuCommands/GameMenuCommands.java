@@ -1,4 +1,4 @@
-package Models.Enums.MenuComands;
+package Models.Enums.MenuCommands;
 
 public enum GameMenuCommands implements Command {
 
@@ -8,6 +8,9 @@ public enum GameMenuCommands implements Command {
     EXIT_GAME("exit\\s*game"),
     DELETE_GAME("delete\\s*game"),
     NEXT_TURN("next\\s*turn"),
+    GAME_NEW("^game\\s*new\\s*-u\\s*(?<username1>\\S*)(?:\\s+(?<username2>\\S*))?(?:\\s+(?<username3>\\S*))?(?:\\s+(?<extraInvalid>\\S*))?$"),
+    GAME_MAP("game\\s*map\\s*(?<mapNumber>.+)"),
+    LOAD_GAME("load\\s*game"),
 
     // date and time
 

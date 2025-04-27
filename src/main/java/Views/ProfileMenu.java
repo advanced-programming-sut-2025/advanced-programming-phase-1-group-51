@@ -1,9 +1,7 @@
 package Views;
 
 import Controllers.MenuControllers.ProfileMenuController;
-import Models.Enums.MenuComands.MainMenuCommands;
-import Models.Enums.MenuComands.ProfileMenuCommands;
-import Models.Enums.MenuComands.SignUpMenuCommands;
+import Models.Enums.MenuCommands.ProfileMenuCommands;
 import Models.Game;
 
 import java.util.Scanner;

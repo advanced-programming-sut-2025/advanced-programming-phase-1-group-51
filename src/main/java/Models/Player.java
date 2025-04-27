@@ -206,6 +206,7 @@ public class Player {
         this.id = id;
     }
 
+
     private void initializeRecipes() {
         this.craftingRecipes.add(CraftingRecipes.FURNACE);
         this.craftingRecipes.add(CraftingRecipes.SCARE_CROW);

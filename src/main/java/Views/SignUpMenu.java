@@ -1,7 +1,7 @@
 package Views;
 
 import Controllers.MenuControllers.SignUpMenuController;
-import Models.Enums.MenuComands.SignUpMenuCommands;
+import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
 
 import java.util.Scanner;

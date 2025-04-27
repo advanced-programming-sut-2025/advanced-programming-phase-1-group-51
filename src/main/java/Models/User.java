@@ -21,6 +21,7 @@ public class User {
     private Game currentGame;
     private int gamesPlayed = 0;
     private int id;
+    private int maxMoneyEarnedInGame;
 
 
     public User(String username, String password, String nickName,  String email, String gender) {
@@ -115,6 +116,14 @@ public class User {
 
     public static void setUsers(List<User> users) {
         User.users = users;
+    }
+
+    public int getMaxMoneyEarnedInGame() {
+        return maxMoneyEarnedInGame;
+    }
+
+    public void setMaxMoneyEarnedInGame(int maxMoneyEarnedInGame) {
+        this.maxMoneyEarnedInGame = maxMoneyEarnedInGame;
     }
 
     public int getId() {
