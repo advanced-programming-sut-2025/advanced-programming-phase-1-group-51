@@ -3,12 +3,15 @@ package Models;
 import Models.Items.Item;
 
 public class StoreProducts {
-    private int price;
-    private Item item;
+    private final int price;
+    private final Item item;
+    private final String name;
+    private int remainingCount;
 
-    public StoreProducts(int price, Item item) {
-        this.price = price;
+    public StoreProducts(Item item, int price, String name) {
         this.item = item;
+        this.price = price;
+        this.name = name;
     }
 
     public int getPrice() {
@@ -19,11 +22,15 @@ public class StoreProducts {
         return item;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public int getRemainingCount() {
+        return remainingCount;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setRemainingCount(int remainingCount) {
+        this.remainingCount = remainingCount;
+    }
+
+    public String getName() {
+        return name;
     }
 }

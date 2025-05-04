@@ -1,6 +1,7 @@
-package Models.Enums.Types;
+package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Season;
+import Models.Enums.Types.ItemTypes.FoodTypes;
 
 public enum TreeType {
 

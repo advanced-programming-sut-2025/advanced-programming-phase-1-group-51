@@ -71,6 +71,9 @@ public class World {
     }
 
     public Result CheatThor(int x, int y){
+
+        Game currentGame = Game.getCurrentUser().getCurrentGame();
+        currentGame.getCurrentPlayer().getFarm().thor(x, y);
         return null;
     }
 

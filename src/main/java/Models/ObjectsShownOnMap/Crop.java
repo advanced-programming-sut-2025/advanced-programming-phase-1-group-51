@@ -1,6 +1,6 @@
 package Models.ObjectsShownOnMap;
 
-import Models.Enums.Types.AllCropsType;
+import Models.Enums.Types.ObjectsOnMapType.AllCropsType;
 
 public class Crop extends ObjectOnMap{
 

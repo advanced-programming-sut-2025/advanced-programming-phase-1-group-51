@@ -10,27 +10,23 @@ import Models.User;
 public class turnAndSaveGameController extends Controller {
 
     public Result newGame(String firstUsername, String secondUsername, String thirdUsername, String extraInvalid) {
-        // Check for extra invalid players first
+
         if (extraInvalid != null && !extraInvalid.isEmpty()) {
             return new Result(false, "You can start a game with maximum 3 players");
         }
 
-        // Validate at least one player exists
         if (firstUsername == null || firstUsername.isEmpty()) {
             return new Result(false, "You should start the game with at least one player!");
         }
 
-        // Find and validate first user
         User user1 = findUserByUsername(firstUsername);
         if (user1 == null) {
             return new Result(false, firstUsername + " doesn't exist");
         }
 
-        // Initialize other users as null
         User user2 = null;
         User user3 = null;
 
-        // Check and validate second user if provided
         if (secondUsername != null && !secondUsername.isEmpty()) {
             user2 = findUserByUsername(secondUsername);
             if (user2 == null) {
@@ -38,7 +34,6 @@ public class turnAndSaveGameController extends Controller {
             }
         }
 
-        // Check and validate third user if provided
         if (thirdUsername != null && !thirdUsername.isEmpty()) {
             user3 = findUserByUsername(thirdUsername);
             if (user3 == null) {
@@ -46,10 +41,8 @@ public class turnAndSaveGameController extends Controller {
             }
         }
 
-        // Clear existing players list
         Player.players.clear();
 
-        // Convert current user to Player if not already
         Player currentPlayer = Game.getCurrentPlayer();
         if (currentPlayer == null || !currentPlayer.getUser().equals(Game.getCurrentUser())) {
             currentPlayer = new Player(Game.getCurrentUser());
@@ -57,7 +50,6 @@ public class turnAndSaveGameController extends Controller {
         }
         Player.players.add(currentPlayer);
 
-        // Convert and add other players
         Player.players.add(new Player(user1));
         if (user2 != null) {
             Player.players.add(new Player(user2));
@@ -70,6 +62,12 @@ public class turnAndSaveGameController extends Controller {
     }
 
     public Result gameMap(int mapNumber){
+        User currentUser = Game.getCurrentUser();
+        Game CurrentGame = currentUser.getCurrentGame();
+        Player currentPlayer = Game.getCurrentPlayer();
+        if (mapNumber != 1 && mapNumber != 2) {
+            return new Result(false, "Invalid map number");
+        }
 
         return new Result(true, "map number chose successfully");
     }
@@ -99,7 +97,7 @@ public class turnAndSaveGameController extends Controller {
 
     public Result nextTurn(){
 
-        return new Result(true,"its not next player's turn");
+        return new Result(true,"its now next player's turn");
     }
 
     private User findUserByUsername(String username) {

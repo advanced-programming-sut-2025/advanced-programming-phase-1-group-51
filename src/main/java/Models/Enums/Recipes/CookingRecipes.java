@@ -1,6 +1,6 @@
 package Models.Enums.Recipes;
 
-import Models.Enums.Types.FoodTypes;
+import Models.Enums.Types.ItemTypes.FoodTypes;
 import Models.Loot;
 
 public enum CookingRecipes {

@@ -1,6 +1,6 @@
 package Models.ObjectsShownOnMap;
 
-import Models.Enums.Types.TreeType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 
 public class Tree extends ObjectOnMap{
 

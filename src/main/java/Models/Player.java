@@ -4,7 +4,7 @@ import Models.Enums.Others.Quality;
 import Models.Enums.Recipes.CookingRecipes;
 import Models.Enums.Recipes.CraftingRecipes;
 import Models.Enums.Types.BackpackType;
-import Models.Enums.Types.ToolType;
+import Models.Enums.Types.ItemTypes.ToolType;
 import Models.Enums.Types.TrashcanType;
 import Models.Items.Item;
 import Models.Items.Tool;

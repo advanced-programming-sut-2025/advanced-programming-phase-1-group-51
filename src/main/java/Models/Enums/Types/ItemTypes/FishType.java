@@ -1,8 +1,8 @@
-package Models.Enums.Types;
+package Models.Enums.Types.ItemTypes;
 
 import Models.Enums.Others.Season;
 
-public enum FishType {
+public enum FishType implements ItemType{
 
     SALMON("Salmon", 75, Season.FALL, false),
     SARDINE("Sardine", 40, Season.FALL, false),
@@ -35,5 +35,10 @@ public enum FishType {
         this.price = price;
         this.season = season;
         this.isLegendary = isLegendary;
+    }
+
+
+    public String getName(){
+        return name;
     }
 }

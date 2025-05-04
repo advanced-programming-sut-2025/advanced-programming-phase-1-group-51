@@ -7,7 +7,6 @@ public class Loot {
     private Item item;
     private int count;
 
-    public Loot(){}
 
     public Loot(Item item, int count) {
         this.item = item;

@@ -1,16 +1,16 @@
 package Models.Map;
 
 import Models.NPCs.NPC;
-import Models.Stores.Store;
+import Models.Store;
 
 import java.util.ArrayList;
 
-public class Villages {
+public class Village {
 
     private ArrayList<Store>  stores;
     private ArrayList<NPC>  NPCs;
 
-    public Villages(ArrayList<Store> stores, ArrayList<NPC> NPCs) {
+    public Village(ArrayList<Store> stores, ArrayList<NPC> NPCs) {
         this.stores = stores;
         this.NPCs = NPCs;
     }

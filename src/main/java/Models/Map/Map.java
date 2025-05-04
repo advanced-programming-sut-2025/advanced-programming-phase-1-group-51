@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Map {
 
-    private Villages Village;
-    private ArrayList<Farm> Farms = new ArrayList<>();
+    private Models.Map.Village Village;
+    private ArrayList<Farm> Farms;
 
 
-    public Map(Villages village, ArrayList<Farm> farms) {
+    public Map(Models.Map.Village village, ArrayList<Farm> farms) {
         Village = village;
         Farms = farms;
     }
 
 
-    public Villages getVillage() {
+    public Models.Map.Village getVillage() {
         return Village;
     }
 
@@ -22,7 +22,7 @@ public class Map {
         return Farms;
     }
 
-    public void setVillage(Villages village) {
+    public void setVillage(Models.Map.Village village) {
         Village = village;
     }
 

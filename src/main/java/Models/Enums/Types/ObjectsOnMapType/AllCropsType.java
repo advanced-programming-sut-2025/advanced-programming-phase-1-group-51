@@ -1,6 +1,8 @@
-package Models.Enums.Types;
+package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Season;
+import Models.Enums.Types.ItemTypes.ItemType;
+import Models.Loot;
 
 public enum AllCropsType {
 
@@ -90,4 +92,6 @@ public enum AllCropsType {
         }
         return null;
     }
+
+
 }

@@ -14,7 +14,6 @@ public class ProfileMenuController extends Controller {
     }
 
 
-
     public void showCurrentUserInfo() {
 
         User currentUser = Game.getCurrentUser();

@@ -17,6 +17,11 @@ public class FriendShip {
 
     public void setXp(int xp) {
         this.xp = xp;
+        int diff = this.xp - (level + 1) * 100;
+        if (diff > 0) {
+            this.xp = diff;
+            this.level += 1;
+        }
     }
 
     public int getLevel() {

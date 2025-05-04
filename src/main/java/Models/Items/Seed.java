@@ -1,6 +1,6 @@
 package Models.Items;
 
-import Models.Enums.Types.AllCropsType;
+import Models.Enums.Types.ObjectsOnMapType.AllCropsType;
 
 public class Seed extends Item{
 

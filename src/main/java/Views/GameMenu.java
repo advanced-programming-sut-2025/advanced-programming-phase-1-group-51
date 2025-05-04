@@ -25,7 +25,6 @@ public class GameMenu implements PlayMenu{
     private final FriendShipController FriendshipController = new FriendShipController();
     private final Trading Trading = new Trading();
     private final NPCController NPCController = new NPCController();
-    private final Marriage Marriage = new Marriage();
     private final World World = new World();
     @Override
     public void check(Scanner scanner){
@@ -326,12 +325,12 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.ASK_MARRIAGE.getMatcher(input)) != null){
             String username = matcher.group("username").trim();
             String ring = matcher.group("ring").trim();
-            System.out.println(Marriage.AskMarriage(username,ring));
+            System.out.println(FriendshipController.AskMarriage(username,ring));
         }
         else if ((matcher = GameMenuCommands.RESPOND.getMatcher(input)) != null){
             String respond = matcher.group("respond").trim();
             String username = matcher.group("username").trim();
-            System.out.println(Marriage.Respond(respond, username));
+            System.out.println(FriendshipController.Respond(respond, username));
         }
         else if ((matcher = GameMenuCommands.START_TRADE.getMatcher(input)) != null){
             System.out.println(Trading.StartTrade());

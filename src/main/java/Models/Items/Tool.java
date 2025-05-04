@@ -1,7 +1,7 @@
 package Models.Items;
 
 import Models.Enums.Others.Quality;
-import Models.Enums.Types.ToolType;
+import Models.Enums.Types.ItemTypes.ToolType;
 
 public class Tool extends Item{
     private ToolType type;

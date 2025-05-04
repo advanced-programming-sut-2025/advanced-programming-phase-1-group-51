@@ -1,4 +1,4 @@
-package Models.Enums.Types;
+package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Season;
 

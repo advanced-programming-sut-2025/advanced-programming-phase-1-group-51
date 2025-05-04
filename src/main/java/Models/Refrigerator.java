@@ -16,7 +16,7 @@ public class Refrigerator {
         return foods;
     }
 
-    public void setFoods(ArrayList<Food> foods) {
-        this.foods = foods;
+    public void AddFood(Food food) {
+        foods.add(food);
     }
 }

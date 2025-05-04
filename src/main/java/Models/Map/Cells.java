@@ -1,11 +1,13 @@
 package Models.Map;
 
+import Models.ObjectsShownOnMap.ObjectOnMap;
+
 public class Cells {
 
     private Position position;
-    private Object objectOnCell;
+    private ObjectOnMap objectOnCell;
 
-    public Cells(Position position, Object objectOnCell) {
+    public Cells(Position position, ObjectOnMap objectOnCell) {
         this.position = position;
         this.objectOnCell = objectOnCell;
     }
@@ -22,7 +24,9 @@ public class Cells {
         return objectOnCell;
     }
 
-    public void setObjectOnCell(Object objectOnCell) {
+    public void setObjectOnCell(ObjectOnMap objectOnCell) {
         this.objectOnCell = objectOnCell;
     }
+
+
 }

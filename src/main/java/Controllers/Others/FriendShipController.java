@@ -17,8 +17,6 @@ public class FriendShipController extends Controller {
         return null;
     }
 
-
-
     public Result Gift(String username, String item, int amount) {
         return null;
     }
@@ -40,6 +38,14 @@ public class FriendShipController extends Controller {
     }
 
     public Result Flower(String username) {
+        return null;
+    }
+
+    public Result AskMarriage(String username, String ring) {
+        return null;
+    }
+
+    public Result Respond(String respond,String username){
         return null;
     }
 

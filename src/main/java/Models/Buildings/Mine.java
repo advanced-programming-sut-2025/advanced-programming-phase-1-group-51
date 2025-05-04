@@ -1,6 +1,6 @@
 package Models.Buildings;
 
-import Models.Enums.Types.ForagingMineralType;
+import Models.Enums.Types.ItemTypes.ForagingMineralType;
 import Models.Map.Cells;
 
 import java.util.ArrayList;

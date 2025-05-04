@@ -1,7 +1,7 @@
 package Models.Items;
 
 import Models.Enums.Others.Quality;
-import Models.Enums.Types.ForagingMineralType;
+import Models.Enums.Types.ItemTypes.ForagingMineralType;
 
 public class Mineral extends Item{
     private ForagingMineralType type;
