@@ -7,7 +7,7 @@ public class Store {
     private final String owner;
     private final int openHour;
     private final int closeHour;
-    private final ArrayList<StoreProducts> products = new ArrayList<>();
+    private final ArrayList<StoreProduct> products = new ArrayList<>();
     private final String name;
 
 
@@ -30,7 +30,7 @@ public class Store {
         return closeHour;
     }
 
-    public ArrayList<StoreProducts> getProducts() {
+    public ArrayList<StoreProduct> getProducts() {
         return products;
     }
 
@@ -42,9 +42,9 @@ public class Store {
         return openHour <= hour && hour <= closeHour;
     }
 
-    public ArrayList<StoreProducts> getProductsRemaining(){
-        ArrayList<StoreProducts> remainingProducts = new ArrayList<>();
-        for (StoreProducts product : products) {
+    public ArrayList<StoreProduct> getProductsRemaining(){
+        ArrayList<StoreProduct> remainingProducts = new ArrayList<>();
+        for (StoreProduct product : products) {
             if(product.getRemainingCount()>0){
                 remainingProducts.add(product);
             }
@@ -52,8 +52,8 @@ public class Store {
         return remainingProducts;
     }
 
-    public StoreProducts getProduct(String productName) {
-        for (StoreProducts product : products) {
+    public StoreProduct getProduct(String productName) {
+        for (StoreProduct product : products) {
             if(product.getName().compareToIgnoreCase(productName) == 0){
                 return product;
             }

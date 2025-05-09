@@ -4,7 +4,7 @@ public enum SignUpMenuCommands implements Command {
 
     SHOW_CURRENT_MENU("show\\s*current\\s*menu"),
     MENU_EXIT("\\s*menu\\s*exit\\s*"),
-    REGISTER("register\\s*-u\\s*(?<username>.+)\\s*-p\\s*(?<password>.+)\\s*(?<passwordConfirm>.+)\\s*-n\\s*(?<nickname>.+)\\s*-e\\s*(?<email>.+)\\s*-g\\s*(?<gender>.+)"),
+    REGISTER("register\\s*-u\\s*(?<username>.+)\\s*-p\\s*(?<password>\\S+)\\s*(?<passwordConfirm>\\S+)\\s*-n\\s*(?<nickname>.+)\\s*-e\\s*(?<email>.+)\\s*-g\\s*(?<gender>.+)"),
     REGISTER_RANDOM_PASS("register\\s*-u\\s*(?<username>.+)\\s*-p\\s*random\\s*pass\\s*-n\\s*(?<nickname>.+)\\s*-e\\s*(?<email>.+)\\s*-g\\s*(?<gender>.+)"),
     USERNAME("^[a-zA-Z0-9-]+$"),
     PASSWORD_LENGTH("^.{9,}$"),

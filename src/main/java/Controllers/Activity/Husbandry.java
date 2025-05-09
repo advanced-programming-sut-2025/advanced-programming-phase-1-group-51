@@ -1,8 +1,9 @@
 package Controllers.Activity;
 
+import Controllers.Controller;
 import Models.Result;
 
-public class Husbandry extends Activity{
+public class Husbandry extends Controller {
 
 
     public Result BuyAnimal(String animalType, String animalName) {

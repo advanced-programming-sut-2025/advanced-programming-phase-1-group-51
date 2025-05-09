@@ -1,26 +1,41 @@
 package Models.Items;
 
 import Models.Enums.Others.Quality;
+import Models.Enums.Types.ItemTypes.FoodTypes;
 
 public class Food extends Item{
-    public boolean isEdible;
+    public FoodTypes foodTypes;
 
-    public Food(Quality quality, int maxStackSize, int value, int energyCost, String name, boolean isEdible) {
-        // Call the parent (Item) constructor first
-        super(quality, maxStackSize, value, energyCost, name);
-        // Then initialize Food-specific fields
-        this.isEdible = isEdible;
+    public Food() {
+        super();
+    }
+
+    /// To be used in enums only!
+    public Food(FoodTypes foodTypes) {
+    }
+
+    public Food(Quality quality, FoodTypes foodTypes) {
+        super(quality, Integer.MAX_VALUE, foodTypes.value, -foodTypes.energy, foodTypes.name);
+        this.foodTypes = foodTypes;
+    }
+
+    public Food(Quality quality, FoodTypes foodTypes, int value) {
+        super(quality, Integer.MAX_VALUE, value, -foodTypes.energy, foodTypes.name);
+        this.foodTypes = foodTypes;
     }
 
     @Override
     public void useItem() {
+
     }
 
     @Override
     public void deleteItem() {
+
     }
 
     @Override
     public void dropItem() {
+
     }
 }

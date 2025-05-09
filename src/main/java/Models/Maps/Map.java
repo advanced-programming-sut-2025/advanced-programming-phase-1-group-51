@@ -1,20 +1,20 @@
-package Models.Map;
+package Models.Maps;
 
 import java.util.ArrayList;
 
 public class Map {
 
-    private Models.Map.Village Village;
+    private Village Village;
     private ArrayList<Farm> Farms;
 
 
-    public Map(Models.Map.Village village, ArrayList<Farm> farms) {
+    public Map(Models.Maps.Village village, ArrayList<Farm> farms) {
         Village = village;
         Farms = farms;
     }
 
 
-    public Models.Map.Village getVillage() {
+    public Village getVillage() {
         return Village;
     }
 
@@ -22,7 +22,7 @@ public class Map {
         return Farms;
     }
 
-    public void setVillage(Models.Map.Village village) {
+    public void setVillage(Village village) {
         Village = village;
     }
 

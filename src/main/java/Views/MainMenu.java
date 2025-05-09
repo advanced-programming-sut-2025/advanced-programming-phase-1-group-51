@@ -4,7 +4,6 @@ import Controllers.MenuControllers.MainMenuController;
 import Models.Enums.MenuCommands.MainMenuCommands;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 

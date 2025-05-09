@@ -79,7 +79,6 @@ public class turnAndSaveGameController extends Controller {
 
 
     public Result deleteGame(){
-
         return null;
     }
 
@@ -91,7 +90,7 @@ public class turnAndSaveGameController extends Controller {
             return new Result(false, "only Starter player can exit the game!");
         }
 
-        Game.setCurrentMenu(Menu.GameMenu);
+        Game.setCurrentMenu(Menu.MainMenu);
         return new Result(true, "you exit the game successfully!");
     }
 

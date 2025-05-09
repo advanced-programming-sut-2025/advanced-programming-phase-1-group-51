@@ -1,9 +1,8 @@
 package Controllers.Activity;
-
 import Controllers.Controller;
 import Models.Result;
 
-public class Crafting extends Activity {
+public class Crafting extends Controller {
 
 
     public Result craftInfo(String name){

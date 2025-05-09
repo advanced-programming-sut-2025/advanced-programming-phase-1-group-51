@@ -3,7 +3,7 @@ package Models;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
-import Models.Map.Map;
+import Models.Maps.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,6 @@ public class Game {
     private static Weather weather = Weather.SUNNY;
     private static DateAndTime currentDateAndTime;
     private static Player currentPlayer = null;
-    public static List<Player> players = new ArrayList<>();
 
 
     public static Player getCurrentPlayer() {

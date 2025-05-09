@@ -2,13 +2,13 @@ package Models;
 
 import Models.Items.Item;
 
-public class StoreProducts {
+public class StoreProduct {
     private final int price;
     private final Item item;
     private final String name;
     private int remainingCount;
 
-    public StoreProducts(Item item, int price, String name) {
+    public StoreProduct(Item item, int price, String name) {
         this.item = item;
         this.price = price;
         this.name = name;

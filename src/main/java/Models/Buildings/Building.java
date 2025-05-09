@@ -1,6 +1,6 @@
 package Models.Buildings;
 
-import Models.Map.Cells;
+import Models.Maps.Cells;
 
 import java.util.ArrayList;
 

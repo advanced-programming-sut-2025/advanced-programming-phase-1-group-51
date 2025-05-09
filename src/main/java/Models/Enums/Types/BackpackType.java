@@ -1,7 +1,6 @@
 package Models.Enums.Types;
 
 public enum BackpackType {
-
     DEFAULT(12, "Default"),
     GIANT(24, "Giant"),
     DELUXE(Double.POSITIVE_INFINITY, "Deluxe"),
@@ -10,8 +9,8 @@ public enum BackpackType {
     final private double capacity;
     final private String name;
 
-    BackpackType(double capacity, String name) {
-        this.capacity = capacity;
+    BackpackType(double maxCapacity, String name) {
+        this.capacity = maxCapacity;
         this.name = name;
     }
 

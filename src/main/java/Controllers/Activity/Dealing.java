@@ -1,9 +1,14 @@
 package Controllers.Activity;
 
+import Controllers.Controller;
 import Models.Result;
 
-public class Dealing extends Activity{
+public class Dealing extends Controller {
 
+
+    public Result enterStore() {
+        return null;
+    }
 
     public Result ShowAllProducts() {
         return null;
@@ -21,7 +26,11 @@ public class Dealing extends Activity{
         return null;
     }
 
-    public Result cheatAdd(int count) {
+    public Result cheatAddMoney(int count) {
+        return null;
+    }
+
+    public Result exitStore() {
         return null;
     }
 

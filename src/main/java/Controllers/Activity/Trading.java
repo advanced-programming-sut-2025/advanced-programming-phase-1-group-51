@@ -3,7 +3,7 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.Result;
 
-public class Trading extends Activity {
+public class Trading extends Controller {
 
 
     public Result StartTrade() {

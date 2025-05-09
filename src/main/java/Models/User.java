@@ -23,7 +23,6 @@ public class User {
     private int id;
     private int maxMoneyEarnedInGame;
 
-
     public User(String username, String password, String nickName,  String email, String gender) {
         this.username = username;
         this.password = password;

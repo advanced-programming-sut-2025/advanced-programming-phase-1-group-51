@@ -3,14 +3,18 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.Result;
 
-public class Farming extends Activity {
+public class Farming extends Controller {
 
 
     public Result plow(String direction) {
         return null;
     }
 
-    public Result seedPlanting(String seed, String direction) {
+    public Result PlantSeeds(String seed, String direction) {
+        return null;
+    }
+
+    public Result PlantTrees(String seed, String direction) {
         return null;
     }
 

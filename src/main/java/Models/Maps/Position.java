@@ -1,4 +1,4 @@
-package Models.Map;
+package Models.Maps;
 
 public class Position {
 

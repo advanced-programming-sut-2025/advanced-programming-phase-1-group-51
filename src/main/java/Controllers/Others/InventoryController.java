@@ -41,38 +41,11 @@ public class InventoryController extends Controller {
     }
 
     public Result inventoryTrashFull(String itemName) {
-        BackPack inventory = currentPlayer.getInventory();
-        ArrayList<Loot> items = inventory.getLoots();
-        TrashCan trashCan = currentPlayer.getTrashcan();
-
-        // Check if inventory is full (for non-deluxe backpacks)
-        if (inventory.getType() != BackpackType.DELUXE &&
-                items.size() >= inventory.getType().getCapacity()) {
-            return new Result(false, "Inventory is full!");
-        }
-
-        // Find the item in inventory
-        for (int i = 0; i < items.size(); i++) {
-            Loot loot = items.get(i);
-            if (loot.getItem().getName().equalsIgnoreCase(itemName)) {
-                // Calculate cash back based on trash can type
-                int cashBack = 0;
-                if (trashCan.getPercentOfCashBack() > 0) {
-                    cashBack = (int)(loot.getItem().getValue() * loot.getCount() *
-                            trashCan.getPercentOfCashBack() / 100.0);
-                    currentPlayer.setMoney(currentPlayer.getMoney() + cashBack);
-                }
-
-                // Remove the item completely
-                items.remove(i);
-
-                String message = "All " + itemName + " has been removed from inventory.";
-                if (cashBack > 0) {
-                    message += " You received " + cashBack + " gold.";
-                }
-                return new Result(true, message);
-            }
-        }
+        User user = Game.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        BackPack backpack = game.getCurrentPlayer().getInventory();
+        Loot slot = backpack.getLootByItemName(itemName);
 
         return new Result(false, "Item not found in inventory: " + itemName);
     }

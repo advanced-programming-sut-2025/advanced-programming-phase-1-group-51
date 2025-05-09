@@ -1,4 +1,4 @@
-package Models.Map;
+package Models.Maps;
 
 import Models.NPCs.NPC;
 import Models.Store;

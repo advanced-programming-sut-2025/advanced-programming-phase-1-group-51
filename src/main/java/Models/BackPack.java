@@ -45,4 +45,13 @@ public class BackPack {
     public void setNumberOfWood(int numberOfWood) {
         this.numberOfWood = numberOfWood;
     }
+
+    public Loot getLootByItemName(String itemName) {
+        for (Loot slot : loots) {
+            if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
+                return slot;
+            }
+        }
+        return null;
+    }
 }

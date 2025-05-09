@@ -8,7 +8,7 @@ import Models.Enums.Types.ItemTypes.ToolType;
 import Models.Enums.Types.TrashcanType;
 import Models.Items.Item;
 import Models.Items.Tool;
-import Models.Map.Farm;
+import Models.Maps.Farm;
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.*;
 import java.util.ArrayList;
@@ -35,8 +35,18 @@ public class Player {
     private int id;
     private Item itemInHand;
     public static ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Loot> refrigeratorLoots = new ArrayList<>();
+    private int usedEnergy;
 
 
+    public Loot getRefrigeratorLootByName(String slotName) {
+        for (Loot loot : refrigeratorLoots) {
+            if (loot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
+                return loot;
+            }
+        }
+        return null;
+    }
 
 
     public Player(User user) {
@@ -206,6 +216,37 @@ public class Player {
         this.id = id;
     }
 
+    public ArrayList<Loot> getRefrigeratorLoots() {
+        return refrigeratorLoots;
+    }
+
+    public void setRefrigeratorLoots(ArrayList<Loot> refrigeratorLoots) {
+        this.refrigeratorLoots = refrigeratorLoots;
+    }
+
+    public ArrayList<CookingRecipes> getCookingRecipes() {
+        return cookingRecipes;
+    }
+
+    public void setCookingRecipes(ArrayList<CookingRecipes> cookingRecipes) {
+        this.cookingRecipes = cookingRecipes;
+    }
+
+    public ArrayList<CraftingRecipes> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+
+    public void setCraftingRecipes(ArrayList<CraftingRecipes> craftingRecipes) {
+        this.craftingRecipes = craftingRecipes;
+    }
+
+    public int getUsedEnergy() {
+        return usedEnergy;
+    }
+
+    public void setUsedEnergy(int usedEnergy) {
+        this.usedEnergy = usedEnergy;
+    }
 
     private void initializeRecipes() {
         this.craftingRecipes.add(CraftingRecipes.FURNACE);

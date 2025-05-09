@@ -1,11 +1,9 @@
 package Views;
 
 import Controllers.Activity.*;
-import Controllers.BuilldingsController.GreenHouseController;
 import Controllers.Others.*;
 import Models.Enums.MenuCommands.GameMenuCommands;
 import Models.Game;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -13,7 +11,6 @@ public class GameMenu implements PlayMenu{
 
     private final turnAndSaveGameController SavingNextTurnController = new turnAndSaveGameController();
     private final MovementAndMapController MovementAndMapController = new MovementAndMapController();
-    private final GreenHouseController GreenHouseController = new GreenHouseController();
     private final EnergyController EnergyController = new EnergyController();
     private final InventoryController InventoryController = new InventoryController();
     private final Farming Farming = new Farming();
@@ -151,7 +148,7 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.PLANT.getMatcher(input)) != null){
             String seed = matcher.group("seed").trim();
             String direction = matcher.group("direction").trim();
-            System.out.println(Farming.seedPlanting(seed, direction));
+            System.out.println(Farming.PlantSeeds(seed, direction));
         }
         else if ((matcher = GameMenuCommands.SHOW_PLANT.getMatcher(input)) != null){
             int x = Integer.parseInt(matcher.group("x").trim());
@@ -195,13 +192,16 @@ public class GameMenu implements PlayMenu{
             String name = matcher.group("item").trim();
             System.out.println(Cooking.TakeOutOfRefrigerator(name));
         }
-        else if ((matcher = GameMenuCommands.REFRIGERATOR_PUT.getMatcher(input)) != null){
+        else if ((matcher = GameMenuCommands.REFRIGERATOR_PUT.getMatcher(input)) != null) {
             String name = matcher.group("item").trim();
             System.out.println(Cooking.PutInRefrigerator(name));
         }
+        else if ((matcher = GameMenuCommands.SHOW_COOKING_RECIPES.getMatcher(input)) != null) {
+            System.out.println(Cooking.showCookingRecipes());
+        }
         else if ((matcher = GameMenuCommands.PREPARE.getMatcher(input)) != null){
             String recipeName = matcher.group("recipeName").trim();
-            System.out.println(Cooking.prepare(recipeName));
+            System.out.println(Cooking.prepareFood(recipeName));
         }
         else if ((matcher = GameMenuCommands.EAT.getMatcher(input)) != null){
             String foodName = matcher.group("foodName").trim();
@@ -282,7 +282,7 @@ public class GameMenu implements PlayMenu{
         }
         else if ((matcher = GameMenuCommands.CHEAT_ADD.getMatcher(input)) != null){
             int count = Integer.parseInt(matcher.group("count").trim());
-            System.out.println(Dealing.cheatAdd(count));
+            System.out.println(Dealing.cheatAddMoney(count));
         }
         else if ((matcher = GameMenuCommands.FRIENDSHIPS.getMatcher(input)) != null){
             System.out.println(FriendshipController.FriendShip());

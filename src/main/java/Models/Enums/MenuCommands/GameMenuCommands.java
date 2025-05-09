@@ -91,8 +91,8 @@ public enum GameMenuCommands implements Command {
 
     REFRIGERATOR_PICK("cooking\\s*refrigerator\\s*pick\\s*(?<item>.+)"),
     REFRIGERATOR_PUT("cooking\\s*refrigerator\\s*put\\s*(?<item>.+)"),
-    SHOW_RECIPES("cooking\\s*show\\s*recipes"),
     PREPARE("cooking\\s*prepare\\s*(?<recipeName>.+)"),
+    SHOW_COOKING_RECIPES("cooking\\s*show\\s*recipes"),
 
     //eating
 

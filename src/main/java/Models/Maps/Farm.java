@@ -1,7 +1,6 @@
-package Models.Map;
+package Models.Maps;
 
 import Models.Buildings.Building;
-import Models.Enums.Types.ObjectsOnMapType.AllCropsType;
 import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Models.ObjectsShownOnMap.*;
 
