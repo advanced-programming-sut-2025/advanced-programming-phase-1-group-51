@@ -9,7 +9,7 @@ public class Animal {
     private int price;
     private String name;
     private AnimalType type;
-    private ArrayList<Item> animalProducts;
+    private Item product;
 
     public Animal(int price, String name, AnimalType type) {
         this.price = price;

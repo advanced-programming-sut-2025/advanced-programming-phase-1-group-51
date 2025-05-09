@@ -10,6 +10,7 @@ public class Farm {
 
     private ArrayList<Building> buildings;
     private ArrayList<Cells> cells;
+    private int farmNumber;
 
     public Farm(ArrayList<Building> buildings, ArrayList<Cells> cells) {
         this.buildings = buildings;
@@ -53,5 +54,13 @@ public class Farm {
             }
         }
         return null;
+    }
+
+    public int getFarmNumber() {
+        return farmNumber;
+    }
+
+    public void setFarmNumber(int farmNumber) {
+        this.farmNumber = farmNumber;
     }
 }

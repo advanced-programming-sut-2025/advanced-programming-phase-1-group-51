@@ -3,11 +3,14 @@ package Models;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
+import Models.Maps.Farm;
 import Models.Maps.Map;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static Models.Player.players;
 
 public class Game {
 
@@ -96,6 +99,15 @@ public class Game {
 
     public static void setGameStarterPlayer(Player gameStarterPlayer) {
         GameStarterPlayer = gameStarterPlayer;
+    }
+
+    public Farm getFarmByNumber(int number) {
+        for (Player player : players) {
+            if (player.getFarm().getFarmNumber() == number) {
+                return player.getFarm();
+            }
+        }
+        return null;
     }
 
     public static void advanceTime(int hours) {

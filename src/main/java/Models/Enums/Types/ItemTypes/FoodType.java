@@ -1,6 +1,6 @@
 package Models.Enums.Types.ItemTypes;
 
-public enum FoodTypes implements ItemType{
+public enum FoodType implements ItemType{
 
     APRICOT("Apricot", 38,   59),
     CHERRY("Cherry", 38,   80),
@@ -120,43 +120,41 @@ public enum FoodTypes implements ItemType{
     MEAD("Mead", 75,   300),
     PALE_ALE("Pale Ale", 50,   300),
     RAISINS("Raisins", 125,   600),
-    //TODO: Determine based on base ingredient.
-    WINE("Wine", null,   null),
-    JUICE("Juice", null,   null),
-    DRIED_MUSHROOMS("Dried Mushrooms", 50,   null),
-    DRIED_FRUIT("Dried Fruit", 75,   null),
-    PICKLES("Pickles", null,   null),
-    JELLY("Jelly", null,   null),
-    SMOKED_FISH("Smoked Fish", null,   null)
-    //END OF LIST
+    //Determined based on base ingredient.
+    WINE("Wine", null, null),
+    JUICE("Juice", null, null),
+    DRIED_MUSHROOMS("Dried Mushrooms", 50, null),
+    DRIED_FRUIT("Dried Fruit", 75,  null),
+    PICKLES("Pickles", null, null),
+    JELLY("Jelly", null,  null),
+    SMOKED_FISH("Smoked Fish", null,  null)
     ;
 
     final public String name;
     final public Integer energy;
-    final public Integer value;
+    final public Integer price;
 
-    FoodTypes(String name, Integer energy, Integer value) {
+    FoodType(String name, Integer energy, Integer price) {
         this.name = name;
         this.energy = energy;
-        this.value = value;
+        this.price = price;
     }
 
-    public static int getEnergy(String itemName) {
-        for (FoodTypes type : FoodTypes.values()) {
-            if(type.name.equals(itemName))
+    public static int getEnergy(String foodName) {
+        for (FoodType type : FoodType.values()) {
+            if(type.name.equals(foodName))
                 return type.energy;
         }
         return 0;
     }
 
     public static int getPrice(String itemName) {
-        for(FoodTypes t : FoodTypes.values()) {
-            if(t.name.equals(itemName))
-                return t.value;
+        for(FoodType p : FoodType.values()) {
+            if(p.name.equals(itemName))
+                return p.price;
         }
         return 0;
     }
-
 
     public String getName(){
         return name;

@@ -19,7 +19,7 @@ public class Player {
     private ArrayList<FriendShip> friendShips;
     private TrashcanType trashcanType;
     private TrashCan trashcan;
-    private ArrayList<Animal> animals;
+    private ArrayList<Animal> animals = new ArrayList<>();;
     private int energy;
     private int maxEnergy;
     private ArrayList<NPCsFriendship> NPCsFriendships;
@@ -36,7 +36,8 @@ public class Player {
     private Item itemInHand;
     public static ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Loot> refrigeratorLoots = new ArrayList<>();
-    private int usedEnergy;
+    private int currentTurnUsedEnergy;
+    private int currentPlaceNumber;
 
 
     public Loot getRefrigeratorLootByName(String slotName) {
@@ -240,12 +241,33 @@ public class Player {
         this.craftingRecipes = craftingRecipes;
     }
 
-    public int getUsedEnergy() {
-        return usedEnergy;
+    public int getCurrentTurnUsedEnergy() {
+        return currentTurnUsedEnergy;
     }
 
-    public void setUsedEnergy(int usedEnergy) {
-        this.usedEnergy = usedEnergy;
+    public void setCurrentTurnUsedEnergy(int currentTurnCurrentTurnUsedEnergy) {
+        this.currentTurnUsedEnergy = currentTurnCurrentTurnUsedEnergy;
+    }
+
+    public Item getItemInHand() {
+        return itemInHand;
+    }
+
+    public void setItemInHand(Item itemInHand) {
+        this.itemInHand = itemInHand;
+    }
+
+    public Animal getAnimalByName(String name) {
+        for (Animal animal : animals) {
+            if (animal.getName().equals(name)) {
+                return animal;
+            }
+        }
+        return null;
+    }
+
+    public Farm getCurrentFarm(Game game){
+        return game.getFarmByNumber(currentPlaceNumber);
     }
 
     private void initializeRecipes() {

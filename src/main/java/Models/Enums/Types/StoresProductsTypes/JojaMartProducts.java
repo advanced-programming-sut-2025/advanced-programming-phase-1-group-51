@@ -3,17 +3,17 @@ package Models.Enums.Types.StoresProductsTypes;
 import Models.Enums.Others.Season;
 import Models.Enums.Types.ItemTypes.CropSeedsType;
 import Models.Enums.Types.ItemTypes.ElseType;
-import Models.Enums.Types.ItemTypes.FoodTypes;
+import Models.Enums.Types.ItemTypes.FoodType;
 import Models.Enums.Types.ItemTypes.ItemType;
 
 public enum JojaMartProducts implements StoreProducts{
 
-    JOJA_COLA("Joja Cola" , "The flagship product of Joja corporation.", FoodTypes.JOJA_COLA, 75,75,Double.POSITIVE_INFINITY,Season.values() ),
+    JOJA_COLA("Joja Cola" , "The flagship product of Joja corporation.", FoodType.JOJA_COLA, 75,75,Double.POSITIVE_INFINITY,Season.values() ),
     ANCIENT_SEED("Ancient Seed" , "Could this still grow?" , CropSeedsType.ANCIENT_FRUIT,500,500,1, Season.values()),
     GRASS_STARTER("Grass Starter" , "Place this on your farm to start a new patch of grass." , ElseType.GRASS_STARTER, 125,125,Double.POSITIVE_INFINITY,Season.values()),
-    SUGAR("Sugar" , "Adds sweetness to pastries and candies. Too much can be unhealthy.", FoodTypes.SUGAR , 125,125,Double.POSITIVE_INFINITY,Season.values()),
-    WHEAT_FLOUR("Wheat Flour" , "A common cooking ingredient made from crushed wheat seeds." , FoodTypes.WHEAT_FLOUR , 125,125,Double.POSITIVE_INFINITY,Season.values()),
-    RICE("Rice" , "A basic grain often served under vegetables." , FoodTypes.RICE , 250,250,Double.POSITIVE_INFINITY,Season.values()),
+    SUGAR("Sugar" , "Adds sweetness to pastries and candies. Too much can be unhealthy.", FoodType.SUGAR , 125,125,Double.POSITIVE_INFINITY,Season.values()),
+    WHEAT_FLOUR("Wheat Flour" , "A common cooking ingredient made from crushed wheat seeds." , FoodType.WHEAT_FLOUR , 125,125,Double.POSITIVE_INFINITY,Season.values()),
+    RICE("Rice" , "A basic grain often served under vegetables." , FoodType.RICE , 250,250,Double.POSITIVE_INFINITY,Season.values()),
     PARSNIP_SEEDS("Parsnip Seeds" , "Plant these in the spring. Takes 4 days to mature." , CropSeedsType.PARSNIP , 25,Double.POSITIVE_INFINITY,5,new Season[]{Season.SPRING}),
     BEAN_STARTER("Bean Starter" , "Plant these in the spring. Takes 10 days to mature, but keeps producing after that. Grows on a trellis." , CropSeedsType.GREEN_BEAN , 75,Double.POSITIVE_INFINITY,5,new Season[]{Season.SPRING}),
     CAULIFLOWER_SEEDS("Cauliflower Seeds" , "Plant these in the spring. Takes 12 days to produce a large cauliflower.", CropSeedsType.CAULIFLOWER , 100 , Double.POSITIVE_INFINITY , 5,new Season[]{Season.SPRING} ),

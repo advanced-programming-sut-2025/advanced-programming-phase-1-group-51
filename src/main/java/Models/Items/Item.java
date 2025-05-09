@@ -5,7 +5,7 @@ import Models.Enums.Others.Quality;
 public abstract class Item {
 
     protected Quality quality;
-    protected int maxStackSize;
+    protected int maxSize;
     protected int value;
     protected double energyCost;
     protected String name;
@@ -13,9 +13,9 @@ public abstract class Item {
     public Item() {
     }
 
-    public Item(Quality quality, int maxStackSize, int value, double energyCost, String name) {
+    public Item(Quality quality, int maxSize, int value, double energyCost, String name) {
         this.quality = quality;
-        this.maxStackSize = maxStackSize;
+        this.maxSize = maxSize;
         this.value = value;
         this.energyCost = energyCost;
         this.name = name;
@@ -43,7 +43,7 @@ public abstract class Item {
         return energyCost;
     }
 
-    public int getMaxStackSize() {
-        return maxStackSize;
+    public int getMaxSize() {
+        return maxSize;
     }
 }

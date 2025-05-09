@@ -5,13 +5,13 @@ import Models.Enums.Types.ItemTypes.*;
 
 public enum PierreGeneralStoreProducts implements StoreProducts{
 
-    RICE("Rice", "A basic grain often served under vegetables.", FoodTypes.RICE, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
-    WHEAT_FLOUR("Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", FoodTypes.WHEAT_FLOUR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
+    RICE("Rice", "A basic grain often served under vegetables.", FoodType.RICE, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
+    WHEAT_FLOUR("Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", FoodType.WHEAT_FLOUR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
     BOUQUET("Bouquet", "A gift that shows your romantic interest.\n(Unlocked after reaching level 2 friendship with a player)",  ElseType.BOUQUET, 1000, 1000, 2, Season.values()),
     WEDDING_RING("Wedding Ring", "It's used to ask for another farmer's hand in marriage.\n(Unlocked after reaching level 3 friendship with a player)",  ElseType.WEDDING_RING, 10000, 10000, 2, Season.values()),
-    SUGAR("Sugar", "Adds sweetness to pastries and candies. Too much can be unhealthy.", FoodTypes.SUGAR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
-    OIL("Oil", "All purpose cooking oil.", FoodTypes.OIL, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
-    VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", FoodTypes.VINEGAR, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
+    SUGAR("Sugar", "Adds sweetness to pastries and candies. Too much can be unhealthy.", FoodType.SUGAR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
+    OIL("Oil", "All purpose cooking oil.", FoodType.OIL, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
+    VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", FoodType.VINEGAR, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
     DELUXE_RETAINING_SOIL("Deluxe Retaining Soil", "This soil has a 100% chance of staying watered overnight. Mix into tilled soil.",  ElseType.DELUXE_RETAINING_SOIL, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     GRASS_STARTER("Grass Starter", "Place this on your farm to start a new patch of grass.",  ElseType.GRASS_STARTER, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
     SPEED_GRO("Speed-Gro", "Makes the plants grow 1 day earlier.", ElseType.SPEED_GRO, 100, 100, Double.POSITIVE_INFINITY, Season.values()),

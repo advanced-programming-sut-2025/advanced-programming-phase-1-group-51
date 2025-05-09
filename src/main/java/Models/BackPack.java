@@ -47,9 +47,9 @@ public class BackPack {
     }
 
     public Loot getLootByItemName(String itemName) {
-        for (Loot slot : loots) {
-            if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
-                return slot;
+        for (Loot loot : loots) {
+            if (loot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
+                return loot;
             }
         }
         return null;
