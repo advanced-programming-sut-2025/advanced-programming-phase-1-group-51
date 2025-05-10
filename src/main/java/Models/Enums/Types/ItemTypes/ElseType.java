@@ -1,5 +1,7 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Loot;
+
 public enum ElseType implements ItemType{
 
     WOOD("Wood", 2, false, false),
@@ -50,8 +52,7 @@ public enum ElseType implements ItemType{
     OIL_MAKER("Oil Maker", 0, true, true),
     PRESERVES_JAR("Preserves Jar", 0, true, true),
     DEHYDRATOR("Dehydrator", 0, true, true),
-    FISH_SMOKER("Fish Smoker", 0, true, true),
-            ;
+    FISH_SMOKER("Fish Smoker", 0, true, true);
 
      public String name;
      public int value;
@@ -65,10 +66,6 @@ public enum ElseType implements ItemType{
         this.isPlacable = isPlacable;
     }
 
-
-    ElseType(){
-
-    }
     public String getName(){
         return name;
     }
@@ -83,4 +80,9 @@ public enum ElseType implements ItemType{
         return null;
     }
 
+
+    @Override
+    public Loot createAmountOfItem(int amount) {
+        return null;
+    }
 }

@@ -265,7 +265,7 @@ public class GameMenu implements PlayMenu{
             System.out.println(Artisan.ArtisanGet(artisanName));
         }
         else if ((matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null){
-            System.out.println(Dealing.ShowAllProducts());
+            System.out.println(Dealing.ShowAllProducts(matcher.group()));
         }
         else if ((matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.getMatcher(input)) != null){
             System.out.println(Dealing.ShowAllAvailableProducts());

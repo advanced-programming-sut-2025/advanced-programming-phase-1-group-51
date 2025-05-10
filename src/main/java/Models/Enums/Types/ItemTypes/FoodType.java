@@ -1,5 +1,7 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Loot;
+
 public enum FoodType implements ItemType{
 
     APRICOT("Apricot", 38,   59),
@@ -116,6 +118,7 @@ public enum FoodType implements ItemType{
     DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", 125,   800),
     TRUFFLE_OIL("Truffle Oil", 38,   1065),
     CHEESE("Cheese", 125,   230),
+    LARGE_CHEESE("large cgeese",),
     GOAT_CHEESE("Goat Cheese", 125,   400),
     MEAD("Mead", 75,   300),
     PALE_ALE("Pale Ale", 50,   300),
@@ -160,5 +163,10 @@ public enum FoodType implements ItemType{
         return name;
     }
 
+
+    @Override
+    public Loot createAmountOfItem(int amount) {
+        return null;
+    }
 
 }

@@ -30,13 +30,13 @@ public class Player {
     private ArrayList<CookingRecipes> cookingRecipes = new ArrayList<>();
     private ArrayList<CraftingRecipes> craftingRecipes = new ArrayList<>();
     private User user;
-    private DateAndTime dateAndTime;
     private boolean isPlayerFainted = false;
     private int id;
     private Item itemInHand;
     public static ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Loot> refrigeratorLoots = new ArrayList<>();
     private int currentTurnUsedEnergy;
+    private boolean isInVillage;
     private int currentPlaceNumber;
 
 
@@ -51,10 +51,12 @@ public class Player {
 
 
     public Player(User user) {
+        this.isInVillage = false;
         this.user = user;
         this.id = user.getId();
         this.inventory = new BackPack(BackpackType.DEFAULT);
         this.trashcanType = TrashcanType.DEFAULT;
+        this.currentTurnUsedEnergy = 0;
         this.energy = 200;
         this.maxEnergy = 200;
         this.money = 0;
@@ -66,13 +68,6 @@ public class Player {
         initializeRecipes();
     }
 
-    public DateAndTime getDateAndTime() {
-        return dateAndTime;
-    }
-
-    public void setDateAndTime(DateAndTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
-    }
     public Position getPosition() {
         return position;
     }
@@ -161,14 +156,6 @@ public class Player {
         this.user = user;
     }
 
-    public static void increaseEnergy(int energy){
-
-    }
-
-    public static void decreaseEnergy(int energy){
-
-    }
-
     public boolean isPlayerFainted() {
         return isPlayerFainted;
     }
@@ -191,14 +178,6 @@ public class Player {
 
     public void setTrashcan(TrashCan trashcan) {
         this.trashcan = trashcan;
-    }
-
-    public void increaseWood(int wood){
-
-    }
-
-    public void increaseGold(int Gold){
-
     }
 
     public ArrayList<Player> getPlayers() {
@@ -257,7 +236,15 @@ public class Player {
         this.itemInHand = itemInHand;
     }
 
-    public Animal getAnimalByName(String name) {
+    public boolean isInVillage() {
+        return isInVillage;
+    }
+
+    public void setInVillage(boolean inVillage) {
+        isInVillage = inVillage;
+    }
+
+    public Animal findAnimalByName(String name) {
         for (Animal animal : animals) {
             if (animal.getName().equals(name)) {
                 return animal;
@@ -270,6 +257,13 @@ public class Player {
         return game.getFarmByNumber(currentPlaceNumber);
     }
 
+    private void initializeSkills() {
+        this.skills.add(new Farming());
+        this.skills.add(new Fishing());
+        this.skills.add(new Foraging());
+        this.skills.add(new Mining());
+    }
+
     private void initializeRecipes() {
         this.craftingRecipes.add(CraftingRecipes.FURNACE);
         this.craftingRecipes.add(CraftingRecipes.SCARE_CROW);
@@ -279,12 +273,6 @@ public class Player {
         this.cookingRecipes.add(CookingRecipes.SALAD);
     }
 
-    private void initializeSkills() {
-        this.skills.add(new Farming());
-        this.skills.add(new Fishing());
-        this.skills.add(new Foraging());
-        this.skills.add(new Mining());
-    }
 
     private void initializeInventory() {
         this.inventory.getLoots().add(

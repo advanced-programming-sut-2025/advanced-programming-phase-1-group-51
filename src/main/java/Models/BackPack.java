@@ -54,4 +54,12 @@ public class BackPack {
         }
         return null;
     }
+
+    public void addLoot(Loot Loot) {
+        this.loots.add(Loot);
+    }
+
+    public void removeLoot(Loot Loot) {
+        loots.remove(Loot);
+    }
 }

@@ -1,17 +1,27 @@
 package Models;
 
+import Models.Enums.Types.StoresProductsTypes.AllProducts;
 import Models.Items.Item;
 
 public class StoreProduct {
-    private final int price;
-    private final Item item;
-    private final String name;
-    private int remainingCount;
+    private AllProducts type;
+    private int price;
+    private Item item;
+    private double remainingCount;
+    private String storeName;
 
-    public StoreProduct(Item item, int price, String name) {
+    public StoreProduct() {
+    }
+
+    public StoreProduct(AllProducts type , String storeName) {
+        this.type = type;
+        this.remainingCount = type.getDailyLimit();
+        this.storeName = storeName;
+    }
+
+    public StoreProduct(Item item, int price) {
         this.item = item;
         this.price = price;
-        this.name = name;
     }
 
     public int getPrice() {
@@ -22,15 +32,27 @@ public class StoreProduct {
         return item;
     }
 
-    public int getRemainingCount() {
+    public double getRemainingCount() {
         return remainingCount;
     }
 
-    public void setRemainingCount(int remainingCount) {
+    public void setRemainingCount(double remainingCount) {
         this.remainingCount = remainingCount;
     }
 
-    public String getName() {
-        return name;
+    public AllProducts getType() {
+        return type;
+    }
+
+    public void setType(AllProducts type) {
+        this.type = type;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

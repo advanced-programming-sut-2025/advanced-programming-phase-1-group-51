@@ -1,6 +1,7 @@
 package Models.Enums.Types.ItemTypes;
 
 import Models.Enums.Others.Season;
+import Models.Loot;
 
 public enum FishType implements ItemType{
 
@@ -37,6 +38,11 @@ public enum FishType implements ItemType{
         this.isLegendary = isLegendary;
     }
 
+
+    @Override
+    public Loot createAmountOfItem(int amount) {
+        return null;
+    }
 
     public String getName(){
         return name;

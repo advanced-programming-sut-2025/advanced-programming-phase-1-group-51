@@ -1,6 +1,8 @@
 package Models.Enums.Types.ItemTypes;
 
 
+import Models.Loot;
+
 public enum ForagingMineralType implements ItemType{
 
     STONE(2, "Stone"),
@@ -46,6 +48,12 @@ public enum ForagingMineralType implements ItemType{
 
     public int getSellPrice() {
         return sellPrice;
+    }
+
+
+    @Override
+    public Loot createAmountOfItem(int amount) {
+        return null;
     }
 
 }

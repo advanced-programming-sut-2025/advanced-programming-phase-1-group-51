@@ -1,6 +1,7 @@
 package Models.Enums.Types.ItemTypes;
 
 import Models.Enums.Others.Season;
+import Models.Loot;
 
 public enum CropSeedsType implements ItemType{
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
@@ -115,6 +116,12 @@ public enum CropSeedsType implements ItemType{
             }
         }
         return this;
+    }
+
+
+    @Override
+    public Loot createAmountOfItem(int amount) {
+        return null;
     }
 
     public String getName(){

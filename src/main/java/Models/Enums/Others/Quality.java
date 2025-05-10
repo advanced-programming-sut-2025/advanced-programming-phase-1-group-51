@@ -8,8 +8,7 @@ public enum Quality {
     COPPER("Copper"),
     SILVER("Silver"),
     GOLD("Gold"),
-    IRIDIUM("Iridium"),
-            ;
+    IRIDIUM("Iridium");
 
     private final String name;
     private final int qualityLevel;

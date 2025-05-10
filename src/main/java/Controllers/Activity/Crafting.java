@@ -20,7 +20,6 @@ public class Crafting extends Controller {
     public Result placeItem(String name, String direction) {
         return null;
     }
-
     public Result addItem(String name, int count) {
         return null;
     }
