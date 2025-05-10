@@ -1,5 +1,6 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Enums.Types.ObjectsOnMapType.ArtisanBlockType;
 import Models.Loot;
 
 public enum FoodType implements ItemType{
@@ -161,6 +162,16 @@ public enum FoodType implements ItemType{
 
     public String getName(){
         return name;
+    }
+
+    public static FoodType findFoodTypeByName(String name) {
+        FoodType[] values = FoodType.values();
+        for (FoodType value : values) {
+            if (value.name.compareToIgnoreCase(name) == 0) {
+                return value;
+            }
+        }
+        return null;
     }
 
 

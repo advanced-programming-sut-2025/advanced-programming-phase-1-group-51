@@ -4,6 +4,7 @@ import Models.Enums.Types.ItemTypes.ElseType;
 import Models.Enums.Types.ItemTypes.FoodType;
 import Models.Items.Else;
 import Models.Items.Food;
+import Models.Loot;
 
 import java.util.ArrayList;
 
@@ -27,10 +28,10 @@ public enum ArtisanBlockType {
 
     public final String name;
     public final int usedEnergy;
-    public final ArrayList<Else> ingridients;
-    public final Food foodThatCanBeMade;
+    public final ArrayList<Loot> ingridients;
+    public final Loot foodThatCanBeMade;
 
-    ArtisanBlockType(String name, int usedEnergy, ArrayList<ElseType> ingridients, Food foodThatCanBeMade) {
+    ArtisanBlockType(String name, int usedEnergy, ArrayList<Loot> ingridients, Loot foodThatCanBeMade) {
         this.name = name;
         this.usedEnergy = usedEnergy;
         this.ingridients = ingridients;
