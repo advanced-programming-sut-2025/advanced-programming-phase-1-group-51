@@ -5,7 +5,6 @@ public abstract class ObjectOnMap {
     public String type;
     public boolean isWalkable;
     public String color;
-    public boolean hasBeenPlowed = false;
 
     public ObjectOnMap(boolean isWalkable, String type, String color) {
         this.isWalkable = isWalkable;

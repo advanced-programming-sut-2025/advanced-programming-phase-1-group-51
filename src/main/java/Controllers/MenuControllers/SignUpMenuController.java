@@ -19,6 +19,11 @@ public class SignUpMenuController extends Controller {
         return new Result(true, "SignUp Menu");
     }
 
+    public Result goToLoginMenu(){
+        Game.setCurrentMenu(Menu.LoginMenu);
+        return new Result(true,"You are now in Login Menu");
+    }
+
     public Result register(String username, String password, String confirmPassword, String nickname, String email, String gender){
 
         for(User user : User.users){

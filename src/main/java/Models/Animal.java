@@ -12,7 +12,7 @@ public class Animal {
     private Item product;
     private boolean hasBeenFedHayToday = false;
     private boolean hasBeenFedGrassToday = false;
-    private boolean hasBeenPetToday = false;
+    private boolean hasBeenPetToday;
     private boolean hasBeenCollected = false;
     private int friendshipLevel;
 
@@ -21,6 +21,10 @@ public class Animal {
         this.price = price;
         this.name = name;
         this.type = type;
+        this.hasBeenPetToday = false;
+        this.hasBeenFedHayToday = false;
+        this.hasBeenFedGrassToday = false;
+        this.friendshipLevel = 0;
     }
 
     public int getPrice() {

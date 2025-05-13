@@ -13,6 +13,7 @@ import Models.NPCs.NPCsFriendship;
 import Models.Skills.*;
 import java.util.ArrayList;
 
+
 public class Player {
     private Position position;
     private Farm farm;
@@ -33,10 +34,11 @@ public class Player {
     private boolean isPlayerFainted = false;
     private int id;
     private Item itemInHand;
-    public static ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Loot> refrigeratorLoots = new ArrayList<>();
     private int currentTurnUsedEnergy;
     private boolean isInVillage;
+    private boolean isInFarm;
+    private boolean isCloseToLake;
     private int currentPlaceNumber;
 
 
@@ -66,6 +68,28 @@ public class Player {
         initializeInventory();
         initializeSkills();
         initializeRecipes();
+    }
+
+
+
+    public Farming getFarmingSkill() {
+
+        return null;
+    }
+
+    public Fishing getFishingSkill() {
+
+        return null;
+    }
+
+    public Foraging getForagingSkill() {
+
+        return null;
+    }
+
+    public Mining getMiningSkill() {
+
+        return null;
     }
 
     public Position getPosition() {
@@ -180,14 +204,6 @@ public class Player {
         this.trashcan = trashcan;
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
-
     public int getId() {
         return id;
     }
@@ -244,7 +260,23 @@ public class Player {
         isInVillage = inVillage;
     }
 
-    public Animal findAnimalByName(String name) {
+    public boolean isCloseToLake() {
+        return isCloseToLake;
+    }
+
+    public void setCloseToLake(boolean closeToLake) {
+        isCloseToLake = closeToLake;
+    }
+
+    public boolean isInFarm() {
+        return isInFarm;
+    }
+
+    public void setInFarm(boolean inFarm) {
+        isInFarm = inFarm;
+    }
+
+    public Animal findAnimal(String name) {
         for (Animal animal : animals) {
             if (animal.getName().equals(name)) {
                 return animal;
@@ -286,6 +318,8 @@ public class Player {
         this.inventory.getLoots().add(
                 new Loot(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolType.SCYTHE, 0), 1));
     }
+
+
 
     @Override
     public boolean equals(Object o) {

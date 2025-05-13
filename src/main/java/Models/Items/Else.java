@@ -21,12 +21,6 @@ public class Else extends Item{
 
     }
 
-
-    public Else() {
-        super();
-        ElseType = null;
-    }
-
     public Else(ElseType ElseType, Quality quality) {
         super(quality, Integer.MAX_VALUE, ElseType.value, 0, ElseType.name);
         this.ElseType = ElseType;

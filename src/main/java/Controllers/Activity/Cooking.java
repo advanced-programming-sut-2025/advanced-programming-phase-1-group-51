@@ -26,7 +26,7 @@ public class Cooking extends Controller {
             return new Result(false, "Your inventory is full.");
         }
 
-        Loot backpackLoot = backpack.getLootByItemName(itemName);
+        Loot backpackLoot = backpack.findItemLoot(itemName);
 
         if (backpackLoot == null) {
             backpack.getLoots().add(refrigeratorLoot);
@@ -44,7 +44,7 @@ public class Cooking extends Controller {
         Player player = game.getCurrentPlayer();
         BackPack backpack = player.getInventory();
 
-        Loot backpackLoot = backpack.getLootByItemName(itemName);
+        Loot backpackLoot = backpack.findItemLoot(itemName);
 
         if (backpackLoot == null) {
             return new Result(false, "This item is not in your backpack");
@@ -101,7 +101,7 @@ public class Cooking extends Controller {
         player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + 3);
 
         for (Loot ingredient : foodRecipe.ingredients) {
-            Loot backpackLoot = backpack.getLootByItemName(ingredient.getItem().getName());
+            Loot backpackLoot = backpack.findItemLoot(ingredient.getItem().getName());
             Loot refrigeratorLoot = player.getRefrigeratorLootByName(ingredient.getItem().getName());
 
             int availableAmount = 0;
@@ -119,8 +119,9 @@ public class Cooking extends Controller {
             }
         }
 
+
         for (Loot ingredient : foodRecipe.ingredients) {
-            Loot backpackLoot = backpack.getLootByItemName(ingredient.getItem().getName());
+            Loot backpackLoot = backpack.findItemLoot(ingredient.getItem().getName());
             Loot refrigeratorLoot = player.getRefrigeratorLootByName(ingredient.getItem().getName());
 
             int neededCount = ingredient.getCount();
@@ -150,7 +151,7 @@ public class Cooking extends Controller {
 
         Loot cookedfoodLoot = new Loot(new Food(Quality.DEFAULT, foodRecipe.cookingResultType), 1);
 
-        Loot destinationLoot = backpack.getLootByItemName(cookedfoodLoot.getItem().getName());
+        Loot destinationLoot = backpack.findItemLoot(cookedfoodLoot.getItem().getName());
 
         if (destinationLoot == null) {
             backpack.getLoots().add(cookedfoodLoot);
@@ -166,7 +167,7 @@ public class Cooking extends Controller {
         Player player = game.getCurrentPlayer();
         BackPack backpack = player.getInventory();
 
-        Loot backpackLoot = backpack.getLootByItemName(foodName);
+        Loot backpackLoot = backpack.findItemLoot(foodName);
 
         if(backpackLoot == null){
             return new Result(false, "You can only eat foods that are in your inventory or refrigerator");

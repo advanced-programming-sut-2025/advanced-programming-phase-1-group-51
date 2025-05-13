@@ -6,25 +6,50 @@ import Models.Enums.Others.Weather;
 import Models.Maps.Farm;
 import Models.Maps.Map;
 
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import static Models.Player.players;
 
 public class Game {
 
     public static final Scanner scanner = new Scanner(System.in);
+    public static ArrayList<Player> players = new ArrayList<>();
     private static Menu currentMenu = Menu.SignUpMenu;
     private static User currentUser = null;
-    private static Player GameStarterPlayer = null;
     private static boolean isGameOver = false;
     private static Season season = Season.SPRING;
     private static Map map;
     private static Weather weather = Weather.SUNNY;
-    private static DateAndTime currentDateAndTime;
-    private static Player currentPlayer = null;
+    private LocalDateTime date;
+    private Weather weatherToday;
+    private Weather weatherTomorrow;
+    private static Player currentPlayer;
+    public boolean hasTurnCycleFinished;
+    private static Player GameStarterPlayer;
+    private static Player secondPlayer;
+    private static Player thirdPlayer;
+    private static Player fourthPlayer;
 
+
+    public Game(ArrayList<Player> players, Player currentPlayer) {
+        this.hasTurnCycleFinished = false;
+        this.players = players;
+        this.currentPlayer = currentPlayer;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.date = LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter);
+        this.weatherToday = Weather.SUNNY;
+        this.weatherTomorrow = Weather.SUNNY;
+        this.season = Season.SPRING;
+        this.currentPlayer = null;
+        this.GameStarterPlayer = null;
+        this.secondPlayer = null;
+        this.thirdPlayer = null;
+        this.fourthPlayer = null;
+
+    }
 
     public static Player getCurrentPlayer() {
         return currentPlayer;
@@ -35,6 +60,14 @@ public class Game {
     }
     public static Menu getCurrentMenu() {
         return currentMenu;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     public static void setCurrentMenu(Menu currentMenu) {
@@ -65,12 +98,28 @@ public class Game {
         Game.season = season;
     }
 
-    public static DateAndTime getCurrentDateAndTime() {
-        return currentDateAndTime;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public static void setCurrentDateAndTime(DateAndTime currentDateAndTime) {
-        Game.currentDateAndTime = currentDateAndTime;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public Weather getWeatherToday() {
+        return weatherToday;
+    }
+
+    public void setWeatherToday(Weather weatherToday) {
+        this.weatherToday = weatherToday;
+    }
+
+    public Weather getWeatherTomorrow() {
+        return weatherTomorrow;
+    }
+
+    public void setWeatherTomorrow(Weather weatherTomorrow) {
+        this.weatherTomorrow = weatherTomorrow;
     }
 
     public static Map getMap() {
@@ -110,34 +159,56 @@ public class Game {
         return null;
     }
 
-    public static void advanceTime(int hours) {
-        currentDateAndTime.increaseHours(hours);
-        // Update weather based on time of day
-        updateWeather();
-    }
-
-    public static void advanceDate(int days) {
-        currentDateAndTime.increaseDays(days);
-        // Update weather based on season
-        updateWeather();
-    }
-
-    private static void updateWeather() {
-        // Implement weather change logic based on season/time
-        // This is just an example - adjust probabilities as needed
-        double rand = Math.random();
-        if (getSeason() == Season.SPRING) {
-            setWeather(rand < 0.6 ? Weather.RAIN : Weather.SUNNY);
-        } else if (getSeason() == Season.SUMMER) {
-            setWeather(rand < 0.1 ? Weather.STORM : Weather.SUNNY);
-        } else if (getSeason() == Season.FALL) {
-            setWeather(rand < 0.4 ? Weather.RAIN : Weather.SUNNY);
-        } else { // WINTER
-            setWeather(rand < 0.7 ? Weather.SNOW : Weather.SUNNY);
+    public Player findPlayerByUser(User user) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().equals(user.getUsername())) {
+                return player;
+            }
         }
+        return null;
+    }
+
+    public Player findPlayerByUsername(String username) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().compareToIgnoreCase(username) == 0) {
+                return player;
+            }
+        }
+        return null;
     }
 
 
+    public boolean isHasTurnCycleFinished() {
+        return hasTurnCycleFinished;
+    }
+
+    public void setHasTurnCycleFinished(boolean hasTurnCycleFinished) {
+        this.hasTurnCycleFinished = hasTurnCycleFinished;
+    }
+
+    public static Player getSecondPlayer() {
+        return secondPlayer;
+    }
+
+    public static void setSecondPlayer(Player secondPlayer) {
+        Game.secondPlayer = secondPlayer;
+    }
+
+    public static Player getThirdPlayer() {
+        return thirdPlayer;
+    }
+
+    public static void setThirdPlayer(Player thirdPlayer) {
+        Game.thirdPlayer = thirdPlayer;
+    }
+
+    public static Player getFourthPlayer() {
+        return fourthPlayer;
+    }
+
+    public static void setFourthPlayer(Player fourthPlayer) {
+        Game.fourthPlayer = fourthPlayer;
+    }
 
 
 }

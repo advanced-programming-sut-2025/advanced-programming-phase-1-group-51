@@ -1,5 +1,6 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Enums.Others.Quality;
 import Models.Enums.Types.ObjectsOnMapType.ArtisanBlockType;
 import Models.Loot;
 
@@ -119,7 +120,7 @@ public enum FoodType implements ItemType{
     DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", 125,   800),
     TRUFFLE_OIL("Truffle Oil", 38,   1065),
     CHEESE("Cheese", 125,   230),
-    LARGE_CHEESE("large cgeese",),
+    LARGE_CHEESE("large cgeese",100, 325),
     GOAT_CHEESE("Goat Cheese", 125,   400),
     MEAD("Mead", 75,   300),
     PALE_ALE("Pale Ale", 50,   300),
@@ -164,7 +165,7 @@ public enum FoodType implements ItemType{
         return name;
     }
 
-    public static FoodType findFoodTypeByName(String name) {
+    public static FoodType findFoodType(String name) {
         FoodType[] values = FoodType.values();
         for (FoodType value : values) {
             if (value.name.compareToIgnoreCase(name) == 0) {
@@ -176,7 +177,7 @@ public enum FoodType implements ItemType{
 
 
     @Override
-    public Loot createAmountOfItem(int amount) {
+    public Loot createAmountOfItem(int amount, Quality quality) {
         return null;
     }
 

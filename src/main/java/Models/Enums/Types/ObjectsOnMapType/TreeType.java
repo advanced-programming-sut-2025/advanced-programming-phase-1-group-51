@@ -5,13 +5,13 @@ import Models.Enums.Types.ItemTypes.FoodType;
 
 public enum TreeType {
 
-    TREE_BARK("Tree Bark", -1, null, -1, -1, false, -1,new Season[]{null}),
-    BURNT_TREE("Burnt Tree", -1, null, -1, -1, false, -1, (Season[]) null),
-    NORMAL_TREE("Normal Tree",-1, null, -1, -1, false, -1, (Season[]) null),
-    APRICOT_TREE("Apricot Tree", 7, FoodType.APRICOT, 1, 59, true, 38,  new Season[]{Season.SPRING}),
-    CHERRY_TREE("Cherry Tree", 7, FoodType.CHERRY, 1, 80, true, 38,  new Season[]{Season.SPRING}),
-    BANANA_TREE("Banana Tree", 7, FoodType.BANANA, 1, 150, true, 75,  new Season[]{Season.SUMMER}),
-    MANGO_TREE("Mango Tree", 7, FoodType.MANGO, 1, 130, true, 100,  new Season[]{Season.SUMMER}),
+    TREE_BARK("Tree Bark", -1, null, -1, -1, false, -1,new Season[]{null}," "),
+    BURNT_TREE("Burnt Tree", -1, null, -1, -1, false, -1, (Season[]) null," "),
+    NORMAL_TREE("Normal Tree",-1, null, -1, -1, false, -1, (Season[]) null," "),
+    APRICOT_TREE("Apricot Tree", 7, FoodType.APRICOT, 1, 59, true, 38,  new Season[]{Season.SPRING},"Apricot Sapling"),
+    CHERRY_TREE("Cherry Tree", 7, FoodType.CHERRY, 1, 80, true, 38,  new Season[]{Season.SPRING},"Apricot Sapling"),
+    BANANA_TREE("Banana Tree", 7, FoodType.BANANA, 1, 150, true, 75,  new Season[]{Season.SUMMER},"Apricot Sapling"),
+    MANGO_TREE("Mango Tree", 7, FoodType.MANGO, 1, 130, true, 100,  new Season[]{Season.SUMMER},"Apricot Sapling"),
     ORANGE_TREE("Orange Tree", 7, FoodType.ORANGE, 1, 100, true, 38,  new Season[]{Season.SUMMER}),
     PEACH_TREE("Peach Tree", 7, FoodType.PEACH, 1, 140, true, 38,  new Season[]{Season.SUMMER}),
     APPLE_TREE("Apple Tree", 7, FoodType.APPLE, 1, 100, true, 38, new Season[]{Season.FALL}),
@@ -34,10 +34,11 @@ public enum TreeType {
     final public boolean isFruitEdible;
     final public int fruitEnergy;
     final public Season[] seasons;
+    final public String seed;
 
 
     TreeType(String name, int stagesTime, FoodType fruitItem, int harvestCycleTime, int fruitSellPrice
-            , boolean isFruitEdible, int fruitEnergy, Season[] seasons) {
+            , boolean isFruitEdible, int fruitEnergy, Season[] seasons, String seed) {
         this.name = name;
         this.stageOneTime = stagesTime;
         this.stageTwoTime = stagesTime;
@@ -49,6 +50,16 @@ public enum TreeType {
         this.isFruitEdible = isFruitEdible;
         this.fruitEnergy = fruitEnergy;
         this.seasons = seasons;
+        this.seed = seed;
+    }
+
+    public static TreeType findTreeBySeed(String seedType) {
+        for (TreeType tree : TreeType.values()) {
+            if (tree.seed.compareToIgnoreCase(seedType) == 0) {
+                return tree;
+            }
+        }
+        return null;
     }
 
 }

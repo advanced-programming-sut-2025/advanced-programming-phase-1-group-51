@@ -18,10 +18,11 @@ public class User {
     private String gender;
     private int securityQuestionNumber;
     private String securityAnswer;
-    private Game currentGame;
     private int gamesPlayed = 0;
     private int id;
     private int maxMoneyEarnedInGame;
+    private Game currentGame;
+    private final ArrayList<Game> games = new ArrayList<>();
 
     public User(String username, String password, String nickName,  String email, String gender) {
         this.username = username;
@@ -132,6 +133,7 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
 
     @Override
     public boolean equals(Object o) {

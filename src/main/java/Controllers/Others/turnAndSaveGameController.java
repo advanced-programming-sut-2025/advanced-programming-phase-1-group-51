@@ -41,23 +41,26 @@ public class turnAndSaveGameController extends Controller {
             }
         }
 
-        Player.players.clear();
+        Game.players.clear();
 
         Player currentPlayer = Game.getCurrentPlayer();
         if (currentPlayer == null || !currentPlayer.getUser().equals(Game.getCurrentUser())) {
             currentPlayer = new Player(Game.getCurrentUser());
             Game.setCurrentPlayer(currentPlayer);
         }
-        Player.players.add(currentPlayer);
+        Game.players.add(currentPlayer);
 
-        Player.players.add(new Player(user1));
+        Game.players.add(new Player(user1));
         if (user2 != null) {
-            Player.players.add(new Player(user2));
+            Game.players.add(new Player(user2));
         }
         if (user3 != null) {
-            Player.players.add(new Player(user3));
+            Game.players.add(new Player(user3));
         }
         Game.setGameStarterPlayer(currentPlayer);
+        Game.setSecondPlayer(new Player(user1));
+        Game.setThirdPlayer(new Player(user2));
+        Game.setFourthPlayer(new Player(user3));
         return new Result(true, "New game created successfully. Write 'load game' to enter the game.");
     }
 
@@ -73,6 +76,9 @@ public class turnAndSaveGameController extends Controller {
     }
 
     public Result loadGame(){
+        if (Game.getCurrentUser().getCurrentGame() == null) {
+            return new Result(false, "No saved game found.");
+        }
         Game.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You are now in game");
     }
@@ -94,9 +100,48 @@ public class turnAndSaveGameController extends Controller {
         return new Result(true, "you exit the game successfully!");
     }
 
-    public Result nextTurn(){
 
-        return new Result(true,"its now next player's turn");
+
+    public Result nextTurn(){
+        User user = Game.getCurrentUser();
+        Game game = user.getCurrentGame();
+
+        // 3 players
+        if(Game.getFourthPlayer() == null){
+            if(Game.getCurrentPlayer() == Game.getGameStarterPlayer()){
+                Game.setCurrentPlayer(Game.getSecondPlayer());
+            }
+            else if(Game.getCurrentPlayer() == Game.getSecondPlayer()){
+                Game.setCurrentPlayer(Game.getThirdPlayer());
+            }
+            else if(Game.getCurrentPlayer() == Game.getThirdPlayer()){
+                Game.setCurrentPlayer(Game.getGameStarterPlayer());
+
+            }
+        }
+         // 2 players
+        else if(Game.getThirdPlayer() == null){
+            if(Game.getCurrentPlayer() == Game.getGameStarterPlayer()){
+                Game.setCurrentPlayer(Game.getSecondPlayer());
+            }
+            else if(Game.getCurrentPlayer() == Game.getSecondPlayer()){
+                Game.setCurrentPlayer(Game.getGameStarterPlayer());
+            }
+        }
+        else {
+            // 4 players
+            if (Game.getCurrentPlayer() == Game.getGameStarterPlayer()) {
+                Game.setCurrentPlayer(Game.getSecondPlayer());
+            } else if (Game.getCurrentPlayer() == Game.getSecondPlayer()) {
+                Game.setCurrentPlayer(Game.getThirdPlayer());
+            } else if (Game.getCurrentPlayer() == Game.getThirdPlayer()) {
+                Game.setCurrentPlayer(Game.getFourthPlayer());
+            } else if (Game.getCurrentPlayer() == Game.getFourthPlayer()) {
+                Game.setCurrentPlayer(Game.getGameStarterPlayer());
+            }
+        }
+        game.getDate().plusHours(1);
+        return new Result(true,"Its now next player's turn");
     }
 
     private User findUserByUsername(String username) {

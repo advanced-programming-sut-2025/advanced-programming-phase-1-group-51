@@ -87,7 +87,7 @@ public class LoginMenuController extends Controller {
         switch (questionNumber) {
             case 1: return "1. What was the name of your first pet?";
             case 2: return "2. What city were you born in?";
-            case 3: return "3. What is your mother's name?";
+            case 3: return "3. What is your father's name?";
             default: return "Invalid question";
         }
     }

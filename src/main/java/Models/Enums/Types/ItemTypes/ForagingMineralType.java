@@ -1,6 +1,7 @@
 package Models.Enums.Types.ItemTypes;
 
 
+import Models.Enums.Others.Quality;
 import Models.Loot;
 
 public enum ForagingMineralType implements ItemType{
@@ -52,7 +53,7 @@ public enum ForagingMineralType implements ItemType{
 
 
     @Override
-    public Loot createAmountOfItem(int amount) {
+    public Loot createAmountOfItem(int amount, Quality quality) {
         return null;
     }
 

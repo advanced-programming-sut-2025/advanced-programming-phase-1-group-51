@@ -1,24 +1,30 @@
 package Models.Items;
 
+import Models.Enums.Others.Quality;
+import Models.Enums.Types.ItemTypes.CropSeedsType;
 import Models.Enums.Types.ObjectsOnMapType.AllCropsType;
 
 public class Seed extends Item{
 
-    private AllCropsType cropSeedsType;
-    private String name;
+    private CropSeedsType cropSeedsType;
 
+    public Seed() {
+    }
 
-    public AllCropsType getCropType() {
+    public CropSeedsType getCropType() {
         return cropSeedsType;
     }
 
-    public void setCropType(AllCropsType cropSeedsType) {
+    public void setCropType(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
     }
 
-    public Seed(AllCropsType cropSeedsType, String name) {
+    public Seed(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
-        this.name = name;
+        this.name = cropSeedsType.source;
+        this.quality = Quality.DEFAULT;
+        this.value = cropSeedsType.baseSellPrice;
+        this.energyCost = 0;
     }
 
     @Override
@@ -34,11 +40,6 @@ public class Seed extends Item{
     @Override
     public void dropItem() {
 
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {

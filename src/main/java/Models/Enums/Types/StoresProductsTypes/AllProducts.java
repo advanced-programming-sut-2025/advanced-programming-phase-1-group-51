@@ -9,6 +9,14 @@ public enum AllProducts {
     IRON_ORE("Iron Ore", "A fairly common ore that can be smelted into bars.", ForagingMineralType.IRON_ORE, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     COAL("Coal", "A combustible rock that is useful for crafting and smelting.", ForagingMineralType.COAL, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     GOLD_ORE("Gold Ore", "A precious ore that can be smelted into bars.", ForagingMineralType.GOLD_ORE, 400, 400, Double.POSITIVE_INFINITY, Season.values()),
+    COPPER_TOOL("Copper Tool", ElseType.COPPER_BAR, 2000, 2000, 1, Season.values()),
+    STEEL_TOOL("Steel Tool", ElseType.IRON_BAR, 5000, 5000, 1, Season.values()),
+    GOLD_TOOL("Gold Tool", ElseType.GOLD_BAR, 10000, 10000, 1, Season.values()),
+    IRIDIUM_TOOL("Iridium Tool", ElseType.IRIDIUM_BAR, 25000, 25000, 1, Season.values()),
+    COPPER_TRASH_CAN("Copper Trash Can", ElseType.COPPER_BAR, 1000, 1000, 1, Season.values()),
+    STEEL_TRASH_CAN("Steel Trash Can", ElseType.COPPER_BAR, 2500, 2500, 1, Season.values()),
+    GOLD_TRASH_CAN("Gold Trash Can", ElseType.COPPER_BAR, 5000, 5000, 1, Season.values()),
+    IRIDIUM_TRASH_CAN("Iridium Trash Can", ElseType.COPPER_BAR, 12500, 12500, 1, Season.values()),
     WOOD("Wood", "A sturdy, yet flexible plant material with a wide variety of uses.", ElseType.WOOD, 10, 10, Double.POSITIVE_INFINITY, Season.values()),
     STONE("Stone", "A common material with many uses in crafting and building.", ForagingMineralType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values()),
     BARN("Barn", "Houses 4 barn-dwelling animals.", ForagingMineralType.STONE, 20, 20, 1, Season.values()),
@@ -127,7 +135,7 @@ public enum AllProducts {
     GRAPE_STARTER_P("Pierre Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.GRAPE, 60, 90, 5, new Season[]{Season.FALL}),
     ARTICHOKE_SEEDS("Artichoke Seeds", "Plant these in the fall. Takes 8 days to mature.", CropSeedsType.ARTICHOKE, 30, 45, 5, new Season[]{Season.FALL}),
     HASHBROWNS("Hashbrowns", "A recipe to make Hashbrowns", null, 50, 50, 1, Season.values()),
-    OMELET("Omelet", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
+    OMELET("Omelette", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
     PANCAKES("Pancakes", "A recipe to make Pancakes", null, 100, 100, 1, Season.values()),
     BREAD_RECIPE("Bread Recipe", "A recipe to make Bread", null, 100, 100, 1, Season.values()),
     TORTILLA("Tortilla", "A recipe to make Tortilla", null, 100, 100, 1, Season.values()),
@@ -145,12 +153,13 @@ public enum AllProducts {
     STONE_S("Stardrop Stone", "A common material with many uses in crafting and building.", ForagingMineralType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values());
 
     private final String name;
-    private final String description;
+    private String description = "";
     private String fieldName;
     private String enumName;
     private final int price;
     private final double outOfSeasonPrice;
     private final double dailyLimit;
+    private ItemType ingredient = null;
     private Integer fishingSkill;
     private Season[] seasons;
 
@@ -205,6 +214,15 @@ public enum AllProducts {
         }
     }
 
+    AllProducts(String name, ItemType ingredient, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
+        this.name = name;
+        this.ingredient = ingredient;
+        this.price = price;
+        this.outOfSeasonPrice = outOfSeasonPrice;
+        this.dailyLimit = dailyLimit;
+        this.seasons = seasons;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -230,10 +248,9 @@ public enum AllProducts {
     }
 
     public ItemType getItemType() {
-        if(fieldName == null){
+        if (fieldName == null) {
             return null;
-        }
-        else if (enumName.equals("CropSeedsType")) {
+        } else if (enumName.equals("CropSeedsType")) {
             return CropSeedsType.valueOf(fieldName);
         } else if (enumName.equals("ElseType")) {
             return ElseType.valueOf(fieldName);
@@ -267,5 +284,13 @@ public enum AllProducts {
             return getPrice();
         }
         return getOutOfSeasonPrice();
+    }
+
+    public ItemType getIngredient() {
+        return ingredient;
+    }
+
+    public Integer getFishingSkill() {
+        return fishingSkill;
     }
 }

@@ -3,22 +3,36 @@ package Models.Skills;
 import Models.Enums.Others.SkillLevel;
 
 public abstract class Skill {
-    int energyCost;
-    int xp;
-    SkillLevel level;
+    protected SkillLevel level;
+    protected int xp;
 
     protected Skill() {
         this.level = SkillLevel.ZERO;
         this.xp = 0;
     }
 
-    public Skill(int energyCost, int xp, SkillLevel level) {
-        this.energyCost = energyCost;
-        this.xp = xp;
+    protected Skill(SkillLevel level, int xp) {
         this.level = level;
+        this.xp = xp;
     }
 
-    public void learnSkill(){}
+    abstract public void learn();
+
+    public int getXp() {
+        return this.xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public SkillLevel getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(SkillLevel level) {
+        this.level = level;
+    }
 
 
 

@@ -5,14 +5,20 @@ import Models.Enums.Others.SkillLevel;
 public class Mining extends Skill {
 
     @Override
-    public void learnSkill() {
-        super.learnSkill();
+    public void learn() {
+
     }
 
     public Mining() {
+        super();
     }
 
-    public Mining(int energyCost, int xp, SkillLevel level) {
-        super(energyCost, xp, level);
+    public Mining(SkillLevel level, int xp) {
+        super(level, xp);
+    }
+
+    @Override
+    public String toString() {
+        return "Mining";
     }
 }

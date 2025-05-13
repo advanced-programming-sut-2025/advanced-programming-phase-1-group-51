@@ -7,8 +7,6 @@ import java.util.ArrayList;
 public class BackPack {
     private BackpackType type;
     private ArrayList<Loot> loots = new ArrayList<>();
-    int numberOfGold;
-    int numberOfWood;
 
     public BackPack(BackpackType type) {
         this.type = type;
@@ -30,23 +28,7 @@ public class BackPack {
         this.loots = lots;
     }
 
-    public int getNumberOfGold() {
-        return numberOfGold;
-    }
-
-    public void setNumberOfGold(int numberOfGold) {
-        this.numberOfGold = numberOfGold;
-    }
-
-    public int getNumberOfWood() {
-        return numberOfWood;
-    }
-
-    public void setNumberOfWood(int numberOfWood) {
-        this.numberOfWood = numberOfWood;
-    }
-
-    public Loot getLootByItemName(String itemName) {
+    public Loot findItemLoot(String itemName) {
         for (Loot loot : loots) {
             if (loot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
                 return loot;

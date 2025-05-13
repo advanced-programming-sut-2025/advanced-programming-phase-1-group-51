@@ -35,6 +35,9 @@ public class SignUpMenu implements PlayMenu{
             System.out.println(controller.pickQuestion(Integer.parseInt(matcher.group("questionNumber").trim()),
                     matcher.group("answer").trim(), matcher.group("answerConfirm").trim()));
         }
+        else if((matcher = SignUpMenuCommands.GO_TO_LOGIN.getMatcher(input)) != null){
+            System.out.println(controller.goToLoginMenu());
+        }
         else{
             System.out.println("Invalid Command!");
         }

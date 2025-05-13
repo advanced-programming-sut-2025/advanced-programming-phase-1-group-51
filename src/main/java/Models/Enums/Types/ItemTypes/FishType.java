@@ -1,5 +1,6 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Enums.Others.Quality;
 import Models.Enums.Others.Season;
 import Models.Loot;
 
@@ -40,7 +41,7 @@ public enum FishType implements ItemType{
 
 
     @Override
-    public Loot createAmountOfItem(int amount) {
+    public Loot createAmountOfItem(int amount, Quality quality) {
         return null;
     }
 

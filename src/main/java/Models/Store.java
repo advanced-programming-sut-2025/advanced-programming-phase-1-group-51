@@ -1,14 +1,16 @@
 package Models;
 
+import Models.Enums.Others.Season;
+
 import java.util.ArrayList;
 
 public class Store {
 
-    private final String owner;
-    private final int openHour;
-    private final int closeHour;
-    private final ArrayList<StoreProduct> products = new ArrayList<>();
-    private final String name;
+    private String owner;
+    private int openHour;
+    private int closeHour;
+    private ArrayList<StoreProduct> products = new ArrayList<>();
+    private String name;
 
 
     public Store(String owner, int openHour, int closeHour, String name) {
@@ -42,19 +44,10 @@ public class Store {
         return openHour <= hour && hour <= closeHour;
     }
 
-    public ArrayList<StoreProduct> getProductsRemaining(){
-        ArrayList<StoreProduct> remainingProducts = new ArrayList<>();
-        for (StoreProduct product : products) {
-            if(product.getRemainingCount()>0){
-                remainingProducts.add(product);
-            }
-        }
-        return remainingProducts;
-    }
 
     public StoreProduct getProduct(String productName) {
         for (StoreProduct product : products) {
-            if(product.getName().compareToIgnoreCase(productName) == 0){
+            if (product.getType().getName().compareToIgnoreCase(productName) == 0) {
                 return product;
             }
         }

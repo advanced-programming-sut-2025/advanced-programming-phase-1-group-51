@@ -16,11 +16,15 @@ public class Mineral extends Item{
 
     public Mineral() {
         super();
-        type = null;
     }
 
-    public Mineral(Quality quality, int value, ForagingMineralType type) {
-        super(quality, Integer.MAX_VALUE, value, 0, type.name);
+    public Mineral(Quality quality, ForagingMineralType type) {
+        super(quality, Integer.MAX_VALUE, type.getSellPrice(), 0, type.name);
+        this.type = type;
+    }
+
+    public Mineral(Quality quality, ForagingMineralType type, int sellPrice) {
+        super(quality, Integer.MAX_VALUE, sellPrice, 0, type.name);
         this.type = type;
     }
 

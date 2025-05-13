@@ -50,4 +50,12 @@ public class Crop extends ObjectOnMap{
     public void setHasBeenFertilized(boolean hasBeenFertilized) {
         this.hasBeenFertilized = hasBeenFertilized;
     }
+
+    public AllCropsType getCropSeedsType() {
+        return cropSeedsType;
+    }
+
+    public void setCropSeedsType(AllCropsType cropSeedsType) {
+        this.cropSeedsType = cropSeedsType;
+    }
 }

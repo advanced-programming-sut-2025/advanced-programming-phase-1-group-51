@@ -6,6 +6,7 @@ public class Cells {
 
     private Position position;
     private ObjectOnMap objectOnCell;
+    public boolean hasBeenPlowed = false;
 
     public Cells(Position position, ObjectOnMap objectOnCell) {
         this.position = position;
@@ -28,7 +29,11 @@ public class Cells {
         this.objectOnCell = objectOnCell;
     }
 
+    public boolean isHasBeenPlowed() {
+        return hasBeenPlowed;
+    }
 
-
-
+    public void setHasBeenPlowed(boolean hasBeenPlowed) {
+        this.hasBeenPlowed = hasBeenPlowed;
+    }
 }

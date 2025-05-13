@@ -1,5 +1,6 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Enums.Others.Quality;
 import Models.Loot;
 
 public enum ElseType implements ItemType{
@@ -70,7 +71,7 @@ public enum ElseType implements ItemType{
         return name;
     }
 
-    public static ElseType getMiscTypeByName(String name) {
+    public static ElseType getElseTypeByName(String name) {
         ElseType[] values = ElseType.values();
         for (ElseType value : values) {
             if (value.name.compareToIgnoreCase(name) == 0) {
@@ -82,7 +83,7 @@ public enum ElseType implements ItemType{
 
 
     @Override
-    public Loot createAmountOfItem(int amount) {
+    public Loot createAmountOfItem(int amount, Quality quality) {
         return null;
     }
 }

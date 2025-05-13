@@ -24,7 +24,7 @@ public class LoginMenu implements  PlayMenu{
         }
         else if((matcher = LoginMenuCommands.LOGIN.getMatcher(input)) != null){
             System.out.println(controller.login(matcher.group("username").trim(),
-                    matcher.group("password").trim(),matcher.group("stayLoggedIn").trim()));
+                    matcher.group("password").trim(),matcher.group("stayLoggedIn")));
         }
         else if((matcher = LoginMenuCommands.FORGET_PASSWORD.getMatcher(input)) != null){
             System.out.println(controller.forgetPassword(matcher.group("username").trim()));

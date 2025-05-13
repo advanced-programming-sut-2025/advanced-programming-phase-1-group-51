@@ -5,14 +5,20 @@ import Models.Enums.Others.SkillLevel;
 public class Foraging extends Skill {
 
     @Override
-    public void learnSkill() {
-        super.learnSkill();
+    public void learn() {
+
     }
 
     public Foraging() {
+        super();
     }
 
-    public Foraging(int energyCost, int xp, SkillLevel level) {
-        super(energyCost, xp, level);
+    public Foraging(SkillLevel level, int xp) {
+        super(level, xp);
+    }
+
+    @Override
+    public String toString() {
+        return "Foraging";
     }
 }

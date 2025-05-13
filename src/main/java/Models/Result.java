@@ -14,4 +14,9 @@ public class Result {
     public String toString() {
         return message;
     }
+
+
+    public boolean isSuccessful() {
+        return isSuccessful;
+    }
 }

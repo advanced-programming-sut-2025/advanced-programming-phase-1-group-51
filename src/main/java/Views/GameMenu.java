@@ -18,11 +18,10 @@ public class GameMenu implements PlayMenu{
     private final Cooking Cooking = new Cooking();
     private final Husbandry Husbandry = new Husbandry();
     private final Artisan Artisan = new Artisan();
-    private final Dealing Dealing = new Dealing();
     private final FriendShipController FriendshipController = new FriendShipController();
     private final Trading Trading = new Trading();
     private final NPCController NPCController = new NPCController();
-    private final World World = new World();
+    private final OthersController OthersController = new OthersController();
     @Override
     public void check(Scanner scanner){
         String input = Game.scanner.nextLine();
@@ -48,43 +47,43 @@ public class GameMenu implements PlayMenu{
             System.out.println(SavingNextTurnController.nextTurn());
         }
         else if ((matcher = GameMenuCommands.TIME.getMatcher(input)) != null){
-            System.out.println(World.Time());
+            System.out.println(OthersController.Time());
         }
         else if ((matcher = GameMenuCommands.DATE.getMatcher(input)) != null){
-            System.out.println(World.Date());
+            System.out.println(OthersController.Date());
         }
         else if ((matcher = GameMenuCommands.DATE_TIME.getMatcher(input)) != null){
-            System.out.println(World.DateTime());
+            System.out.println(OthersController.DateTime());
         }
         else if ((matcher = GameMenuCommands.DAY_OF_WEEK.getMatcher(input)) != null){
-            System.out.println(World.DayOfTheWeek());
+            System.out.println(OthersController.DayOfTheWeek());
         }
         else if ((matcher = GameMenuCommands.TIME_CHEAT.getMatcher(input)) != null){
-            System.out.println(World.CheatAdvanceTime(matcher.group("X").trim()));
+            System.out.println(OthersController.CheatAdvanceTime(matcher.group("X").trim()));
         }
         else if ((matcher = GameMenuCommands.DATE_CHEAT.getMatcher(input)) != null){
-            System.out.println(World.CheatAdvanceDate(matcher.group("X").trim()));
+            System.out.println(OthersController.CheatAdvanceDate(matcher.group("X").trim()));
         }
         else if ((matcher = GameMenuCommands.SEASON.getMatcher(input)) != null){
-            System.out.println(World.showCurrentSeason());
+            System.out.println(OthersController.showCurrentSeason());
         }
         else if ((matcher = GameMenuCommands.WEATHER.getMatcher(input)) != null){
-            System.out.println(World.showCurrentWeather());
+            System.out.println(OthersController.showCurrentWeather());
         }
         else if ((matcher = GameMenuCommands.WEATHER_FORECAST.getMatcher(input)) != null){
-            System.out.println(World.weatherForecast());
+            System.out.println(OthersController.weatherForecast());
         }
         else if ((matcher = GameMenuCommands.CHEAT_THOR.getMatcher(input)) != null){
             int x = Integer.parseInt(matcher.group("x").trim());
             int y = Integer.parseInt(matcher.group("y").trim());
-            System.out.println(World.CheatThor(x,y));
+            System.out.println(OthersController.CheatThor(x,y));
         }
         else if ((matcher = GameMenuCommands.CHEAT_WEATHER_SET.getMatcher(input)) != null){
             String weather = matcher.group("Type").trim();
-            System.out.println(World.cheatTomorrowWeatherSet(weather));
+            System.out.println(OthersController.cheatTomorrowWeatherSet(weather));
         }
         else if((matcher = GameMenuCommands.GREEN_HOUSE_BUILD.getMatcher(input)) != null){
-            System.out.println(World.GreenhouseBuild());
+            System.out.println(OthersController.GreenhouseBuild());
         }
         else if((matcher = GameMenuCommands.WALK.getMatcher(input)) != null){
             int x = Integer.parseInt(matcher.group("x").trim());
@@ -128,14 +127,10 @@ public class GameMenu implements PlayMenu{
             System.out.println(InventoryController.toolEquip(name));
         }
         else if ((matcher = GameMenuCommands.TOOLS_SHOW_CURRENT.getMatcher(input)) != null){
-            System.out.println(InventoryController.showTools());
+            System.out.println(InventoryController.showCurrentTool());
         }
         else if ((matcher = GameMenuCommands.TOOLS_SHOW_AVAILABLE.getMatcher(input)) != null){
             System.out.println(InventoryController.showAvailableTools());
-        }
-        else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.getMatcher(input)) != null){
-            String name = matcher.group("toolName").trim();
-            System.out.println(InventoryController.toolUpgrade(name));
         }
         else if ((matcher = GameMenuCommands.TOOLS_USE.getMatcher(input)) != null){
             String direction = matcher.group("direction").trim();
@@ -211,12 +206,7 @@ public class GameMenu implements PlayMenu{
             String buildingName = matcher.group("buildingName").trim();
             int x = Integer.parseInt(matcher.group("x").trim());
             int y = Integer.parseInt(matcher.group("y").trim());
-            System.out.println(World.BuildBuilding(buildingName, x, y));
-        }
-        else if ((matcher = GameMenuCommands.BUY_ANIMALS.getMatcher(input)) != null){
-            String animalType = matcher.group("animal").trim();
-            String name = matcher.group("name").trim();
-            System.out.println(Husbandry.BuyAnimal(animalType, name));
+            System.out.println(OthersController.BuildBuilding(buildingName, x, y));
         }
         else if ((matcher = GameMenuCommands.PET.getMatcher(input)) != null){
             String name = matcher.group("name").trim();
@@ -263,26 +253,6 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.ARTISAN_GET.getMatcher(input)) != null){
             String artisanName = matcher.group("artisanName").trim();
             System.out.println(Artisan.ArtisanGet(artisanName));
-        }
-        else if ((matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null){
-            System.out.println(Dealing.ShowAllProducts(matcher.group()));
-        }
-        else if ((matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.getMatcher(input)) != null){
-            System.out.println(Dealing.ShowAllAvailableProducts());
-        }
-        else if ((matcher = GameMenuCommands.PURCHASE.getMatcher(input)) != null){
-            String name = matcher.group("productName").trim();
-            int count = Integer.parseInt(matcher.group("count").trim());
-            System.out.println(Dealing.Purchase(name, count));
-        }
-        else if ((matcher = GameMenuCommands.SELL.getMatcher(input)) != null){
-            String name = matcher.group("productName").trim();
-            int count = Integer.parseInt(matcher.group("count").trim());
-            System.out.println(Dealing.Sell(name,count));
-        }
-        else if ((matcher = GameMenuCommands.CHEAT_ADD.getMatcher(input)) != null){
-            int count = Integer.parseInt(matcher.group("count").trim());
-            System.out.println(Dealing.cheatAddMoney(count));
         }
         else if ((matcher = GameMenuCommands.FRIENDSHIPS.getMatcher(input)) != null){
             System.out.println(FriendshipController.FriendShip());
@@ -371,6 +341,9 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.QUESTS_FINISH.getMatcher(input)) != null){
             int index = Integer.parseInt(matcher.group("index").trim());
             System.out.println(NPCController.QuestFinish(index));
+        }
+        else if ((matcher = GameMenuCommands.ENTER_STORE.getMatcher(input)) != null){
+            System.out.println(OthersController.enterStore(matcher.group("storeName")));
         }
         else{
             System.out.println("Invalid Command!");

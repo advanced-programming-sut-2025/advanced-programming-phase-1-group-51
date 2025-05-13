@@ -120,12 +120,12 @@ public enum GameMenuCommands implements Command {
     ARTISAN_GET("artisan\\s+get\\s+(?<artisanName>\\S+)"),
 
     // Dealing
-    ENTER_STORE("go\\s+to\\s+(?<storeName>\\S+)\\s+"),
-    SHOW_ALL_PRODUCTS("show\\s+all\\s+products\\s+(?<StoreName>\\S+)\\s+"),
-    SHOW_ALL_AVAILABLE_PRODUCTS("show\\s+all\\s+available\\s+products\\s+(?<StoreName>\\S+)\\s+"),
-    PURCHASE("^purchase\\s+\\s+(?<StoreName>\\S+)\\s+(?<productName>\\S+)(?:\\s+-n\\s+(?<count>\\S+))?\\s+$"),
-    SELL("sell\\s+(?<StoreName>\\S+)\\s+(?<productName>\\S+)\\s+-n\\s+(?<count>\\S+)"),
-    GET_OUT("get\\s+out\\s+of\\s+(?<StoreName>\\S+)\\s+"),
+    ENTER_STORE("go\\s+to\\s+(?<storeName>\\S+)"),
+    SHOW_ALL_PRODUCTS("show\\s+all\\s+products"),
+    SHOW_ALL_AVAILABLE_PRODUCTS("show\\s+all\\s+available\\s+products"),
+    PURCHASE("^purchase\\s+\\s+(?<productName>\\S+)(?:\\s+-n\\s+(?<count>\\S+))?\\s+$"),
+    SELL("sell\\s+(?<productName>\\S+)\\s+-n\\s+(?<count>\\S+)"),
+    GET_OUT("exit\\s+store"),
 
     // CHEAT CODE
     CHEAT_ADD("cheat\\s+add\\s+(?<count>\\S+)\\s+dollars"),

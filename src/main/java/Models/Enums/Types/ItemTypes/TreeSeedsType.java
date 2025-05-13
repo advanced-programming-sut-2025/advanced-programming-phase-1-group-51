@@ -1,6 +1,8 @@
 package Models.Enums.Types.ItemTypes;
 
+import Models.Enums.Others.Quality;
 import Models.Enums.Others.Season;
+import Models.Loot;
 
 public enum TreeSeedsType implements ItemType{
     ACORNS(Season.values(), "Acorns", 0),
@@ -36,7 +38,7 @@ public enum TreeSeedsType implements ItemType{
         this.value = value;
     }
 
-    public static TreeSeedsType findTreeTypeByName(String name){
+    public static TreeSeedsType findTreeType(String name){
         for (TreeSeedsType tree : TreeSeedsType.values()) {
             if (tree.name.compareToIgnoreCase(name) == 0) {
                 return tree;
@@ -46,9 +48,16 @@ public enum TreeSeedsType implements ItemType{
     }
 
 
+    @Override
+    public Loot createAmountOfItem(int amount, Quality quality) {
+        return null;
+    }
+
     public String getName(){
         return name;
     }
+
+
 
 
 }
