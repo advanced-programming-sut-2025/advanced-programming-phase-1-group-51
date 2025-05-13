@@ -3,6 +3,7 @@ package Controllers.Others;
 import Controllers.Controller;
 import Models.*;
 import Models.Enums.Others.Quality;
+import Models.Enums.Others.Season;
 import Models.Enums.Others.SkillLevel;
 import Models.Enums.Others.Weather;
 import Models.Enums.Recipes.CookingRecipes;
@@ -12,14 +13,12 @@ import Models.Enums.Types.ItemTypes.*;
 import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Models.Enums.Types.TrashcanType;
 import Models.Items.Else;
+import Models.Items.Fish;
 import Models.Items.Item;
 import Models.Items.Tool;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
-import Models.ObjectsShownOnMap.AnimalCell;
-import Models.ObjectsShownOnMap.BurntCell;
-import Models.ObjectsShownOnMap.Crop;
-import Models.ObjectsShownOnMap.Tree;
+import Models.ObjectsShownOnMap.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -477,25 +476,24 @@ public class InventoryController extends Controller {
             targetCell.setObjectOnCell(new BurntCell());
 
             BackPack backpack = player.getInventory();
-            Loot loot = backpack.findItemLoot(TreeSeedsType.findTreeType(tree.getTreeType().source).name);
+            Loot loot = backpack.findItemLoot(TreeSeedsType.findTreeType(tree.getTreeType().seed).name);
 
             if (loot == null) {
                 if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
                     return new Result(false
-                            , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                            , "Your backpack is full");
                 }
 
-                Loot lootToAdd = TreeSeedsType.findTreeType(tree.getTreeType().source).createAmountOfItem(2, Quality.DEFAULT);
+                Loot lootToAdd = TreeSeedsType.findTreeType(tree.getTreeType().seed).createAmountOfItem(2, Quality.DEFAULT);
                 backpack.getLoots().add(lootToAdd);
 
-                return new Result(true, "You received " + 2 + " tree seeds.");
-            } else {
-                loot.setCount(Math.min(loot.getCount() + 2, loot.getItem().getMaxSize()));
-                return new Result(true, "You received " + 2 + " tree seeds.");
+                return new Result(true, "You got " + 2 + " tree seeds.");
             }
-            return null;
+            else {
+                loot.setCount(Math.min(loot.getCount() + 2, loot.getItem().getMaxSize()));
+                return new Result(true, "You got " + 2 + " tree seeds.");
+            }
         }
-
     }
 
     private static Result wateringCanUse(String direction, ToolType wateringCanType
@@ -511,8 +509,55 @@ public class InventoryController extends Controller {
         int targetCellY = newDirection.getY();
         Cells targetCell = farm.findCell(targetCellX, targetCellY);
 
+        int takenEnergy = 0;
+        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int playerEnergy = player.getEnergy();
 
-        return null;
+        if (takenEnergy + currentEnergyUsed > 50) {
+            return new Result(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - takenEnergy < 0) {
+            return new Result(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Result(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - takenEnergy);
+        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + takenEnergy);
+
+        if (targetCell.getObjectOnCell() instanceof Lake) {
+            toolInHand.setWaterReserve(wateringCanType.waterCapacity);
+         
+            return new Result(true, "Water filled successfully.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof Tree tree) {
+            if (toolInHand.getWaterReserve() == 0) {
+             
+                return new Result(false, "Watering can is empty.");
+            }
+            tree.setHasBeenWateredToday(true);
+         
+            return new Result(true, "Tree watered successfully.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof Crop crop) {
+            if (toolInHand.getWaterReserve() == 0) {
+             
+                return new Result(false, "Watering can is empty.");
+            }
+            crop.setHasBeenWateredToday(true);
+            crop.setLastWateringDate(game.getDate());
+         
+            return new Result(true, "Crop watered successfully.");
+        }
+
+     
+        return new Result(false, "No operation was performed.");
     }
 
     private static Result fishingRodUse(String direction, Quality quality, int skillEnergyDiscount) {
@@ -527,27 +572,12 @@ public class InventoryController extends Controller {
         int targetCellY = newDirection.getY();
         Cells targetCell = farm.findCell(targetCellX, targetCellY);
 
-        return null;
-    }
-
-    private static Result scytheUse(String direction){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
-        int energyCost = getScytheEnergyCost();
+        int energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
         int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
         int playerEnergy = player.getEnergy();
 
         if (energyCost + currentEnergyUsed > 50) {
-            return new Result(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+            return new Result(false, "You don't have enough energy in this turn");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -561,153 +591,149 @@ public class InventoryController extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + energyCost);
 
-        if (targetCell.getObjectOnCell() instanceof ForagingCrop crop) {
+        if (targetCell.getObjectOnCell() instanceof Lake) {
+            int randomNumber = (int) (Math.random() * 2);
+            double weatherModifier = setWeatherModifierFishing(game);
+            int playerLevel = player.getFishingSkill().getLevel().levelNumber;
+            int numberOfFishes = (int) (((double) randomNumber)
+                    * weatherModifier * (double) (playerLevel + 2));
+            if (numberOfFishes == 0) {
+                return new Result(false, "You could not catch fish");
+            }
+            ArrayList<FishType> values = getValidFishTypes(game.getSeason(), playerLevel);
+            int randomFishNumber = (int) (Math.random() * values.size());
+            FishType fishType = values.get(randomFishNumber);
 
-            targetCell.setObjectOnCell(new BurntCell());
+            double qualityNumber = 0;
+            double pole = setPoleModifier(quality);
+            qualityNumber = (randomNumber * (double) (playerLevel + 2) * pole) / (7.0 - weatherModifier);
+            Quality fishQuality = setFishQuality(qualityNumber);
+            int price = fishType.price;
 
+            Fish fish = new Fish(fishQuality, fishType);
             BackPack backpack = player.getInventory();
-            ItemType itemType = crop.getForagingCropsType().getHarvestedItemType();
-            Loot loot = null;
-            String name = null;
+            player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
 
-            if (itemType instanceof ElseType) {
-                loot = backpack.findItemLoot(((ElseType) itemType).name);
-                name = ((ElseType) itemType).name;
-            } else if (itemType instanceof FoodType) {
-                loot = backpack.findItemLoot(((FoodType) itemType).name);
-                name = ((FoodType) itemType).name;
+            if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
+              
+                return new Result(false, "You didn't have enough space. But caught a fish anyways.");
             }
 
-            int randomInt = (int) (Math.random() * 3) + 1;
+            addFishes(fish, backpack, numberOfFishes);
 
-            if (player.getInventory().getType().getCapacity() == player.getInventory().getLoots().size()) {
-                if (loot == null) {
-                    System.out.println("You had no inventory space to collect the materials.");
-                } else {
-                    loot.setCount(Math.min(loot.getCount() + randomInt, loot.getItem().getMaxSize()));
-                    System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
-                }
-            } else {
-                if (loot == null) {
-                    backpack.getLoots().add(itemType.createAmountOfItem(randomInt, Quality.DEFAULT));
-                } else {
-                    loot.setCount(Math.min(loot.getCount() + randomInt, loot.getItem().getMaxSize()));
-                }
-                System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
-            }
-
-            player.getForagingSkill().setXp(player.getForagingSkill().getXp() + 10);
-            
-            return new Result(true, "Removed " + name + "from tile.");
-        } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
-
-            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
-                return new Result(false, "Crop isn't ready for harvest.");
-            }
-
-            int amountToHarvest = crop.isGiant() ? 10 : 1;
-
-            BackPack backpack = player.getInventory();
-            Loot loot = backpack.findItemLoot(crop.getCropSeedsType().name);
-
-            if (loot == null) {
-                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
-                    
-                    return new Result(false, "Not enough inventory space.");
-                }
-
-                Loot newloot = new Loot(FoodType.findFoodType(crop.cropSeedsType.name), amountToHarvest);
-                backpack.getLoots().add(newloot);
-
-                if (crop.cropSeedsType.oneTime) {
-                    targetCell.setObjectOnCell(new BurntCell());
-                } else {
-                    crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
-                }
-
-                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
-
-                
-                return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
-            }
-
-            if (crop.cropSeedsType.oneTime) {
-                targetCell.setObjectOnCell(new BurntCell());
-            } else {
-                crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
-            }
-
-            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
-
-            loot.setCount(Math.min(loot.getCount() + amountToHarvest, loot.getItem().getMaxSize()));
-            
-
-            return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
-        } else if (targetCell.getObjectOnCell() instanceof Tree tree) {
-
-            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(game.getDate())) {
-                return new Result(false, "Tree isn't ready for harvest.");
-            }
-
-            int amountToHarvest = 1;
-
-            BackPack backpack = player.getInventory();
-            Loot loot = backpack.findItemLoot(tree.getTreeType().fruitItem.getName());
-
-            if (loot == null) {
-                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
-                    
-                    return new Result(false, "Not enough inventory space.");
-                }
-
-                if (tree.getTreeType() == TreeType.NORMAL_TREE
-                        || tree.getTreeType() == TreeType.TREE_BARK
-                        || tree.getTreeType() == TreeType.BURNT_TREE) {
-                    return new Result(false, "Tree isn't harvestable.");
-                } else {
-                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
-                }
-
-                Loot newloot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest, Quality.DEFAULT);
-                backpack.getLoots().add(newloot);
-
-                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
-
-                
-                return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
-            }
-
-            if (tree.getTreeType() == TreeType.NORMAL_TREE
-                    || tree.getTreeType() == TreeType.TREE_BARK
-                    || tree.getTreeType() == TreeType.BURNT_TREE) {
-                return new Result(false, "Can't harvest a normal, burnt tree or bark.");
-            } else {
-                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
-            }
-
-            loot.setCount(Math.min(loot.getCount() + amountToHarvest, loot.getItem().getMaxSize()));
-
-            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
-
-            return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
-
-        } else {
-            return new Result(false, "Target cell isn't a valid use case of the scythe.");
+          
+            return new Result(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
+
+      
+        return new Result(false, "You only can fish in Lake");
     }
 
-    private static int getScytheEnergyCost() {
-        Game game = Game.getCurrentUser().getCurrentGame();
+    private static int calculateFishingEnergyCost(int discount, Quality quality) {
+        int answer = 0;
+        if (quality == Quality.COPPER) {
+            answer = 8;
+        } else if (quality == Quality.SILVER) {
+            answer = 8;
+        } else if (quality == Quality.GOLD) {
+            answer = 6;
+        } else if (quality == Quality.IRIDIUM) {
+            answer = 4;
+        } else {
+            answer = 1;
+        }
+        answer -= discount;
 
-        int energyCost = 2;
+        if (answer < 0) {
+            answer = 0;
+        }
+
+        Game game = Game.getCurrentUser().getCurrentGame();
         if (game.getWeatherToday() == Weather.SNOW) {
-            energyCost *= 2;
+            answer *= 2;
         }
         if (game.getWeatherToday() == Weather.RAIN) {
-            energyCost *= 1.5;
+            answer *= 1.5;
         }
-        return energyCost;
+
+        return answer;
     }
+
+    private static void addFishes(Fish fish, BackPack backpack, int numberOfFishes) {
+        for (Loot  loot  : backpack.getLoots()) {
+            if (loot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
+                loot.setCount(loot.getCount() + numberOfFishes);
+                return;
+            }
+        }
+        Loot newLoot  = new Loot (fish, numberOfFishes);
+        backpack.addLoot(newLoot);
+    }
+
+    private static ArrayList<FishType> getValidFishTypes(Season season, int playerLevel) {
+        if (playerLevel == 4) {
+            FishType[] values = FishType.values();
+            ArrayList<FishType> finalValues = new ArrayList<>();
+            for (int i = 0; i < values.length; i++) {
+                if (values[i].season == season) {
+                    finalValues.add(values[i]);
+                }
+            }
+            return finalValues;
+        }
+        FishType[] values = FishType.values();
+        ArrayList<FishType> finalValues = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].season == season && !values[i].isLegendary) {
+                finalValues.add(values[i]);
+            }
+        }
+        return finalValues;
+    }
+
+    private static Quality setFishQuality(double qualityNumber) {
+        if (qualityNumber >= 0.5 && qualityNumber < 0.7)
+            return Quality.SILVER;
+        else if (qualityNumber >= 0.7 && qualityNumber < 0.9)
+            return Quality.GOLD;
+        else if (qualityNumber >= 0.9)
+            return Quality.IRIDIUM;
+        return Quality.COPPER;
+    }
+
+    private static double setPoleModifier(Quality quality) {
+        if (quality == Quality.COPPER)
+            return 0.1;
+        else if (quality == Quality.SILVER)
+            return 0.5;
+        else if (quality == Quality.GOLD)
+            return 0.9;
+        return 1.2;
+    }
+
+    private static double setWeatherModifierFishing(Game game) {
+        double weatherModifier;
+        if (game.getWeatherToday().equals(Weather.SUNNY))
+            weatherModifier = 1.5;
+        else if (game.getWeatherToday().equals(Weather.RAIN))
+            weatherModifier = 1.2;
+        else if (game.getWeatherToday().equals(Weather.STORM))
+            weatherModifier = 0.5;
+        else
+            weatherModifier = 1.0;
+        return weatherModifier;
+    }
+
+
+
+
+    private static Result scytheUse(String direction){
+        return null;
+    }
+
+
+
+
 
     public static  Result collectProducts(Item product, BackPack backpack, Loot productloot, Animal animal, Player player, Game game) {
         Item item = new Else(((Else) product).getElseType(), ((Else) product).getQuality());
@@ -740,6 +766,8 @@ public class InventoryController extends Controller {
 
 
 
+
+
     private static Result milkPailUse(String direction){
         User user = Game.getCurrentUser();
         Game game = user.getCurrentGame();
@@ -754,16 +782,15 @@ public class InventoryController extends Controller {
         Item equippedItem = player.getItemInHand();
         BackPack backpack = player.getInventory();
         Loot productloot = null;
-        double energyCost = 4;
-        double currentEnergyUsed = player.getCurrentTurnUsedEnergy();
-        double playerEnergy = player.getEnergy();
+        int takenEnergy = 4;
+        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int playerEnergy = player.getEnergy();
 
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Result(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+        if (takenEnergy + currentEnergyUsed > 50) {
+            return new Result(false, "You don't have enough energy in this turn");
         }
 
-        if (playerEnergy - energyCost < 0) {
+        if (playerEnergy - takenEnergy < 0) {
             return new Result(false, "You don't have enough energy.");
         }
 

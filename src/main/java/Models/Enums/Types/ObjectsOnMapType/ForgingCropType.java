@@ -1,10 +1,8 @@
 package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Season;
-import Models.Enums.Types.ItemTypes.ItemType;
-import Models.Loot;
 
-public enum AllCropsType {
+public enum ForgingCropType {
 
     Blue_JAZZ("Blue Jazz", "Jazz Seeds", true, -1, 50, true, 45, new Season[]{Season.SPRING}, false, 1, 2 , 2, 2, -1, 7),
     CARROT("Carrot", "Carrot Seeds",true, -1, 35,  true, 75,new Season[]{Season.SPRING},true,1,1,1,-1,-1,3),
@@ -64,9 +62,9 @@ public enum AllCropsType {
     public final int StageFour;
     public final int totalHarvestTime;
 
-    AllCropsType(String name, String seed, boolean oneTime, int regrowthTime,
-                 int baseSellPrice, boolean isEdible, int energy, Season[] seasons,
-                 boolean canBecomeGiant, int stageZero, int stageOne, int stageTwo, int stageThree, int stageFour, int totalHarvestTime) {
+    ForgingCropType(String name, String seed, boolean oneTime, int regrowthTime,
+                    int baseSellPrice, boolean isEdible, int energy, Season[] seasons,
+                    boolean canBecomeGiant, int stageZero, int stageOne, int stageTwo, int stageThree, int stageFour, int totalHarvestTime) {
         this.name = name;
         this.seed = seed;
         this.oneTime = oneTime;
@@ -84,8 +82,8 @@ public enum AllCropsType {
         this.totalHarvestTime = totalHarvestTime;
     }
 
-    public static AllCropsType findCropBySeed(String seed){
-        for (AllCropsType crop : AllCropsType.values()){
+    public static ForgingCropType findCropBySeed(String seed){
+        for (ForgingCropType crop : ForgingCropType.values()){
             if(crop.seed.equals(seed)){
                 return crop;
             }
