@@ -1,24 +1,24 @@
 package Models.Items;
 
 import Models.Enums.Others.Quality;
-import Models.Enums.Types.ItemTypes.CropSeedsType;
+import Models.Enums.Types.ObjectsOnMapType.CropType;
 
 public class CropSeed extends Item{
 
-    private CropSeedsType cropSeedsType;
+    private CropType cropSeedsType;
 
     public CropSeed() {
     }
 
-    public CropSeedsType getCropType() {
+    public CropType getCropType() {
         return cropSeedsType;
     }
 
-    public void setCropType(CropSeedsType cropSeedsType) {
+    public void setCropType(CropType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
     }
 
-    public CropSeed(CropSeedsType cropSeedsType) {
+    public CropSeed(CropType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
         this.name = cropSeedsType.source;
         this.quality = Quality.DEFAULT;

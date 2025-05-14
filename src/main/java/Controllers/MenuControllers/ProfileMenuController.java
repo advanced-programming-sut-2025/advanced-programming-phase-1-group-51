@@ -1,19 +1,22 @@
 package Controllers.MenuControllers;
 
-import Controllers.Controller;
 import Models.App;
+import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
-import Models.Game;
 import Models.Result;
 import Models.User;
 
-public class ProfileMenuController extends Controller {
+public class ProfileMenuController {
 
 
     public Result showCurrentMenu() {
         return new Result(true, "Profile Menu");
     }
 
+    public Result goToMain() {
+        App.setCurrentMenu(Menu.MainMenu);
+        return new Result(true, "You are now in main menu");
+    }
 
     public void showCurrentUserInfo() {
 
@@ -61,8 +64,6 @@ public class ProfileMenuController extends Controller {
         currentUser.setNickName(newNickname);
         return new Result(true, "your username changed to " + newNickname + " successfully!");
     }
-
-
 
 
     public Result changeEmail(String newEmail) {

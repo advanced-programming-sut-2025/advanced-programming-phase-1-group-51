@@ -34,9 +34,6 @@ public enum Menu {
         this.menu.check(scanner);
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
 
     @Override
     public String toString() {

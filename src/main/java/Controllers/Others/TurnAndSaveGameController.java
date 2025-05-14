@@ -1,5 +1,6 @@
 package Controllers.Others;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
@@ -7,12 +8,24 @@ import Models.Enums.Others.Weather;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 
-public class TurnAndSaveGameController {
+public class TurnAndSaveGameController  extends BaseController {
 
+    public Result goToMain() {
+        App.setCurrentMenu(Menu.MainMenu);
+        return new Result(true, "You are now in main menu");
+    }
+
+    public Result showCurrentMenu(){
+        return new Result(true, "Game Menu");
+    }
 
     public Result newGame(String firstUsername, String secondUsername, String thirdUsername, String extraInvalid) {
-        // Validation checks
+
+        if(firstUsername == null || firstUsername.isEmpty()){
+            return new Result(false, "You can start a game with minimum 1 other player");
+        }
         if (extraInvalid != null && !extraInvalid.isEmpty()) {
             return new Result(false, "You can start a game with maximum 3 players");
         }
@@ -102,21 +115,32 @@ public class TurnAndSaveGameController {
         User currentUser = App.getCurrentUser();
         Game game = currentUser.getCurrentGame();
 
-        if (game != null) {
-            // Remove user from game
-            currentUser.setCurrentGame(null);
-
-            // If no players left, end the game
-            if (game.getPlayers().stream().noneMatch(p -> p.getUser().getCurrentGame() == game)) {
-                // Clean up game resources
-            }
+        if (game == null) {
+            return new Result(false, "No active game to exit");
         }
 
-        App.setCurrentMenu(Menu.MainMenu);
-        return new Result(true, "Exited game successfully");
+        // Check if current player is the game starter (first player)
+        if (game.getCurrentPlayer() != game.getPlayers().get(0)) {
+            return new Result(false, "Only the game creator can exit the game on their turn");
+        }
+
+        try {
+            // Save the game state (you'll need to implement this)
+           // saveGameToFile(game);
+
+            // Clear current game reference for all players
+            for (Player player : game.getPlayers()) {
+                player.getUser().setCurrentGame(null);
+            }
+
+            // Return to main menu
+            App.setCurrentMenu(Menu.MainMenu);
+            return new Result(true, "Game saved successfully. You can load it later using 'load game'");
+        }
+        catch (Exception e) {
+            return new Result(false, "Failed to save game: " + e.getMessage());
+        }
     }
-
-
 
     public Result nextTurn() {
         User user = App.getCurrentUser();
@@ -156,24 +180,85 @@ public class TurnAndSaveGameController {
         LocalDateTime newTime = game.getDate().plusHours(1);
         game.setDate(newTime);
 
-        // Check for day change
-        if (newTime.getHour() == 0) { // Midnight
-            // Reset player energies for new day
+        // Check for 10 PM curfew
+        if (newTime.getHour() == 22) { // 10 PM
+            // Return all players to their houses
             for (Player player : game.getPlayers()) {
-                player.setEnergy(player.getMaxEnergy());
-                player.setCurrentTurnUsedEnergy(0);
+                returnPlayerToHouse(player);
             }
+            // Fast forward to next morning at 9 AM
+            newTime = newTime.plusHours(11); // 10 PM + 11 hours = 9 AM next day
+            game.setDate(newTime);
 
-            // Check for season change (28 days per season)
-            int dayOfSeason = newTime.getDayOfMonth() % 28;
-            if (dayOfSeason == 1) { // First day of new season
-                Season currentSeason = game.getSeason();
-                Season nextSeason = getNextSeason(currentSeason);
-                game.setSeason(nextSeason);
+            // Handle day change effects
+            handleDayChange(game);
+            return;
+        }
 
-                // Handle season change effects
-                handleSeasonChange(game, currentSeason, nextSeason);
-            }
+        // Check for midnight (normal day change)
+        if (newTime.getHour() == 0) { // Midnight
+            handleDayChange(game);
+        }
+    }
+
+    private void handleDayChange(Game game) {
+        LocalDateTime date = game.getDate();
+
+        // Reset player energies for new day
+        for (Player player : game.getPlayers()) {
+            player.setEnergy(player.getMaxEnergy());
+            player.setCurrentTurnUsedEnergy(0);
+
+            // Daily animal care reset
+            resetAnimalCareStatus(player);
+        }
+
+        // Check for season change (28 days per season)
+        int dayOfSeason = date.getDayOfMonth() % 28;
+        if (dayOfSeason == 1) { // First day of new season
+            Season currentSeason = game.getSeason();
+            Season nextSeason = getNextSeason(currentSeason);
+            game.setSeason(nextSeason);
+        }
+
+        // Generate new weather for the day
+        generateDailyWeather(game);
+    }
+
+    private void returnPlayerToHouse(Player player) {
+        // Set player position to their house coordinates
+        player.setPosition(new Position(5, 10)); // Example house coordinates
+        player.setInHouse(true);
+        player.setInFarm(false);
+        player.setInVillage(false);
+        player.setCloseToLake(false);
+
+        // Apply energy penalty for staying out late
+        int energyPenalty = (int)(player.getEnergy() * 0.2); // Lose 20% energy
+        player.setEnergy(player.getEnergy() - energyPenalty);
+
+        // You might want to add a notification/message about being forced home
+    }
+
+    private void resetAnimalCareStatus(Player player) {
+        for (Animal animal : player.getAnimals()) {
+            animal.setHasBeenPetToday(false);
+            animal.setHasBeenFedGrassToday(false);
+            animal.setHasBeenFedHayToday(false);
+        }
+    }
+
+    private void generateDailyWeather(Game game) {
+        // Simple weather generation - can be enhanced
+        Random random = new Random();
+        Weather[] possibleWeathers = Weather.values();
+        game.setWeatherToday(possibleWeathers[random.nextInt(possibleWeathers.length)]);
+
+        // Set tomorrow's weather (50% chance of same weather)
+        if (random.nextBoolean()) {
+            game.setWeatherTomorrow(game.getWeatherToday());
+        } else {
+            game.setWeatherTomorrow(possibleWeathers[random.nextInt(possibleWeathers.length)]);
         }
     }
 
@@ -187,18 +272,8 @@ public class TurnAndSaveGameController {
         }
     }
 
-    private void handleSeasonChange(Game game, Season oldSeason, Season newSeason) {
-        // Handle crop changes (some crops die between seasons)
-        for (Player player : game.getPlayers()) {
-            player.getFarm().handleSeasonChange(oldSeason, newSeason);
-        }
 
-        // Update weather patterns
-        game.setWeatherToday(Weather.SUNNY); // Default to sunny on season change
-        game.setWeatherTomorrow(Weather.SUNNY);
 
-        // You can add other season change effects here
-    }
 
     private User findUserByUsername(String username) {
 

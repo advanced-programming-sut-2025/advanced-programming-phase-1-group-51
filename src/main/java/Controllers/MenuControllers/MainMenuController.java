@@ -1,11 +1,10 @@
 package Controllers.MenuControllers;
 
-import Controllers.Controller;
 import Models. App;
 import Models.Result;
 import Models.Enums.MenuCommands.Menu;
 
-public class MainMenuController extends Controller {
+public class MainMenuController {
 
     public Result showCurrentMenu(){
         return new Result(true, "Main Menu");

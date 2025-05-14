@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.MenuControllers.ProfileMenuController;
+import Models.App;
 import Models.Enums.MenuCommands.ProfileMenuCommands;
 import Models.Game;
 
@@ -14,7 +15,7 @@ public class ProfileMenu implements  PlayMenu {
 
     @Override
     public void check(Scanner scanner){
-        String input = Game.scanner.nextLine();
+        String input = App.scanner.nextLine();
         Matcher matcher;
 
         if(ProfileMenuCommands.SHOW_CURRENT_MENU.getMatcher(input) != null){
@@ -34,6 +35,9 @@ public class ProfileMenu implements  PlayMenu {
         }
         else if(ProfileMenuCommands.USER_INFO.getMatcher(input) != null){
             controller.showCurrentUserInfo();
+        }
+        else if(ProfileMenuCommands.GO_TO_MAIN.getMatcher(input) != null){
+          System.out.println(controller.goToMain());
         }
         else{
             System.out.println("Invalid Command!");

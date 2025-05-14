@@ -6,6 +6,8 @@ import Models.Enums.Others.Quality;
 import Models.Enums.Recipes.CookingRecipes;
 import Models.Enums.Recipes.CraftingRecipes;
 import Models.Enums.Types.ItemTypes.*;
+import Models.Enums.Types.ObjectsOnMapType.CropType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Models.Enums.Types.StoresProductsTypes.BlackSmithProducts;
 import Models.Enums.Types.StoresProductsTypes.FishShopProducts;
 import Models.Enums.Types.TrashcanType;
@@ -13,16 +15,16 @@ import Models.Items.*;
 
 public class BlackSmithShop {
     public Result ShowAllProducts() {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore("Blacksmith");
+        Store store = game.getMap().getVillage().getStore("Blacksmith");
 
         StringBuilder output = new StringBuilder();
 
         for (StoreProduct product : store.getProducts()) {
             output.append("name : ").append(product.getType().getName()).append("\n");
             output.append("price : ");
-            if(product.getType().isInSeason(Game.getSeason())){
+            if(product.getType().isInSeason(game.getSeason())){
                 output.append(product.getType().getPrice());
             }else {
                 output.append(product.getType().getOutOfSeasonPrice());
@@ -33,8 +35,8 @@ public class BlackSmithShop {
     }
 
     public Result ShowAllAvailableProducts() {
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore("Blacksmith");
+        Game game = App.getCurrentUser().getCurrentGame();
+        Store store = game.getMap().getVillage().getStore("Blacksmith");
 
         StringBuilder output = new StringBuilder();
 
@@ -43,7 +45,7 @@ public class BlackSmithShop {
                 output.append("name :").append(product.getType().getName()).append("\n");
                 output.append("Remaining count : ").append(product.getRemainingCount()).append("\n");
                 output.append("price : ");
-                if(product.getType().isInSeason(Game.getSeason())){
+                if(product.getType().isInSeason(game.getSeason())){
                     output.append(product.getType().getPrice());
                 }else {
                     output.append(product.getType().getOutOfSeasonPrice());
@@ -56,10 +58,10 @@ public class BlackSmithShop {
     }
 
     public Result Purchase(String productName, int count) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Store store = Game.getMap().getVillage().getStore("Blacksmith");
+        Player player = game.getCurrentPlayer();
+        Store store = game.getMap().getVillage().getStore("Blacksmith");
         StoreProduct product = store.getProduct(productName);
 
         if (product == null) {
@@ -70,7 +72,7 @@ public class BlackSmithShop {
             return new Result(false, "Not enough available products");
         }
 
-        if (product.getType().getProductPrice(Game.getSeason()) * count > player.getMoney()) {
+        if (product.getType().getProductPrice(game.getSeason()) * count > player.getMoney()) {
             return new Result(false, "Not enough money");
         }
 
@@ -101,7 +103,7 @@ public class BlackSmithShop {
                 if (Loot.getCount() == 0) {
                     player.getInventory().removeLoot(Loot);
                 }
-                player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(Game.getSeason())));
+                player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason())));
             }
             return res;
         }
@@ -109,11 +111,13 @@ public class BlackSmithShop {
             Item item = null;
             if (type instanceof FoodType) {
                 item = new Food((FoodType) type);
-            } else if (type instanceof CropSeedsType) {
-                item = new CropSeed((CropSeedsType) type);
-            } else if (type instanceof TreeSeedsType) {
-                item = new TreeSeed((TreeSeedsType) type);
-            } else if (type instanceof FishType) {
+            } else if (type instanceof CropType) {
+                item = new CropSeed((CropType) type);
+            }
+//            else if (type instanceof TreeType) {
+//                item = new TreeSeed((TreeType) type);
+//            }
+            else if (type instanceof FishType) {
                 item = new Fish(Quality.DEFAULT, (FishType) type);
             } else if (type instanceof ElseType) {
                 item = new Else((ElseType) type);
@@ -130,7 +134,7 @@ public class BlackSmithShop {
                 } else if (product.getType().getName().equals(FishShopProducts.IRIDIUM_ROD.getName())) {
                     q = Quality.IRIDIUM;
                 }
-                item = new Tool(q, (ToolType) type, (int) product.getType().getProductPrice(Game.getSeason()));
+                item = new Tool(q, (ToolType) type, (int) product.getType().getProductPrice(game.getSeason()));
             }
             if (item == null) {
                 return new Result(false, "No such item");
@@ -176,8 +180,8 @@ public class BlackSmithShop {
     }
 
     public Result exitStore() {
-        String name = Game.getCurrentMenu().name();
-        Game.setCurrentMenu(Menu.GameMenu);
+        String name = App.getCurrentMenu().name();
+        App.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You leaved " + name);
     }
 }

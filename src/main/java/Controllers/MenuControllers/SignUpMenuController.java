@@ -1,9 +1,7 @@
 package Controllers.MenuControllers;
 
-import Controllers.Controller;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
-import Models.Game;
 import Models.Result;
 import Models.User;
 
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import Models.App;
 
-public class SignUpMenuController extends Controller {
+public class SignUpMenuController {
 
 
     public Result showCurrentMenu(){
@@ -109,7 +107,7 @@ public class SignUpMenuController extends Controller {
             // In a real application, you would get user input here
             // For this example, we'll simulate the user saying "Yes" after 3 attempts
             // Replace this with actual user input logic in your implementation
-            String userResponse = Game.scanner.nextLine().trim(); // This would be your input method
+            String userResponse = App.scanner.nextLine().trim(); // This would be your input method
 
             if (userResponse.equalsIgnoreCase("Yes")) {
                 // Create and add the user

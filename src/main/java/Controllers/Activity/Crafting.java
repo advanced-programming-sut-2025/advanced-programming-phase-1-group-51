@@ -1,34 +1,25 @@
 package Controllers.Activity;
-import Controllers.Controller;
 import Models.*;
 import Models.Enums.Recipes.CraftingRecipes;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.Maps.Village;
-import Models.ObjectsShownOnMap.ObjectOnMap;
 
-import java.awt.image.AffineTransformOp;
-
-public class Crafting extends Controller {
+public class Crafting {
 
 
 
-    public Result showCraftRecipes() {
-        CraftingRecipes craftsRecipe = null;
-        User user = App.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
-        if (player.isInHouse) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Crafting recipes : \n");
+    public Result showCraftingRecipes() {
+        Player player = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        String header = "Crafting recipes : \n";
+        StringBuilder recipeList = new StringBuilder(header);
+        if(player.isInHouse()){
 
-            Player currentPlayer = game.getCurrentPlayer();
+        for (CraftingRecipes r : player.getCraftingRecipes()) {
+            recipeList.append(r.toString()).append("\n");
+        }
 
-            for (CraftingRecipes recipe : currentPlayer.getCraftingRecipes()) {
-                stringBuilder.append(recipe.toString()).append("\n");
-            }
-            return new Result(true, stringBuilder.toString());
+        return new Result(true, recipeList.toString());
         }
         return new Result(false, "You are not in house!");
     }
@@ -39,7 +30,7 @@ public class Crafting extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         CraftingRecipes craftingRecipes = null;
-        if (player.isInHouse) {
+        if (player.isInHouse()) {
             for (CraftingRecipes recipes : player.getCraftingRecipes()) {
                 if (recipes.name.equalsIgnoreCase(itemName)) {
                     craftingRecipes = recipes;
@@ -108,7 +99,6 @@ public class Crafting extends Controller {
     }
 
     public Result placeItem(String name, String direction) {;
-
         CraftingRecipes craftsRecipe = null;
         User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
@@ -148,19 +138,6 @@ public class Crafting extends Controller {
 
 
 
-    public Result addItem(String name, int count) {
-        User user = App.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        BackPack backPack = player.getInventory();
-        Loot loot = backPack.findItemLoot(name);
-        if(loot == null){
-            return new Result(false,"no item with this name exists");
-        }
-
-
-        return new Result(true, count + " of " + name + " added to your Backpack");
-    }
 
 
 }

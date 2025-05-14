@@ -7,6 +7,8 @@
         <maven.compiler.source>24</maven.compiler.source>
         <maven.compiler.target>24</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Add Jackson version as property -->
+        <jackson.version>2.15.2</jackson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -15,10 +17,24 @@
             <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Keep Gson if you're using it elsewhere -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
+        </dependency>
+
+        <!-- Add Jackson dependencies -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 </project>

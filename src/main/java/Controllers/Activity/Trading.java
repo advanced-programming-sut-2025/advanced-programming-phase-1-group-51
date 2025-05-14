@@ -1,14 +1,9 @@
 package Controllers.Activity;
 
-import Controllers.Controller;
 import Models.Result;
 
-public class Trading extends Controller {
+public class Trading {
 
-
-    public Result StartTrade() {
-        return null;
-    }
     public Result TradeWithUser(String username, String type, String item, int amount) {
         return null;
     }

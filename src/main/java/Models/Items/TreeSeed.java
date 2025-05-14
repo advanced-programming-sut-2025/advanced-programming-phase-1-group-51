@@ -2,6 +2,7 @@ package Models.Items;
 
 import Models.Enums.Others.Quality;
 import Models.Enums.Types.ItemTypes.TreeSeedsType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 
 public class TreeSeed extends Item{
 

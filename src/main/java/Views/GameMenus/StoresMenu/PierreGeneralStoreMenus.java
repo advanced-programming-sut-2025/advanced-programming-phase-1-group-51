@@ -2,6 +2,7 @@ package Views.GameMenus.StoresMenu;
 
 import Controllers.Others.OthersController;
 import Controllers.StoresControllers.PierreGeneralStore;
+import Models.App;
 import Models.Enums.MenuCommands.GameMenuCommands;
 import Models.Game;
 import Views.PlayMenu;
@@ -14,7 +15,7 @@ public class PierreGeneralStoreMenus implements PlayMenu {
     private final Controllers.Others.OthersController OthersController = new OthersController();
     @Override
     public void check(Scanner scanner) {
-        String input = Game.scanner.nextLine();
+        String input = App.scanner.nextLine();
         Matcher matcher;
 
         if ((matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null){

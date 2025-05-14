@@ -2,14 +2,39 @@ package Models;
 
 import Models.Items.Item;
 import Models.Items.Tool;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class User {
 
+    @JsonIgnore
+    private Game currentGame; // Avoid circular reference
+
+    // Add this to handle serialization of games list
+    @JsonProperty("games")
+    public List<GameInfo> getGameInfos() {
+        return games.stream()
+                .map(game -> new GameInfo(game.getDate(), game.getPlayers().size()))
+                .collect(Collectors.toList());
+    }
+
+    // Inner class for simplified game info
+    private static class GameInfo {
+        public LocalDateTime date;
+        public int playerCount;
+
+        public GameInfo(LocalDateTime date, int playerCount) {
+            this.date = date;
+            this.playerCount = playerCount;
+        }
+    }
     public static List<User> users = new ArrayList<>();
     private String username;
     private String password;
@@ -21,7 +46,6 @@ public class User {
     private int gamesPlayed = 0;
     private int id;
     private int maxMoneyEarnedInGame;
-    private Game currentGame;
     private final ArrayList<Game> games = new ArrayList<>();
 
     public User(String username, String password, String nickName,  String email, String gender) {

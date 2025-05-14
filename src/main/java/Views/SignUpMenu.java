@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.MenuControllers.SignUpMenuController;
+import Models.App;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
 
@@ -13,7 +14,7 @@ public class SignUpMenu implements PlayMenu{
 
     @Override
     public void check(Scanner scanner){
-        String input = Game.scanner.nextLine();
+        String input = App.scanner.nextLine();
         Matcher matcher;
 
         if(SignUpMenuCommands.SHOW_CURRENT_MENU.getMatcher(input) != null){

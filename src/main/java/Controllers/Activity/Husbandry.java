@@ -1,6 +1,5 @@
 package Controllers.Activity;
 
-import Controllers.Controller;
 import Models.*;
 import Models.Enums.Others.Weather;
 import Models.Enums.Types.ItemTypes.ElseType;
@@ -12,7 +11,7 @@ import Models.ObjectsShownOnMap.AnimalCell;
 import Models.ObjectsShownOnMap.BurntCell;
 import java.util.ArrayList;
 
-public class Husbandry extends Controller {
+public class Husbandry {
 
 
 

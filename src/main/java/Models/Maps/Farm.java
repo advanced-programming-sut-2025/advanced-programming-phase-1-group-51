@@ -1,8 +1,6 @@
 package Models.Maps;
 
 import Models.Buildings.Building;
-import Models.Enums.Types.ObjectsOnMapType.TreeType;
-import Models.ObjectsShownOnMap.*;
 
 import java.util.ArrayList;
 

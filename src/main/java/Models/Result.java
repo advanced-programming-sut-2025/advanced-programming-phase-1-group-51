@@ -1,22 +1,30 @@
 package Models;
 
 public class Result {
-    private final boolean isSuccessful;
+    private final boolean success;
     private final String message;
 
-    public Result(boolean isSuccessful, String message) {
-        this.isSuccessful = isSuccessful;
+    public Result(boolean success, String message) {
+        this.success = success;
         this.message = message;
     }
 
-
-    @Override
-    public String toString() {
-        return message;
+    public Result combine(Result other) {
+        return new Result(
+                this.success && other.success,
+                this.message + (other.message.isEmpty() ? "" : "\n" + other.message)
+        );
     }
 
-
-    public boolean isSuccessful() {
-        return isSuccessful;
+    public static Result success(String message) {
+        return new Result(true, message);
     }
+
+    public static Result failure(String message) {
+        return new Result(false, message);
+    }
+
+    // Getters
+    public boolean isSuccessful() { return success; }
+    public String getMessage() { return message; }
 }

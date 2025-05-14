@@ -1,13 +1,8 @@
 package Controllers.Activity;
 
-import Controllers.Controller;
 import Models.*;
-import Models.Enums.Types.ItemTypes.ElseType;
-import Models.Enums.Types.ItemTypes.FoodType;
-import Models.Enums.Types.ObjectsOnMapType.ArtisanBlockType;
-import Models.Items.Else;
 
-public class Artisan extends Controller {
+public class Artisan {
 
     public Result ArtisanUse(String artisanName, String itemName) {
 //        User user = Game.getCurrentUser();

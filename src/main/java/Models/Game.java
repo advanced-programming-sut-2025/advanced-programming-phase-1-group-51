@@ -5,35 +5,32 @@ import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
 import Models.Maps.Farm;
 import Models.Maps.Map;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Game {
 
-    public static final Scanner scanner = new Scanner(System.in);
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime date;
+
     public ArrayList<Player> players;
     private boolean isGameOver = false;
     private Season season;
     private Map map;
     private Weather weather = Weather.SUNNY;
-    private LocalDateTime date;
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Player currentPlayer;
-    public boolean hasTurnCycleFinished;
-    private Player GameStarterPlayer;
-    private Player secondPlayer;
-    private Player thirdPlayer;
-    private Player fourthPlayer;
+
+
 
 
     public Game(ArrayList<Player> players, Player currentPlayer) {
-        this.hasTurnCycleFinished = false;
         this.players = players;
         this.currentPlayer = currentPlayer;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -42,10 +39,6 @@ public class Game {
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
         this.currentPlayer = null;
-        this.GameStarterPlayer = null;
-        this.secondPlayer = null;
-        this.thirdPlayer = null;
-        this.fourthPlayer = null;
         this.map = Map.makeMap();
 
     }
@@ -112,16 +105,6 @@ public class Game {
     }
 
 
-
-
-    public Player getGameStarterPlayer() {
-        return GameStarterPlayer;
-    }
-
-    public void setGameStarterPlayer(Player gameStarterPlayer) {
-        GameStarterPlayer = gameStarterPlayer;
-    }
-
     public Farm getFarmByNumber(int number) {
         for (Player player : players) {
             if (player.getFarm().getFarmNumber() == number) {
@@ -150,27 +133,6 @@ public class Game {
     }
 
 
-    public boolean isHasTurnCycleFinished() {
-        return hasTurnCycleFinished;
-    }
-
-    public void setHasTurnCycleFinished(boolean hasTurnCycleFinished) {
-        this.hasTurnCycleFinished = hasTurnCycleFinished;
-    }
-
-    public Player getSecondPlayer() {
-        return secondPlayer;
-    }
-
-    public Player getThirdPlayer() {
-        return thirdPlayer;
-    }
-
-
-    public Player getFourthPlayer() {
-        return fourthPlayer;
-    }
-
 
     public void setGameOver(boolean gameOver) {
         isGameOver = gameOver;
@@ -188,16 +150,5 @@ public class Game {
         this.weather = weather;
     }
 
-    public void setSecondPlayer(Player secondPlayer) {
-        this.secondPlayer = secondPlayer;
-    }
-
-    public void setThirdPlayer(Player thirdPlayer) {
-        this.thirdPlayer = thirdPlayer;
-    }
-
-    public void setFourthPlayer(Player fourthPlayer) {
-        this.fourthPlayer = fourthPlayer;
-    }
 }
 

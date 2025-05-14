@@ -1,14 +1,12 @@
 package Controllers.MenuControllers;
 
-import Controllers.Controller;
 import Models.App;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
-import Models.Game;
 import Models.Result;
 import Models.User;
 
-public class LoginMenuController extends Controller {
+public class LoginMenuController {
 
     public Result showCurrentMenu() {
         return new Result(true, "Login Menu");

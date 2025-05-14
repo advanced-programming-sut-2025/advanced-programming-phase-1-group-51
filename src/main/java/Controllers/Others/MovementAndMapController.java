@@ -1,8 +1,8 @@
 package Controllers.Others;
-import Controllers.Controller;
+import Controllers.BaseController;
 import Models.Result;
 
-public class MovementAndMapController extends Controller {
+public class MovementAndMapController  extends BaseController {
 
     public Result Walking(int x,int y) {
         return null;

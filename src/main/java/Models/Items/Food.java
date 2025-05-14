@@ -1,14 +1,12 @@
 package Models.Items;
 
+import Models.Buff;
 import Models.Enums.Others.Quality;
 import Models.Enums.Types.ItemTypes.FoodType;
 
 public class Food extends Item{
-    public FoodType foodTypes;
-
-    public Food() {
-        super();
-    }
+    private FoodType foodTypes;
+    private Buff buff;
 
     /// To be used in enums only!
     public Food(FoodType foodTypes) {
@@ -19,9 +17,20 @@ public class Food extends Item{
         this.foodTypes = foodType;
     }
 
-    public Food(Quality quality, FoodType foodType, int value) {
-        super(quality, Integer.MAX_VALUE, value, -foodType.energy, foodType.name);
-        this.foodTypes = foodType;
+    public Buff getBuff() {
+        return  buff;
+    }
+
+    public void setFoodBuff(Buff buff) {
+        this.buff = buff;
+    }
+
+    public FoodType getFoodTypes() {
+        return foodTypes;
+    }
+
+    public void setFoodTypes(FoodType foodTypes) {
+        this.foodTypes = foodTypes;
     }
 
     @Override

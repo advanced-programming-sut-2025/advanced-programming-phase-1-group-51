@@ -6,9 +6,9 @@ public enum ProfileMenuCommands implements Command {
     CHANGE_USERNAME("change\\s*username\\s*-u\\s*(?<username>.+)"),
     CHANGE_NICKNAME("change\\s*nickname\\s*-u\\s*(?<nickname>.+)"),
     CHANGE_EMAIL("change\\s*email\\s*-e\\s*(?<email>.+)"),
-    CHANGE_PASSWORD("change\\s*password\\s*-p\\s*(?<newPassword>.+)\\s*-o\\s*(?<oldPassword>.+)"),
-    USER_INFO("user\\s*info");
-
+    CHANGE_PASSWORD("change\\s*password\\s*-p\\s*(?<newPassword>.+)\\s+-o\\s*(?<oldPassword>.+)"),
+    USER_INFO("user\\s*info"),
+    GO_TO_MAIN("go\\s+to\\s+main\\s+menu");
     private final String pattern;
 
     ProfileMenuCommands(String pattern) {

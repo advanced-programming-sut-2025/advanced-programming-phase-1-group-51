@@ -2,6 +2,9 @@ package Models.Enums.Types.StoresProductsTypes;
 
 import Models.Enums.Others.Season;
 import Models.Enums.Types.ItemTypes.*;
+import Models.Enums.Types.ObjectsOnMapType.CropType;
+import Models.Enums.Types.ObjectsOnMapType.ForagingSeedType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 
 public enum AllProducts {
 
@@ -33,46 +36,46 @@ public enum AllProducts {
     FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", ToolType.FISHING_ROD, 1800, 1800, 1, 2, Season.values()),
     IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", ToolType.FISHING_ROD, 7500, 7500, 1, 4, Season.values()),
     JOJA_COLA("Joja Cola", "The flagship product of Joja corporation.", FoodType.JOJA_COLA, 75, 75, Double.POSITIVE_INFINITY, Season.values()),
-    ANCIENT_SEED("Ancient Seed", "Could this still grow?", CropSeedsType.ANCIENT_FRUIT, 500, 500, 1, Season.values()),
+    ANCIENT_SEED("Ancient Seed", "Could this still grow?", CropType.ANCIENT_FRUIT, 500, 500, 1, Season.values()),
     GRASS_STARTER("Grass Starter", "Place this on your farm to start a new patch of grass.", ElseType.GRASS_STARTER, 125, 125, Double.POSITIVE_INFINITY, Season.values()),
     SUGAR("Sugar", "Adds sweetness to pastries and candies. Too much can be unhealthy.", FoodType.SUGAR, 125, 125, Double.POSITIVE_INFINITY, Season.values()),
     WHEAT_FLOUR("Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", FoodType.WHEAT_FLOUR, 125, 125, Double.POSITIVE_INFINITY, Season.values()),
     RICE("Rice", "A basic grain often served under vegetables.", FoodType.RICE, 250, 250, Double.POSITIVE_INFINITY, Season.values()),
-    PARSNIP_SEEDS("Parsnip Seeds", "Plant these in the spring. Takes 4 days to mature.", CropSeedsType.PARSNIP, 25, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    BEAN_STARTER("Bean Starter", "Plant these in the spring. Takes 10 days to mature, but keeps producing after that. Grows on a trellis.", CropSeedsType.GREEN_BEAN, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    CAULIFLOWER_SEEDS("Cauliflower Seeds", "Plant these in the spring. Takes 12 days to produce a large cauliflower.", CropSeedsType.CAULIFLOWER, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    POTATO_SEEDS("Potato Seeds", "Plant these in the spring. Takes 6 days to mature, and has a chance of yielding multiple potatoes at harvest.", CropSeedsType.POTATO, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    STRAWBERRY_SEEDS("Strawberry Seeds", "Plant these in spring. Takes 8 days to mature, and keeps producing strawberries after that.", CropSeedsType.STRAWBERRY, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    PARSNIP_SEEDS("Parsnip Seeds", "Plant these in the spring. Takes 4 days to mature.", CropType.PARSNIP, 25, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    BEAN_STARTER("Bean Starter", "Plant these in the spring. Takes 10 days to mature, but keeps producing after that. Grows on a trellis.", CropType.GREEN_BEAN, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    CAULIFLOWER_SEEDS("Cauliflower Seeds", "Plant these in the spring. Takes 12 days to produce a large cauliflower.", CropType.CAULIFLOWER, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    POTATO_SEEDS("Potato Seeds", "Plant these in the spring. Takes 6 days to mature, and has a chance of yielding multiple potatoes at harvest.", CropType.POTATO, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    STRAWBERRY_SEEDS("Strawberry Seeds", "Plant these in spring. Takes 8 days to mature, and keeps producing strawberries after that.", CropType.STRAWBERRY, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
     TULIP_BULB("Tulip Bulb", "Plant in spring. Takes 6 days to produce a colorful flower. Assorted colors.", null, 25, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    KALE_SEEDS("Kale Seeds", "Plant these in the spring. Takes 6 days to mature. Harvest with the scythe.", CropSeedsType.KALE, 87, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    COFFEE_BEANS("Coffee Beans", "Plant in summer or spring. Takes 10 days to grow, Then produces coffee Beans every other day.", CropSeedsType.COFFEE_BEAN, 200, Double.POSITIVE_INFINITY, 1, new Season[]{Season.SPRING, Season.SUMMER}),
-    CARROT_SEEDS("Carrot Seeds", "Plant in the spring. Takes 3 days to grow.", CropSeedsType.CARROT, 5, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SPRING}),
-    RHUBARB_SEEDS("Rhubarb Seeds", "Plant these in the spring. Takes 13 days to mature.", CropSeedsType.RHUBARB, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    JAZZ_SEEDS("Jazz Seeds", "Plant in spring. Takes 7 days to produce a blue puffball flower.", CropSeedsType.BLUE_JAZZ, 37, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
-    TOMATO_SEEDS("Tomato Seeds", "Plant these in the summer. Takes 11 days to mature, and continues to produce after first harvest.", CropSeedsType.TOMATO, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    PEPPER_SEEDS("Pepper Seeds", "Plant these in the summer. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.HOT_PEPPER, 50, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    WHEAT_SEEDS("Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropSeedsType.WHEAT, 12, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SUMMER, Season.FALL}),
-    SUMMER_SQUASH_SEEDS("Summer Squash Seeds", "Plant in the summer. Takes 6 days to grow, and continues to produce after first harvest.", CropSeedsType.SUMMER_SQUASH, 10, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SUMMER}),
-    RADISH_SEEDS("Radish Seeds", "Plant these in the summer. Takes 6 days to mature.", CropSeedsType.RADISH, 50, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    MELON_SEEDS("Melon Seeds", "Plant these in the summer. Takes 12 days to mature.", CropSeedsType.MELON, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    HOPS_STARTER("Hops Starter", "Plant these in the summer. Takes 11 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.HOPS, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    POPPY_SEEDS("Poppy Seeds", "Plant in summer. Produces a bright red flower in 7 days.", CropSeedsType.POPPY, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    SPANGLE_SEEDS("Spangle Seeds", "Plant in summer. Takes 8 days to produce a vibrant tropical flower. Assorted colors.", CropSeedsType.SUMMER_SPANGLE, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    STARFRUIT_SEEDS("Starfruit Seeds", "Plant these in the summer. Takes 13 days to mature.", CropSeedsType.STARFRUIT, 400, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
-    SUNFLOWER_SEEDS("Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropSeedsType.SUNFLOWER, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER, Season.FALL}),
-    CORN_SEEDS("Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropSeedsType.CORN, 187, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    EGGPLANT_SEEDS("Eggplant Seeds", "Plant these in the fall. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.EGGPLANT, 25, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    PUMPKIN_SEEDS("Pumpkin Seeds", "Plant these in the fall. Takes 13 days to mature.", CropSeedsType.PUMPKIN, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    BROCCOLI_SEEDS("Broccoli Seeds", "Plant in the fall. Takes 8 days to mature, and continues to produce after first harvest.", CropSeedsType.BROCCOLI, 15, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    AMARANTH_SEEDS("Amaranth Seeds", "Plant these in the fall. Takes 7 days to grow. Harvest with the scythe.", CropSeedsType.AMARANTH, 87, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    GRAPE_STARTER("Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.GRAPE, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    BEET_SEEDS("Beet Seeds", "Plant these in the fall. Takes 6 days to mature.", CropSeedsType.BEET, 20, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    YAM_SEEDS("Yam Seeds", "Plant these in the fall. Takes 10 days to mature.", CropSeedsType.YAM, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    BOK_CHOY_SEEDS("Bok Choy Seeds", "Plant these in the fall. Takes 4 days to mature.", CropSeedsType.BOK_CHOY, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    CRANBERRY_SEEDS("Cranberry Seeds", "Plant these in the fall. Takes 7 days to mature, and continues to produce after first harvest.", CropSeedsType.CRANBERRIES, 300, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    FAIRY_SEEDS("Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower. Assorted Colors.", CropSeedsType.FAIRY_ROSE, 250, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
-    RARE_SEED("Rare Seed", "Sow in fall. Takes all season to grow.", CropSeedsType.SWEET_GEM_BERRY, 1000, Double.POSITIVE_INFINITY, 1, new Season[]{Season.FALL}),
-    POWDERMELON_SEEDS("Powdermelon Seeds", "This special melon grows in the winter. Takes 7 days to grow.", CropSeedsType.POWDER_MELON, 20, Double.POSITIVE_INFINITY, 10, new Season[]{Season.WINTER}),
+    KALE_SEEDS("Kale Seeds", "Plant these in the spring. Takes 6 days to mature. Harvest with the scythe.", CropType.KALE, 87, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    COFFEE_BEANS("Coffee Beans", "Plant in summer or spring. Takes 10 days to grow, Then produces coffee Beans every other day.", CropType.COFFEE_BEAN, 200, Double.POSITIVE_INFINITY, 1, new Season[]{Season.SPRING, Season.SUMMER}),
+    CARROT_SEEDS("Carrot Seeds", "Plant in the spring. Takes 3 days to grow.", CropType.CARROT, 5, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SPRING}),
+    RHUBARB_SEEDS("Rhubarb Seeds", "Plant these in the spring. Takes 13 days to mature.", CropType.RHUBARB, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    JAZZ_SEEDS("Jazz Seeds", "Plant in spring. Takes 7 days to produce a blue puffball flower.", CropType.BLUE_JAZZ, 37, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SPRING}),
+    TOMATO_SEEDS("Tomato Seeds", "Plant these in the summer. Takes 11 days to mature, and continues to produce after first harvest.", CropType.TOMATO, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    PEPPER_SEEDS("Pepper Seeds", "Plant these in the summer. Takes 5 days to mature, and continues to produce after first harvest.", CropType.HOT_PEPPER, 50, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    WHEAT_SEEDS("Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropType.WHEAT, 12, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SUMMER, Season.FALL}),
+    SUMMER_SQUASH_SEEDS("Summer Squash Seeds", "Plant in the summer. Takes 6 days to grow, and continues to produce after first harvest.", CropType.SUMMER_SQUASH, 10, Double.POSITIVE_INFINITY, 10, new Season[]{Season.SUMMER}),
+    RADISH_SEEDS("Radish Seeds", "Plant these in the summer. Takes 6 days to mature.", CropType.RADISH, 50, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    MELON_SEEDS("Melon Seeds", "Plant these in the summer. Takes 12 days to mature.", CropType.MELON, 100, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    HOPS_STARTER("Hops Starter", "Plant these in the summer. Takes 11 days to grow, but keeps producing after that. Grows on a trellis.", CropType.HOPS, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    POPPY_SEEDS("Poppy Seeds", "Plant in summer. Produces a bright red flower in 7 days.", CropType.POPPY, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    SPANGLE_SEEDS("Spangle Seeds", "Plant in summer. Takes 8 days to produce a vibrant tropical flower. Assorted colors.", CropType.SUMMER_SPANGLE, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    STARFRUIT_SEEDS("Starfruit Seeds", "Plant these in the summer. Takes 13 days to mature.", CropType.STARFRUIT, 400, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER}),
+    SUNFLOWER_SEEDS("Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropType.SUNFLOWER, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.SUMMER, Season.FALL}),
+    CORN_SEEDS("Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropType.CORN, 187, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    EGGPLANT_SEEDS("Eggplant Seeds", "Plant these in the fall. Takes 5 days to mature, and continues to produce after first harvest.", CropType.EGGPLANT, 25, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    PUMPKIN_SEEDS("Pumpkin Seeds", "Plant these in the fall. Takes 13 days to mature.", CropType.PUMPKIN, 125, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    BROCCOLI_SEEDS("Broccoli Seeds", "Plant in the fall. Takes 8 days to mature, and continues to produce after first harvest.", CropType.BROCCOLI, 15, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    AMARANTH_SEEDS("Amaranth Seeds", "Plant these in the fall. Takes 7 days to grow. Harvest with the scythe.", CropType.AMARANTH, 87, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    GRAPE_STARTER("Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropType.GRAPE, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    BEET_SEEDS("Beet Seeds", "Plant these in the fall. Takes 6 days to mature.", CropType.BEET, 20, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    YAM_SEEDS("Yam Seeds", "Plant these in the fall. Takes 10 days to mature.", CropType.YAM, 75, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    BOK_CHOY_SEEDS("Bok Choy Seeds", "Plant these in the fall. Takes 4 days to mature.", CropType.BOK_CHOY, 62, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    CRANBERRY_SEEDS("Cranberry Seeds", "Plant these in the fall. Takes 7 days to mature, and continues to produce after first harvest.", CropType.CRANBERRIES, 300, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    FAIRY_SEEDS("Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower. Assorted Colors.", CropType.FAIRY_ROSE, 250, Double.POSITIVE_INFINITY, 5, new Season[]{Season.FALL}),
+    RARE_SEED("Rare Seed", "Sow in fall. Takes all season to grow.", CropType.SWEET_GEM_BERRY, 1000, Double.POSITIVE_INFINITY, 1, new Season[]{Season.FALL}),
+    POWDERMELON_SEEDS("Powdermelon Seeds", "This special melon grows in the winter. Takes 7 days to grow.", CropType.POWDER_MELON, 20, Double.POSITIVE_INFINITY, 10, new Season[]{Season.WINTER}),
     HAY("Hay", "Dried grass used as animal food.", ElseType.WOOD, 50, 50, Double.POSITIVE_INFINITY, Season.values()),
     MILK_PAIL("Milk Pail", "Gather milk from your animals.", ForagingMineralType.STONE, 1000, 1000, 1, Season.values()),
     SHEARS("Shears", "Use this to collect wool from sheep", ForagingMineralType.STONE, 1000, 1000, 1, Season.values()),
@@ -104,36 +107,36 @@ public enum AllProducts {
     POMEGRANATE_SAPLING("Pomegranate Sapling", "Takes 28 days to produce a mature Pomegranate tree. Bears fruit in the fall. Only grows if the 8 surrounding \"tiles\" are empty.", TreeSeedsType.POMEGRANATE_SAPLING, 6000, 6000, Double.POSITIVE_INFINITY, Season.values()),
     BASIC_RETAINING_SOIL("Basic Retaining Soil", "This soil has a chance of staying watered overnight. Mix into tilled soil.", ElseType.BASIC_RETAINING_SOIL, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
     QUALITY_RETAINING_SOIL("Quality Retaining Soil", "This soil has a good chance of staying watered overnight. Mix into tilled soil.", ElseType.QUALITY_RETAINING_SOIL, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
-    PARSNIP_SEEDS_P("Pierre Parsnip Seeds", "Plant these in the spring. Takes 4 days to mature.", CropSeedsType.PARSNIP, 20, 30, 5, new Season[]{Season.SPRING}),
-    BEAN_STARTER_P("Pierre Bean Starter", "Plant these in the spring. Takes 10 days to mature, but keeps producing after that. Grows on a trellis.", CropSeedsType.GREEN_BEAN, 60, 90, 5, new Season[]{Season.SPRING}),
-    CAULIFLOWER_SEEDS_P("Pierre Cauliflower Seeds", "Plant these in the spring. Takes 12 days to produce a large cauliflower.", CropSeedsType.CAULIFLOWER, 80, 120, 5, new Season[]{Season.SPRING}),
-    POTATO_SEEDS_P("Pierre Potato Seeds", "Plant these in the spring. Takes 6 days to mature, and has a chance of yielding multiple potatoes at harvest.", CropSeedsType.POTATO, 50, 75, 5, new Season[]{Season.SPRING}),
-    TULIP_BULB_P("Pierre Tulip Bulb", "Plant in spring. Takes 6 days to produce a colorful flower. Assorted colors.", CropSeedsType.TULIP, 20, 30, 5, new Season[]{Season.SPRING}),
-    KALE_SEEDS_P("Pierre Kale Seeds", "Plant these in the spring. Takes 6 days to mature. Harvest with the scythe.", CropSeedsType.KALE, 70, 105, 5, new Season[]{Season.SPRING}),
-    JAZZ_SEEDS_P("Pierre Jazz Seeds", "Plant in spring. Takes 7 days to produce a blue puffball flower.", CropSeedsType.BLUE_JAZZ, 30, 45, 5, new Season[]{Season.SPRING}),
-    GARLIC_SEEDS("Garlic Seeds", "Plant these in the spring. Takes 4 days to mature.", CropSeedsType.GARLIC, 40, 60, 5, new Season[]{Season.SPRING}),
-    RICE_SHOOT("Rice Shoot", "Plant these in the spring. Takes 8 days to mature. Grows faster if planted near a body of water.\nHarvest with the scythe.", CropSeedsType.UNMILLED_RICE, 40, 60, 5, new Season[]{Season.SPRING}),
-    MELON_SEEDS_P("Pierre Melon Seeds", "Plant these in the summer. Takes 12 days to mature.", CropSeedsType.MELON, 80, 120, 5, new Season[]{Season.SUMMER}),
-    TOMATO_SEEDS_P("Pierre Tomato Seeds", "Plant these in the summer. Takes 11 days to mature, and continues to produce after first harvest.", CropSeedsType.TOMATO, 50, 75, 5, new Season[]{Season.SUMMER}),
-    BLUEBERRY_SEEDS("Blueberry Seeds", "Plant these in the summer. Takes 13 days to mature, and continues to produce after first harvest.", CropSeedsType.BLUEBERRY, 80, 120, 5, new Season[]{Season.SUMMER}),
-    PEPPER_SEEDS_P("Pierre Pepper Seeds", "Plant these in the summer. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.HOT_PEPPER, 40, 60, 5, new Season[]{Season.SUMMER}),
-    WHEAT_SEEDS_P("Pierre Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropSeedsType.WHEAT, 10, 15, 5, new Season[]{Season.SUMMER, Season.FALL}),
-    RADISH_SEEDS_P("Pierre Radish Seeds", "Plant these in the summer. Takes 6 days to mature.", CropSeedsType.RADISH, 40, 60, 5, new Season[]{Season.SUMMER}),
-    POPPY_SEEDS_P("Pierre Poppy Seeds", "Plant in summer. Produces a bright red flower in 7 days.", CropSeedsType.POPPY, 100, 150, 5, new Season[]{Season.SUMMER}),
-    SPANGLE_SEEDS_P("Pierre Spangle Seeds", "Plant in summer. Takes 8 days to produce a vibrant tropical flower. Assorted colors.", CropSeedsType.SUMMER_SPANGLE, 50, 75, 5, new Season[]{Season.SUMMER}),
-    HOPS_STARTER_P("Pierre Hops Starter", "Plant these in the summer. Takes 11 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.HOPS, 60, 90, 5, new Season[]{Season.SUMMER}),
-    CORN_SEEDS_P("Pierre Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropSeedsType.CORN, 150, 225, 5, new Season[]{Season.SUMMER, Season.FALL}),
-    SUNFLOWER_SEEDS_P("Pierre Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropSeedsType.SUNFLOWER, 200, 300, 5, new Season[]{Season.SUMMER, Season.FALL}),
-    RED_CABBAGE_SEEDS("Red Cabbage Seeds", "Plant these in the summer. Takes 9 days to mature.", CropSeedsType.RED_CABBAGE, 100, 150, 5, new Season[]{Season.SUMMER}),
-    EGGPLANT_SEEDS_P("Pierre Eggplant Seeds", "Plant these in the fall. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.EGGPLANT, 20, 30, 5, new Season[]{Season.FALL}),
-    PUMPKIN_SEEDS_P("Pierre Pumpkin Seeds", "Plant these in the fall. Takes 13 days to mature.", CropSeedsType.PUMPKIN, 100, 150, 5, new Season[]{Season.FALL}),
-    BOK_CHOY_SEEDS_P("Pierre Bok Choy Seeds", "Plant these in the fall. Takes 4 days to mature.", CropSeedsType.BOK_CHOY, 50, 75, 5, new Season[]{Season.FALL}),
-    YAM_SEEDS_P("Pierre Yam Seeds", "Plant these in the fall. Takes 10 days to mature.", CropSeedsType.YAM, 60, 90, 5, new Season[]{Season.FALL}),
-    CRANBERRY_SEEDS_P("Pierre Cranberry Seeds", "Plant these in the fall. Takes 7 days to mature, and continues to produce after first harvest.", CropSeedsType.CRANBERRIES, 240, 360, 5, new Season[]{Season.FALL}),
-    FAIRY_SEEDS_P("Pierre Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower. Assorted Colors.", CropSeedsType.FAIRY_ROSE, 200, 300, 5, new Season[]{Season.FALL}),
-    AMARANTH_SEEDS_P("Pierre Amaranth Seeds", "Plant these in the fall. Takes 7 days to grow. Harvest with the scythe.", CropSeedsType.AMARANTH, 70, 105, 5, new Season[]{Season.FALL}),
-    GRAPE_STARTER_P("Pierre Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.GRAPE, 60, 90, 5, new Season[]{Season.FALL}),
-    ARTICHOKE_SEEDS("Artichoke Seeds", "Plant these in the fall. Takes 8 days to mature.", CropSeedsType.ARTICHOKE, 30, 45, 5, new Season[]{Season.FALL}),
+    PARSNIP_SEEDS_P("Pierre Parsnip Seeds", "Plant these in the spring. Takes 4 days to mature.", CropType.PARSNIP, 20, 30, 5, new Season[]{Season.SPRING}),
+    BEAN_STARTER_P("Pierre Bean Starter", "Plant these in the spring. Takes 10 days to mature, but keeps producing after that. Grows on a trellis.", CropType.GREEN_BEAN, 60, 90, 5, new Season[]{Season.SPRING}),
+    CAULIFLOWER_SEEDS_P("Pierre Cauliflower Seeds", "Plant these in the spring. Takes 12 days to produce a large cauliflower.", CropType.CAULIFLOWER, 80, 120, 5, new Season[]{Season.SPRING}),
+    POTATO_SEEDS_P("Pierre Potato Seeds", "Plant these in the spring. Takes 6 days to mature, and has a chance of yielding multiple potatoes at harvest.", CropType.POTATO, 50, 75, 5, new Season[]{Season.SPRING}),
+    TULIP_BULB_P("Pierre Tulip Bulb", "Plant in spring. Takes 6 days to produce a colorful flower. Assorted colors.", CropType.TULIP, 20, 30, 5, new Season[]{Season.SPRING}),
+    KALE_SEEDS_P("Pierre Kale Seeds", "Plant these in the spring. Takes 6 days to mature. Harvest with the scythe.", CropType.KALE, 70, 105, 5, new Season[]{Season.SPRING}),
+    JAZZ_SEEDS_P("Pierre Jazz Seeds", "Plant in spring. Takes 7 days to produce a blue puffball flower.", CropType.BLUE_JAZZ, 30, 45, 5, new Season[]{Season.SPRING}),
+    GARLIC_SEEDS("Garlic Seeds", "Plant these in the spring. Takes 4 days to mature.", CropType.GARLIC, 40, 60, 5, new Season[]{Season.SPRING}),
+    RICE_SHOOT("Rice Shoot", "Plant these in the spring. Takes 8 days to mature. Grows faster if planted near a body of water.\nHarvest with the scythe.", CropType.UNMILLED_RICE, 40, 60, 5, new Season[]{Season.SPRING}),
+    MELON_SEEDS_P("Pierre Melon Seeds", "Plant these in the summer. Takes 12 days to mature.", CropType.MELON, 80, 120, 5, new Season[]{Season.SUMMER}),
+    TOMATO_SEEDS_P("Pierre Tomato Seeds", "Plant these in the summer. Takes 11 days to mature, and continues to produce after first harvest.", CropType.TOMATO, 50, 75, 5, new Season[]{Season.SUMMER}),
+    BLUEBERRY_SEEDS("Blueberry Seeds", "Plant these in the summer. Takes 13 days to mature, and continues to produce after first harvest.", CropType.BLUEBERRY, 80, 120, 5, new Season[]{Season.SUMMER}),
+    PEPPER_SEEDS_P("Pierre Pepper Seeds", "Plant these in the summer. Takes 5 days to mature, and continues to produce after first harvest.", CropType.HOT_PEPPER, 40, 60, 5, new Season[]{Season.SUMMER}),
+    WHEAT_SEEDS_P("Pierre Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropType.WHEAT, 10, 15, 5, new Season[]{Season.SUMMER, Season.FALL}),
+    RADISH_SEEDS_P("Pierre Radish Seeds", "Plant these in the summer. Takes 6 days to mature.", CropType.RADISH, 40, 60, 5, new Season[]{Season.SUMMER}),
+    POPPY_SEEDS_P("Pierre Poppy Seeds", "Plant in summer. Produces a bright red flower in 7 days.", CropType.POPPY, 100, 150, 5, new Season[]{Season.SUMMER}),
+    SPANGLE_SEEDS_P("Pierre Spangle Seeds", "Plant in summer. Takes 8 days to produce a vibrant tropical flower. Assorted colors.", CropType.SUMMER_SPANGLE, 50, 75, 5, new Season[]{Season.SUMMER}),
+    HOPS_STARTER_P("Pierre Hops Starter", "Plant these in the summer. Takes 11 days to grow, but keeps producing after that. Grows on a trellis.", CropType.HOPS, 60, 90, 5, new Season[]{Season.SUMMER}),
+    CORN_SEEDS_P("Pierre Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropType.CORN, 150, 225, 5, new Season[]{Season.SUMMER, Season.FALL}),
+    SUNFLOWER_SEEDS_P("Pierre Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropType.SUNFLOWER, 200, 300, 5, new Season[]{Season.SUMMER, Season.FALL}),
+    RED_CABBAGE_SEEDS("Red Cabbage Seeds", "Plant these in the summer. Takes 9 days to mature.", CropType.RED_CABBAGE, 100, 150, 5, new Season[]{Season.SUMMER}),
+    EGGPLANT_SEEDS_P("Pierre Eggplant Seeds", "Plant these in the fall. Takes 5 days to mature, and continues to produce after first harvest.", CropType.EGGPLANT, 20, 30, 5, new Season[]{Season.FALL}),
+    PUMPKIN_SEEDS_P("Pierre Pumpkin Seeds", "Plant these in the fall. Takes 13 days to mature.", CropType.PUMPKIN, 100, 150, 5, new Season[]{Season.FALL}),
+    BOK_CHOY_SEEDS_P("Pierre Bok Choy Seeds", "Plant these in the fall. Takes 4 days to mature.", CropType.BOK_CHOY, 50, 75, 5, new Season[]{Season.FALL}),
+    YAM_SEEDS_P("Pierre Yam Seeds", "Plant these in the fall. Takes 10 days to mature.", CropType.YAM, 60, 90, 5, new Season[]{Season.FALL}),
+    CRANBERRY_SEEDS_P("Pierre Cranberry Seeds", "Plant these in the fall. Takes 7 days to mature, and continues to produce after first harvest.", CropType.CRANBERRIES, 240, 360, 5, new Season[]{Season.FALL}),
+    FAIRY_SEEDS_P("Pierre Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower. Assorted Colors.", CropType.FAIRY_ROSE, 200, 300, 5, new Season[]{Season.FALL}),
+    AMARANTH_SEEDS_P("Pierre Amaranth Seeds", "Plant these in the fall. Takes 7 days to grow. Harvest with the scythe.", CropType.AMARANTH, 70, 105, 5, new Season[]{Season.FALL}),
+    GRAPE_STARTER_P("Pierre Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropType.GRAPE, 60, 90, 5, new Season[]{Season.FALL}),
+    ARTICHOKE_SEEDS("Artichoke Seeds", "Plant these in the fall. Takes 8 days to mature.", CropType.ARTICHOKE, 30, 45, 5, new Season[]{Season.FALL}),
     HASHBROWNS("Hashbrowns", "A recipe to make Hashbrowns", null, 50, 50, 1, Season.values()),
     OMELET("Omelette", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
     PANCAKES("Pancakes", "A recipe to make Pancakes", null, 100, 100, 1, Season.values()),
@@ -171,7 +174,7 @@ public enum AllProducts {
         this.dailyLimit = dailyLimit;
         this.seasons = seasons;
         this.fieldName = itemType == null ? null : itemType.name();
-        if (itemType instanceof CropSeedsType) {
+        if (itemType instanceof CropType) {
             enumName = "CropSeedsType";
         } else if (itemType instanceof ElseType) {
             enumName = "ElseType";
@@ -183,7 +186,7 @@ public enum AllProducts {
             enumName = "FishType";
         } else if (itemType instanceof ToolType) {
             enumName = "ToolType";
-        } else if (itemType instanceof TreeSeedsType) {
+        } else if (itemType instanceof TreeType) {
             enumName = "TreeSeedsType";
         }
     }
@@ -197,7 +200,7 @@ public enum AllProducts {
         this.fishingSkill = fishingSkill;
         this.seasons = seasons;
         this.fieldName = itemType.name();
-        if (itemType instanceof CropSeedsType) {
+        if (itemType instanceof CropType) {
             enumName = "CropSeedsType";
         } else if (itemType instanceof ElseType) {
             enumName = "ElseType";
@@ -209,7 +212,7 @@ public enum AllProducts {
             enumName = "FishType";
         } else if (itemType instanceof ToolType) {
             enumName = "ToolType";
-        } else if (itemType instanceof TreeSeedsType) {
+        } else if (itemType instanceof TreeType) {
             enumName = "TreeSeedsType";
         }
     }
@@ -251,7 +254,7 @@ public enum AllProducts {
         if (fieldName == null) {
             return null;
         } else if (enumName.equals("CropSeedsType")) {
-            return CropSeedsType.valueOf(fieldName);
+            return CropType.valueOf(fieldName);
         } else if (enumName.equals("ElseType")) {
             return ElseType.valueOf(fieldName);
         } else if (enumName.equals("FoodType")) {
@@ -263,7 +266,7 @@ public enum AllProducts {
         } else if (enumName.equals("ToolType")) {
             return ToolType.valueOf(fieldName);
         } else if (enumName.equals("TreeSeedsType")) {
-            return TreeSeedsType.valueOf(fieldName);
+            return TreeType.valueOf(fieldName);
         }
         return null;
     }

@@ -11,10 +11,27 @@ import Models.Items.Tool;
 import Models.Maps.Farm;
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.ArrayList;
 
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Player {
+
+        @JsonIgnore
+        private User user; // Will be reconstructed from ID
+
+        @JsonProperty("userId")
+        public int getUserId() {
+            return user != null ? user.getId() : -1;
+        }
+
     private Position position;
     private Farm farm;
     private ArrayList<FriendShip> friendShips;
@@ -30,7 +47,6 @@ public class Player {
     private ArrayList<Quest> quests = new ArrayList<>();
     private ArrayList<CookingRecipes> cookingRecipes = new ArrayList<>();
     private ArrayList<CraftingRecipes> craftingRecipes = new ArrayList<>();
-    private User user;
     private boolean isPlayerFainted = false;
     private int id;
     private Item itemInHand;
@@ -39,8 +55,9 @@ public class Player {
     private boolean isInVillage;
     private boolean isInFarm;
     private boolean isCloseToLake;
-    public boolean isInHouse;
+    private boolean isInHouse;
     private int currentPlaceNumber;
+    private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
 
 
     public Player(User user) {
@@ -278,6 +295,26 @@ public class Player {
         isInFarm = inFarm;
     }
 
+    public boolean isInHouse() {
+        return isInHouse;
+    }
+
+    public void setInHouse(boolean inHouse) {
+        isInHouse = inHouse;
+    }
+
+    public void setMaxEnergy(int maxEnergy) {
+        this.maxEnergy = maxEnergy;
+    }
+
+
+
+    public ArrayList<ActiveBuff> getActiveBuffs() {
+        return activeBuffs;
+    }
+
+
+
     public Animal findAnimal(String name) {
         for (Animal animal : animals) {
             if (animal.getName().equals(name)) {
@@ -287,13 +324,20 @@ public class Player {
         return null;
     }
 
+    public int getMaxEnergy() {
+        int temp = maxEnergy;
+        for (ActiveBuff activeBuff : activeBuffs) {
+            if (activeBuff.getFoodBuff().getAffectedSkill().equalsIgnoreCase("maxEnergy")) {
+                temp += activeBuff.getFoodBuff().getMaxEnergyIncrease();
+            }
+        }
+        return temp;
+    }
+
     public Farm getCurrentFarm(Game game){
         return game.getFarmByNumber(currentPlaceNumber);
     }
 
-    public int getMaxEnergy() {
-        return maxEnergy;
-    }
 
     private void initializeSkills() {
         this.skills.add(new Farming());

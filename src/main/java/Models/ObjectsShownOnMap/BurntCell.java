@@ -20,28 +20,5 @@ public class BurntCell extends ObjectOnMap{
         return super.getType();
     }
 
-    @Override
-    public void setType(String type) {
-        super.setType(type);
-    }
 
-    @Override
-    public boolean isWalkable() {
-        return super.isWalkable();
-    }
-
-    @Override
-    public void setWalkable(boolean walkable) {
-        super.setWalkable(walkable);
-    }
-
-    @Override
-    public String getColor() {
-        return super.getColor();
-    }
-
-    @Override
-    public void setColor(String color) {
-        super.setColor(color);
-    }
 }

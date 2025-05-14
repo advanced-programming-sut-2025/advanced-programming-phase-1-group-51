@@ -1,94 +1,86 @@
 package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Season;
+import Models.Enums.Types.ItemTypes.ElseType;
+import Models.Enums.Types.ItemTypes.FoodType;
+import Models.Enums.Types.ItemTypes.ItemType;
+
+import java.util.Arrays;
 
 public enum ForagingCropType {
 
-    Blue_JAZZ("Blue Jazz", "Jazz Seeds", true, -1, 50, true, 45, new Season[]{Season.SPRING}, false, 1, 2 , 2, 2, -1, 7),
-    CARROT("Carrot", "Carrot Seeds",true, -1, 35,  true, 75,new Season[]{Season.SPRING},true,1,1,1,-1,-1,3),
-    CAULIFLOWER("Cauliflower", "Cauliflower Seeds",true,-1, 175,true,75, new Season[]{Season.SPRING},false,1,2,4,4,1,12),
-    COFFEE_BEAN("Coffee Bean", "Coffee Bean",false,2, 15,false,-1,new Season[]{Season.SPRING, Season.SUMMER}, false,1,2,2,3,2,10),
-    GARLIC("Garlic", "Garlic Seeds",true,-1,  60,true, 20,new Season[]{Season.SPRING},false,1,1,1,1,-1,4),
-    GREEN_BEAN("Green Bean", "Bean Starter",false,3, 40,true, 25,new Season[]{Season.SPRING},false,1,1,1,3,4,10),
-    KALE("Kale", "Kale Seeds",true,  -1,110,true,50, new Season[]{Season.SPRING},false,1,2,2,1,-1,6),
-    PARSNIP("Parsnip", "Parsnip Seeds",true, -1, 35,true, 25,new Season[]{Season.SPRING},false,1,1,1,1,-1,4),
-    POTATO("Potato", "Potato Seeds",true,  -1,80, true,25, new Season[]{Season.SPRING},false,1,1,1,2,1,6),
-    RHUBARB("Rhubarb", "Rhubarb Seeds",true, -1, 220,false,-1,new Season[]{Season.SPRING},false,2,2,2,3,4,13),
-    STRAWBERRY("Strawberry", "Strawberry Seeds",false,  4,120,true, 50,new Season[]{Season.SPRING},false,1,1,2,2,2,8),
-    TULIP("Tulip", "Tulip Bulb",true, -1, 30,true, 45,new Season[]{Season.SPRING},false,1,1,2,2,-1,6),
-    UNMILLED_RICE("Unmilled Rice", "Rice Shoot",true, -1,30,true, 3,new Season[]{Season.SPRING}, false,1,2,2,3,-1,8),
-    BLUEBERRY("BlueBerry", "BlueBerry Seeds",false, 4,50,true, 25,new Season[]{Season.SUMMER},false,1,3,3,4,2,13),
-    CORN("Corn", "Corn Seeds", false,4,50,true, 25,new Season[]{Season.SUMMER, Season.FALL},false,2,3,3,3,3,14),
-    HOPS("Hops", "Hops Starter", false,1,25,true, 45,new Season[]{Season.SUMMER},false,1,1,2,3,4, 11),
-    HOT_PEPPER("Hot Pepper", "Pepper Seeds", false,3,40,true,13, new Season[]{Season.SUMMER},false,1,1,1,1,1,5),
-    MELON("Melon", "Melon Seeds",true, -1, 250,true, 113,new Season[]{Season.SUMMER},true,1,2,3,3,3,12),
-    POPPY("Poppy", "Poppy Seeds",true, -1, 140,true,45,new Season[]{Season.SUMMER},false,1,2,2,2,-1,7 ),
-    RADISH("Radish", "Radish Seeds", true, -1,90,true,45, new Season[]{Season.SUMMER},false,2,1,2,1,-1,6),
-    RED_CABBAGE("Red Cabbage", "Red Cabbage Seeds",true,-1,  260,true,75, new Season[]{Season.SUMMER},false,2,1,2,2,2,9),
-    STARFRUIT("Starfruit", "Starfruit Seeds", true,-1, 750,true,125, new Season[]{Season.SUMMER},false,2,3,2,3,3,13),
-    SUMMER_SPANGLE("Summer Spangle", "Spangle Seeds", true, -1,90,true, 45,new Season[]{Season.SUMMER}, false,1,2,3,1,-1, 8),
-    SUMMER_SQUASH("Summer Squash", "Summer Squash Seeds",false,3, 45,true,63,new Season[]{Season.SUMMER},false, 1,1,1,2,1, 6),
-    SUNFLOWER("Sunflower", "Sunflower Seeds",true, -1, 80,true, 45,new Season[]{Season.SUMMER, Season.FALL},false,1,2,3,2,-1,8),
-    TOMATO("Tomato", "Tomato Seeds",false,4, 60,true, 20,new Season[]{Season.SUMMER},false,2,2,2,2,3,11),
-    WHEAT("Wheat", "Wheat Seeds",true,  -1,25,false,-1,new Season[]{Season.SUMMER, Season.FALL},false,1,1,1,1,-1,4),
-    AMARANTH("Amaranth", "Amaranth Seeds",true,  -1,150,true, 50,new Season[]{Season.FALL},false,1,2,2,2,-1, 7),
-    ARTICHOKE("Artichoke", "Artichoke Seeds",true, -1, 160,true, 30,new Season[]{Season.FALL},false,2,2,1,2,1,8),
-    BEET("Beet", "Beet Seeds",true, -1, 100,true, 30,new Season[]{Season.FALL},false,1,1,2,2,-2,6),
-    BOK_CHOY("Bok Choy", "Bok Choy Seeds", true, -1,80,true, 25,new Season[]{Season.FALL},false,1,1,1,1,-1,4),
-    BROCCOLI("Broccoli", "Broccoli Seeds", false,4,70,true,63,new Season[]{Season.FALL}, false,2,2,2,2,-1,8),
-    CRANBERRIES("Cranberries", "Cranberry seeds", false,5,75,true,38,new Season[]{Season.FALL},false,1,2,1,1,2,7 ),
-    EGGPLANT("Eggplant", "Eggplant Seeds", false,5,60,true, 20,new Season[]{Season.FALL},false,1,1,1,1,1,5),
-    FAIRY_ROSE("Fairy Rose", "Fairy Seeds",true, -1, 290,true, 45,new Season[]{Season.FALL},false,1,4,4,3,-1,12),
-    GRAPE("Grape", "Grape Starter", false,3,80,true, 38,new Season[]{Season.FALL},false,1,1,2,3,3,10),
-    PUMPKIN("Pumpkin", "Pumpkin Seeds",true, -1, 320,false,-1,new Season[]{Season.FALL},true,1,2,3,4,3,13),
-    YAM("Yam", "Yam Seeds",true, -1, 160,true, 45,new Season[]{Season.FALL},false,1,3,3,3,-1, 10),
-    SWEET_GEM_BERRY("Sweet Gem Berry", "Rare Seeds",true,  -1,3000,false,-1,new Season[]{Season.FALL},false,2,4,6,6,6,24),
-    POWDERMELON("Powdermelon", "Powdermelon Seeds",true, -1, 60,true,63, new Season[]{Season.WINTER},true,1,2,1,2,1,7),
-    ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", false,7,550,false,-1,new Season[]{Season.SPRING, Season.SUMMER,Season.FALL},false,2,7,7,7,5,28);
+    GRASS(Season.values(), 0, 0, ElseType.FIBER, "Grass"),
+    COMMON_MUSHROOM(Season.values(), 40, 38, FoodType.COMMON_MUSHROOM, "Common Mushroom"),
+    DAFFODIL(Season.SPRING, 30, 0, FoodType.DAFFODIL, "Daffodil"),
+    DANDELION(Season.SPRING, 40, 25, FoodType.DANDELION, "Dandelion"),
+    LEEK(Season.SPRING, 60, 40, FoodType.LEEK, "Leek"),
+    MOREL(Season.SPRING, 150, 20, FoodType.MOREL, "Morel"),
+    SALMON_BERRY(Season.SPRING, 8, 13, FoodType.SALMON_BERRY, "Salmon Berry"),
+    SPRING_ONION(Season.SPRING, 8, 13, FoodType.SPRING_ONION, "Spring Onion"),
+    WILD_HORSERADISH(Season.SPRING, 50, 13, FoodType.WILD_HORSERADISH, "Wild Horseradish"),
+    FIDDLE_HEAD_FERN(Season.SUMMER, 90, 25, FoodType.FIDDLE_HEAD_FERN, "Fiddle Head Fern"),
+    GRAPE(Season.SUMMER, 80, 38, FoodType.GRAPE, "Grape"),
+    RED_MUSHROOM(Season.SUMMER, 75, -50, FoodType.RED_MUSHROOM, "Red Mushroom"),
+    SPICE_BERRY(Season.SUMMER, 80, 25, FoodType.SPICE_BERRY, "Spice Berry"),
+    SWEET_PEA(Season.SUMMER, 50, 0, FoodType.SWEET_PEA, "Sweet Pea"),
+    BLACKBERRY(Season.FALL, 25, 25, FoodType.BLACKBERRY, "Black Berry"),
+    CHANTERELLE(Season.FALL, 160, 75, FoodType.CHANTERELLE, "Chernelle"),
+    HAZELNUT(Season.FALL, 40, 38, FoodType.HAZELNUT, "Hazelnut"),
+    PURPLE_MUSHROOM(Season.FALL, 90, 30, FoodType.PURPLE_MUSHROOM, "Purple Mushroom"),
+    WILD_PLUM(Season.FALL, 80, 25, FoodType.WILD_PLUM, "Wild Plum"),
+    CROCUS(Season.WINTER, 60, 0, FoodType.CROCUS, "Crocus"),
+    CRYSTAL_FRUIT(Season.WINTER, 150, 63, FoodType.CRYSTAL_FRUIT, "Crystal Fruit"),
+    HOLLY(Season.WINTER, 80, -37, FoodType.HOLLY, "Holly"),
+    SNOW_YAM(Season.WINTER, 100, 30, FoodType.SNOW_YAM, "Snow Yam"),
+    WINTER_ROOT(Season.WINTER, 70, 25, FoodType.WINTER_ROOT, "Winter Root"),
+    ;
 
+    private final Season[] seasons;
+    private final int cost;
+    private final int energy;
+    private final ItemType harvestedItemType;
     public final String name;
-    public final String seed;
-    public final boolean oneTime;
-    public final int regrowthTime;
-    public final int BaseSellPrice;
-    public final boolean isEdible;
-    public final int energy;
-    public final Season[] seasons;
-    public final boolean canBecomeGiant;
-    public final int StageZero;
-    public final int StageOne;
-    public final int StageTwo;
-    public final int StageThree;
-    public final int StageFour;
-    public final int totalHarvestTime;
 
-    ForagingCropType(String name, String seed, boolean oneTime, int regrowthTime,
-                     int baseSellPrice, boolean isEdible, int energy, Season[] seasons,
-                     boolean canBecomeGiant, int stageZero, int stageOne, int stageTwo, int stageThree, int stageFour, int totalHarvestTime) {
-        this.name = name;
-        this.seed = seed;
-        this.oneTime = oneTime;
-        this.regrowthTime = regrowthTime;
-        this.BaseSellPrice = baseSellPrice;
-        this.isEdible = isEdible;
-        this.energy = energy;
-        this.seasons = seasons;
-        this.canBecomeGiant = canBecomeGiant;
-        StageZero = stageZero;
-        StageOne = stageOne;
-        StageTwo = stageTwo;
-        StageThree = stageThree;
-        StageFour = stageFour;
-        this.totalHarvestTime = totalHarvestTime;
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Name: ").append(name).append("\n");
+        str.append("Value: ").append(cost).append("\n");
+        str.append("Energy: ").append(energy).append("\n");
+        str.append("Seasons: ").append(Arrays.toString(seasons)).append("\n");
+        return str.toString();
     }
 
-    public static ForagingCropType findCropBySeed(String seed){
-        for (ForagingCropType crop : ForagingCropType.values()){
-            if(crop.seed.equals(seed)){
-                return crop;
-            }
-        }
-        return null;
+    ForagingCropType(Season[] seasons, int cost, int energy, ItemType harvestedItemType, String name) {
+        this.seasons = seasons;
+        this.cost = cost;
+        this.energy = energy;
+        this.harvestedItemType = harvestedItemType;
+        this.name = name;
+    }
+
+    ForagingCropType(Season season, int cost, int energy, ItemType harvestedItemType, String name) {
+        this.seasons = new Season[]{season};
+        this.cost = cost;
+        this.energy = energy;
+        this.harvestedItemType = harvestedItemType;
+        this.name = name;
+    }
+
+    public Season[] getSeasons() {
+        return seasons;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public ItemType getHarvestedItemType() {
+        return harvestedItemType;
     }
 
 

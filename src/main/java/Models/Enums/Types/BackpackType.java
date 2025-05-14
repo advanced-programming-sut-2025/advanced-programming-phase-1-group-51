@@ -3,8 +3,7 @@ package Models.Enums.Types;
 public enum BackpackType {
     DEFAULT(12, "Default"),
     GIANT(24, "Giant"),
-    DELUXE(Double.POSITIVE_INFINITY, "Deluxe"),
-    ;
+    DELUXE(Double.POSITIVE_INFINITY, "Deluxe");
 
     final private double capacity;
     final private String name;

@@ -2,7 +2,9 @@ package Views;
 
 import Controllers.Activity.*;
 import Controllers.Others.*;
+import Models.App;
 import Models.Enums.MenuCommands.GameMenuCommands;
+import Models.Enums.MenuCommands.ProfileMenuCommands;
 import Models.Game;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -19,15 +21,20 @@ public class GameMenu implements PlayMenu{
     private final Husbandry Husbandry = new Husbandry();
     private final Artisan Artisan = new Artisan();
     private final FriendShipController FriendshipController = new FriendShipController();
-    private final Trading Trading = new Trading();
     private final NPCController NPCController = new NPCController();
     private final OthersController OthersController = new OthersController();
     @Override
     public void check(Scanner scanner){
-        String input = Game.scanner.nextLine();
+        String input = App.scanner.nextLine();
         Matcher matcher;
 
-        if((matcher = GameMenuCommands.GAME_NEW.getMatcher(input)) != null){
+        if((matcher = GameMenuCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null){
+            System.out.println(SavingNextTurnController.showCurrentMenu());
+        }
+        else if(GameMenuCommands.GO_TO_MAIN.getMatcher(input) != null){
+             System.out.println(SavingNextTurnController.goToMain());
+         }
+        else if((matcher = GameMenuCommands.GAME_NEW.getMatcher(input)) != null){
             System.out.println(SavingNextTurnController.newGame(matcher.group("username1").trim(),matcher.group("username2").trim(),
                     matcher.group("username3").trim(),matcher.group("username4").trim()));
         }
@@ -159,7 +166,7 @@ public class GameMenu implements PlayMenu{
             System.out.println(Farming.cropInfo(name));
         }
         else if ((matcher = GameMenuCommands.CRAFTING_SHOW_RECIPES.getMatcher(input)) != null){
-            System.out.println(Crafting.showCraftRecipes());
+            System.out.println(Crafting.showCraftingRecipes());
         }
         else if ((matcher = GameMenuCommands.CRAFTING_CRAFT.getMatcher(input)) != null){
             String name = matcher.group("itemName").trim();
@@ -173,7 +180,7 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.CHEAT_ADD_ITEM.getMatcher(input)) != null){
             String name = matcher.group("itemName").trim();
             int count = Integer.parseInt(matcher.group("count").trim());
-            System.out.println(Crafting.addItem(name, count));
+            System.out.println(InventoryController.addItem(name, count));
         }
         else if ((matcher = GameMenuCommands.REFRIGERATOR_PICK.getMatcher(input)) != null){
             String name = matcher.group("item").trim();
@@ -290,27 +297,6 @@ public class GameMenu implements PlayMenu{
             String username = matcher.group("username").trim();
             System.out.println(FriendshipController.Respond(respond, username));
         }
-        else if ((matcher = GameMenuCommands.START_TRADE.getMatcher(input)) != null){
-            System.out.println(Trading.StartTrade());
-        }
-        else if ((matcher = GameMenuCommands.TRADE.getMatcher(input)) != null){
-            String username = matcher.group("username").trim();
-            String type = matcher.group("type").trim();
-            String item = matcher.group("item").trim();
-            int amount = Integer.parseInt(matcher.group("amount").trim());
-            System.out.println(Trading.TradeWithUser(username, type, item, amount));
-        }
-        else if ((matcher = GameMenuCommands.TRADE_LIST.getMatcher(input)) != null){
-            System.out.println(Trading.TradeList());
-        }
-        else if ((matcher = GameMenuCommands.TRADE_RESPONSE.getMatcher(input)) != null){
-            String response = matcher.group("response").trim();
-            int id = Integer.parseInt(matcher.group("id").trim());
-            System.out.println(Trading.TradeResponse(response, id));
-        }
-        else if ((matcher = GameMenuCommands.TRADE_HISTORY.getMatcher(input)) != null){
-            System.out.println(Trading.TradeHistory());
-        }
         else if ((matcher = GameMenuCommands.MEET_NPC.getMatcher(input)) != null){
             String NPCname = matcher.group("npcName").trim();
             System.out.println(NPCController.NPCMeet(NPCname));
@@ -338,6 +324,9 @@ public class GameMenu implements PlayMenu{
         }
         else if ((matcher = GameMenuCommands.SHOW_MONEY.getMatcher(input)) != null){
             System.out.println(OthersController.showMoney());
+        }
+        else if ((matcher = GameMenuCommands.START_TRADE.getMatcher(input)) != null){
+            System.out.println(OthersController.StartTrade());
         }
         else{
             System.out.println("Invalid Command!");

@@ -1,9 +1,9 @@
 package Controllers.Others;
 
-import Controllers.Controller;
+import Controllers.BaseController;
 import Models.Result;
 
-public class FriendShipController extends Controller {
+public class FriendShipController  extends BaseController {
 
     public Result FriendShip() {
         return null;

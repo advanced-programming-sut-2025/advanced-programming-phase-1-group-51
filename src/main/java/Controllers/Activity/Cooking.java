@@ -1,13 +1,11 @@
 package Controllers.Activity;
 
-import Controllers.Controller;
 import Models.*;
 import Models.Enums.Others.Quality;
 import Models.Enums.Recipes.CookingRecipes;
-import Models.Enums.Types.ItemTypes.FoodType;
 import Models.Items.Food;
 
-public class Cooking extends Controller {
+public class Cooking {
 
     public Result TakeOutOfRefrigerator(String itemName) {
         Player player = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
@@ -143,19 +141,33 @@ public class Cooking extends Controller {
     }
 
     public Result Eating(String foodName) {
-        Player consumer = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
-        Loot foodItem = consumer.getInventory().findItemLoot(foodName);
+        Game game = App.getCurrentUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        BackPack backpack = player.getInventory();
 
-        if (foodItem == null) {
-            return new Result(false, "You can only eat foods that are in your inventory or refrigerator");
+        Loot loot = backpack.findItemLoot(foodName);
+
+        if (loot == null) {
+            return new Result(false, "Item not in your inventory");
         }
 
-        int energyGain = FoodType.getEnergy(foodName);
-        consumer.setEnergy(consumer.getEnergy() + energyGain);
-        foodItem.setCount(foodItem.getCount() - 1);
+        if (!(loot.getItem() instanceof Food) || loot.getItem().getEnergyCost() >= 0) {
+            return new Result(false, "its not edible.");
+        }
+
+        Food food = (Food) loot.getItem();
+        loot.setCount(loot.getCount() - 1);
+
+        if (loot.getCount() == 0) {
+            backpack.getLoots().remove(loot);
+        }
+
+        player.getActiveBuffs().add(new ActiveBuff(food.getBuff()));
+        player.setEnergy((int) Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
 
         return new Result(true, "You ate " + foodName);
     }
+
 
     public Result showCookingRecipes() {
         Player recipeOwner = App.getCurrentUser().getCurrentGame().getCurrentPlayer();

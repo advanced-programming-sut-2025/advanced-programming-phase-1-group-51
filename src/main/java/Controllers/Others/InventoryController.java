@@ -1,30 +1,27 @@
 package Controllers.Others;
 
-import Controllers.Controller;
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.Others.Quality;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.SkillLevel;
 import Models.Enums.Others.Weather;
-import Models.Enums.Recipes.CookingRecipes;
 import Models.Enums.Types.AnimalType;
 import Models.Enums.Types.BackpackType;
 import Models.Enums.Types.ItemTypes.*;
+import Models.Enums.Types.ObjectsOnMapType.ForagingTreeType;
 import Models.Enums.Types.ObjectsOnMapType.TreeType;
-import Models.Enums.Types.TrashcanType;
-import Models.Items.Else;
-import Models.Items.Fish;
-import Models.Items.Item;
-import Models.Items.Tool;
+import Models.Items.*;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class InventoryController extends Controller {
+public class InventoryController  extends BaseController {
 
 
     public Result showInventory() {
@@ -230,28 +227,28 @@ public class InventoryController extends Controller {
         Cells targetCell = farm.findCellFarm(targetCellX, targetCellY);
 
         if (toolType == ToolType.HOE) {
-            return hoeUse(player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality(),targetCell, player);
-        } 
+            return hoeUse(player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality(),targetCell, player, game);
+        }
         else if (toolType == ToolType.PICKAXE) {
             return pickaxeUse(targetCell, player
                     , player.getMiningSkill().getLevel()
                     , toolInHand.getQuality()
-                    , player.getMiningSkill().getLevel().energyCostDiscount);
+                    , player.getMiningSkill().getLevel().energyCostDiscount, game);
         }
         else if (toolType == ToolType.AXE) {
             return axeUse(targetCell, player, toolInHand.getQuality()
-                    , player.getForagingSkill().getLevel().energyCostDiscount);
+                    , player.getForagingSkill().getLevel().energyCostDiscount, game);
         }
         else if (toolType == ToolType.WATERING_CAN_DEFAULT) {
             return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
                     , toolInHand, game);
-        } 
+        }
         else if (toolType == ToolType.WATERING_CAN_COPPER) {
             return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
                     , toolInHand, game);
-        } 
+        }
         else if (toolType == ToolType.WATERING_CAN_IRON) {
             return wateringCanUse(targetCell,player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
@@ -261,25 +258,25 @@ public class InventoryController extends Controller {
             return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
                     , toolInHand, game);
-        } 
+        }
         else if (toolType == ToolType.WATERING_CAN_IRIDIUM) {
             return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
                     , toolInHand, game);
-        } 
+        }
         else if (toolType == ToolType.FISHING_ROD) {
             return fishingRodUse(targetCell, player, toolInHand.getQuality()
                     , player.getFishingSkill().getLevel().energyCostDiscount, game);
-        } 
+        }
         else if (toolType == ToolType.SCYTHE) {
             return scytheUse(targetCell, player, game);
         }
         else if (toolType == ToolType.MILK_PAIL) {
             return milkPailUse(targetCell, player, game);
-        } 
+        }
         else if (toolType == ToolType.SHEAR) {
             return shearUse(targetCell, player, game);
-        } 
+        }
         else {
             return new Result(false, "Invalid tool");
         }
@@ -288,10 +285,21 @@ public class InventoryController extends Controller {
 
 
 
-    private Result hoeUse(int energyDiscount, Quality quality, Cells targetCell, Player player){
+    private Result hoeUse(int energyDiscount, Quality quality, Cells targetCell, Player player, Game game){
 
+        int takenEnergy;
+        takenEnergy = 5 - quality.getQualityLevel() - energyDiscount;
+        if (takenEnergy < 0) {
+            takenEnergy = 0;
+        }
+
+        if (game.getWeatherToday() == Weather.SNOW) {
+            takenEnergy *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            takenEnergy *= 1.5;
+        }
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
-        int takenEnergy = 0;
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
@@ -317,17 +325,207 @@ public class InventoryController extends Controller {
         return new Result(true, "Target cell is now plowed.");
     }
 
-    private Result pickaxeUse(Cells targetCell, Player player, SkillLevel skillLevel
-            , Quality quality, int energyDiscount){
-
-
-        return null;
+    private static boolean canPickaxeMineThis( ForagingMineralType target, Quality pickaxeQuality) {
+        if (pickaxeQuality == Quality.DEFAULT) {
+            if (target ==  ForagingMineralType.STONE) {
+                return true;
+            } else if (target ==  ForagingMineralType.COPPER_ORE) {
+                return true;
+            } else if (target ==  ForagingMineralType.COAL) {
+                return true;
+            }
+            return false;
+        }
+        if (pickaxeQuality == Quality.COPPER) {
+            if (target ==  ForagingMineralType.STONE) {
+                return true;
+            } else if (target ==  ForagingMineralType.COPPER_ORE) {
+                return true;
+            } else if (target ==  ForagingMineralType.COAL) {
+                return true;
+            } else if (target ==  ForagingMineralType.IRON_ORE) {
+                return true;
+            }
+            return false;
+        }
+        if (pickaxeQuality == Quality.SILVER) {
+            if (target ==  ForagingMineralType.GOLD_ORE) {
+                return false;
+            } else if (target ==  ForagingMineralType.IRIDIUM_ORE) {
+                return false;
+            }
+            return true;
+        }
+        return true;
     }
 
-    private Result axeUse(Cells targetCell, Player player, Quality quality, int energyDiscount) {
+    private Result pickaxeUse(Cells targetCell, Player player, SkillLevel skillLevel
+            , Quality quality, int energyDiscount, Game game) {
+        int energyCost;
+         energyCost = 5 - quality.getQualityLevel() - energyDiscount;
+        if (energyCost < 0) {
+            energyCost = 0;
+        }
 
+        if (game.getWeatherToday() == Weather.SNOW) {
+            energyCost *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            energyCost *= 1.5;
+        }
+
+
+        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Result(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Result(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Result(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + energyCost);
+
+
+        if (targetCell.getObjectOnCell() instanceof Mineral) {
+
+            ForagingMineralType type = ((Mineral) targetCell.getObjectOnCell()).getType();
+
+            BackPack backpack = player.getInventory();
+            Loot slot = backpack.findItemLoot(type.name);
+
+            if (!canPickaxeMineThis(type, quality)) {
+
+                return new Result(false, "Pickaxe is too weak to mine this block.");
+            }
+
+//            player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + 10);
+//
+//            int cellX = targetCell.getCoordinate().getX();
+//            int cellY = targetCell.getCoordinate().getY();
+
+//            boolean check = cellX <= 9 && cellY <= 11;
+
+//            targetCell.setObjectOnCell(check ? new BuildingCell(true, "Mine") : new BurntCell());
+
+            int count = 1;
+            if (skillLevel.ordinal() <= 2) {
+                count++;
+            }
+
+            if (backpack.getLoots().size() == backpack.getType().getCapacity()) {
+                if (slot == null) {
+                    System.out.println("No space in backpack.");
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + count, slot.getItem().getMaxSize()));
+                    System.out.println("Added " + count + " to backpack.");
+                }
+            }
+//            else {
+//                if (slot == null) {
+//                    backpack.getLoots().add(new
+//                            Loot(new ForagingMineralItem(Quality.DEFAULT, type), count));
+//                } else {
+//                    slot.setCount(Math.min(slot.getItem().getMaxSize(), slot.getCount() + count));
+//                }
+//                System.out.println("Added " + count + " to backpack.");
+//            }
+
+
+            return new Result(true, "Mined stone/mineral at target cell.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof DroppedItemCell) {
+
+            DroppedItemCell droppedItem = (DroppedItemCell) targetCell.getObjectOnCell();
+            Loot droppedSlot = new Loot(droppedItem.getItem(), droppedItem.getQuantity());
+            BackPack backpack = player.getInventory();
+            Loot backpackSlot = backpack.findItemLoot(droppedSlot.getItem().getName());
+
+            if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
+                if (backpackSlot == null) {
+
+                    return new Result(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                }
+            } else {
+                if (backpackSlot == null) {
+                    backpack.getLoots().add(droppedSlot);
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                }
+            }
+        }
+
+        if (targetCell.getObjectOnCell() instanceof ArtisanBlockCell) {
+            ArtisanBlockCell block = (ArtisanBlockCell) targetCell.getObjectOnCell();
+            Loot droppedSlot = new Loot(new Else(ElseType.getElseTypeByName(block.getArtisanType().name), Quality.DEFAULT), 1);
+
+            BackPack backpack = player.getInventory();
+            Loot backpackSlot = backpack.findItemLoot(droppedSlot.getItem().getName());
+
+            if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
+                if (backpackSlot == null) {
+
+                    return new Result(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                }
+            } else {
+                if (backpackSlot == null) {
+                    backpack.getLoots().add(droppedSlot);
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
+                    targetCell.setObjectOnCell(new BurntCell());
+
+                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                }
+            }
+        }
+
+
+        return new Result(false, "No operation was performed.");
+    }
+
+    private Result axeUse(Cells targetCell, Player player, Quality quality, int energyDiscount, Game game) {
+
+        int takenEnergy;
+        takenEnergy = 5 - quality.getQualityLevel() - energyDiscount;
+        if (takenEnergy < 0) {
+            takenEnergy = 0;
+        }
+
+        if (game.getWeatherToday() == Weather.SNOW) {
+            takenEnergy *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            takenEnergy *= 1.5;
+        }
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
-        int takenEnergy = 0;
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
@@ -349,9 +547,9 @@ public class InventoryController extends Controller {
             return new Result(false, "Target cell is not a tree or wood");
         }
 
-        if (tree.getTreeType() == TreeType.NORMAL_TREE) {
+        if (tree.getTreeType() == ForagingTreeType.NORMAL_TREE) {
             int woodCount = (int) (Math.random() * 4 + 2);
-            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK));
+            targetCell.setObjectOnCell(new Tree(ForagingTreeType.TREE_BARK));
 
             BackPack backpack = player.getInventory();
             Loot loot = backpack.findItemLoot("Wood");
@@ -361,7 +559,7 @@ public class InventoryController extends Controller {
                     return new Result(false,
                             "yous backpack is full");
                 }
-                
+
                 loot.setCount(Math.min(loot.getCount() + woodCount, loot.getItem().getMaxSize()));
                 return new Result(true, "you got " + woodCount + " woods");
             }
@@ -377,7 +575,7 @@ public class InventoryController extends Controller {
             }
         }
 
-        else if (tree.getTreeType() == TreeType.TREE_BARK) {
+        else if (tree.getTreeType() == ForagingTreeType.TREE_BARK) {
             int woodCount = (int) (Math.random() * 2 + 1);
             targetCell.setObjectOnCell(new BurntCell());
 
@@ -402,7 +600,7 @@ public class InventoryController extends Controller {
             }
         }
 
-        else if (tree.getTreeType() == TreeType.BURNT_TREE) {
+        else if (tree.getTreeType() == ForagingTreeType.BURNT_TREE) {
             targetCell.setObjectOnCell(new BurntCell());
 
             BackPack backpack = player.getInventory();
@@ -428,7 +626,7 @@ public class InventoryController extends Controller {
             targetCell.setObjectOnCell(new BurntCell());
 
             BackPack backpack = player.getInventory();
-            Loot loot = backpack.findItemLoot(TreeSeedsType.findTreeType(tree.getTreeType().seed).name);
+            Loot loot = backpack.findItemLoot(TreeType.findTreeBySeed(tree.getTreeType().seed).name);
 
             if (loot == null) {
                 if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
@@ -436,8 +634,8 @@ public class InventoryController extends Controller {
                             , "Your backpack is full");
                 }
 
-                Loot lootToAdd = TreeSeedsType.findTreeType(tree.getTreeType().seed).createAmountOfItem(2, Quality.DEFAULT);
-                backpack.getLoots().add(lootToAdd);
+             //   Loot lootToAdd = TreeType.findTreeBySeed(tree.getTreeType().seed).createAmountOfItem(2, Quality.DEFAULT);
+              //  backpack.getLoots().add(lootToAdd);
 
                 return new Result(true, "You got " + 2 + " tree seeds.");
             }
@@ -451,7 +649,18 @@ public class InventoryController extends Controller {
     private Result wateringCanUse(Cells targetCell, Player player, ToolType wateringCanType
             , int energyDiscount, Quality quality, Tool toolInHand, Game game){
 
-        int takenEnergy = 0;
+        int takenEnergy;
+        takenEnergy = 5 - quality.getQualityLevel() - energyDiscount;
+        if (takenEnergy < 0) {
+            takenEnergy = 0;
+        }
+
+        if (game.getWeatherToday() == Weather.SNOW) {
+            takenEnergy *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            takenEnergy *= 1.5;
+        }
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int playerEnergy = player.getEnergy();
 
@@ -472,32 +681,32 @@ public class InventoryController extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof Lake) {
             toolInHand.setWaterReserve(wateringCanType.waterCapacity);
-         
+
             return new Result(true, "Water filled successfully.");
         }
 
         if (targetCell.getObjectOnCell() instanceof Tree tree) {
             if (toolInHand.getWaterReserve() == 0) {
-             
+
                 return new Result(false, "Watering can is empty.");
             }
             tree.setHasBeenWateredToday(true);
-         
+
             return new Result(true, "Tree watered successfully.");
         }
 
         if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (toolInHand.getWaterReserve() == 0) {
-             
+
                 return new Result(false, "Watering can is empty.");
             }
             crop.setHasBeenWateredToday(true);
             crop.setLastWateringDate(game.getDate());
-         
+
             return new Result(true, "Crop watered successfully.");
         }
 
-     
+
         return new Result(false, "No operation was performed.");
     }
 
@@ -546,17 +755,17 @@ public class InventoryController extends Controller {
             player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
 
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
-              
+
                 return new Result(false, "You didn't have enough space. But caught a fish anyways.");
             }
 
             addFishes(fish, backpack, numberOfFishes);
 
-          
+
             return new Result(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
 
-      
+
         return new Result(false, "You only can fish in Lake");
     }
 
@@ -658,8 +867,179 @@ public class InventoryController extends Controller {
 
 
 
-    private static Result scytheUse(String direction){
-        return null;
+  private static Result scytheUse(Cells targetCell, Player player, Game game){
+//
+//        int energyCost = getScytheEnergyCost();
+//        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+//        int playerEnergy = player.getEnergy();
+//
+//        if (energyCost + currentEnergyUsed > 50) {
+//            return new Result(false, "You can't perform this activity. " +
+//                    "You will exceed your energy usage limit.");
+//        }
+//
+//        if (playerEnergy - energyCost < 0) {
+//            return new Result(false, "You don't have enough energy.");
+//        }
+//
+//        if (targetCell == null) {
+//            return new Result(false, "Target cell not found.");
+//        }
+//
+//        player.setEnergy(player.getEnergy() - energyCost);
+//        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + energyCost);
+//
+//        if (targetCell.getObjectOnCell() instanceof ForagingCrop crop) {
+//
+//            targetCell.setObjectOnCell(new BurntCell());
+//
+//            BackPack backpack = player.getInventory();
+//            ItemType itemType = crop.getForagingCropsType().getHarvestedItemType();
+//            Loot loot = null;
+//            String name = null;
+//
+//            if (itemType instanceof ElseType) {
+//                loot = backpack.findItemLoot(((ElseType) itemType).name);
+//                name = ((ElseType) itemType).name;
+//            } else if (itemType instanceof FoodType) {
+//                loot = backpack.findItemLoot(((FoodType) itemType).name);
+//                name = ((FoodType) itemType).name;
+//            }
+//
+//            int randomInt = (int) (Math.random() * 3) + 1;
+//
+//            if (player.getInventory().getType().getCapacity() == player.getInventory().getLoots().size()) {
+//                if (loot == null) {
+//                    System.out.println("You had no inventory space to collect the materials.");
+//                } else {
+//                    loot.setCount(Math.min(loot.getCount() + randomInt, loot.getItem().getMaxSize()));
+//                    System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
+//                }
+//            }
+//            else {
+//                if (loot == null) {
+//                    backpack.getLoots().add(itemType.createAmountOfItem(randomInt, Quality.DEFAULT));
+//                } else {
+//                    loot.setCount(Math.min(loot.getCount() + randomInt, loot.getItem().getMaxStackSize()));
+//                }
+//                System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
+//            }
+//
+//            player.getUnbuffedForagingSkill().setXp(player.getUnbuffedForagingSkill().getXp() + 10);
+//
+//            return new Result(true, "Removed " + name + "from tile.");
+//        } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
+//
+//            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
+//                return new Result(false, "Crop isn't ready for harvest.");
+//            }
+//
+//            int amountToHarvest = crop.isGiant() ? 10 : 1;
+//
+//            BackPack backpack = player.getInventory();
+//            Loot slot = backpack.findItemLoot(crop.cropSeedsType.name);
+//
+//            if (slot == null) {
+//                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
+//
+//                    return new Result(false, "Not enough inventory space.");
+//                }
+//
+//                Loot newSlot = new Loot(FoodType.findFoodByName(crop.cropSeedsType.name), amountToHarvest);
+//                backpack.getLoots().add(newSlot);
+//
+//                if (crop.cropSeedsType.oneTime) {
+//                    targetCell.setObjectOnCell(new BurntCell());
+//                } else {
+//                    crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+//                }
+//
+//                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+//
+//
+//                return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
+//            }
+//
+//            if (crop.cropSeedsType.oneTime) {
+//                targetCell.setObjectOnCell(new BurntCell());
+//            } else {
+//                crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+//            }
+//
+//            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+//
+//            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxSize()));
+//
+//
+//            return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
+//        } else if (targetCell.getObjectOnCell() instanceof Tree tree) {
+//
+//            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(game.getDate())) {
+//                return new Result(false, "Tree isn't ready for harvest.");
+//            }
+//
+//            int amountToHarvest = 1;
+//
+//            BackPack backpack = player.getInventory();
+//            Loot loot = backpack.getLoots(tree.getTreeType().fruitItem.getName());
+//
+//            if (loot == null) {
+//                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
+//
+//                    return new Result(false, "Not enough inventory space.");
+//                }
+//
+//                if (tree.getTreeType() == TreeType.NORMAL_TREE
+//                        || tree.getTreeType() == TreeType.TREE_BARK
+//                        || tree.getTreeType() == TreeType.BURNT_TREE) {
+//                    return new Result(false, "Tree isn't harvestable.");
+//                }
+//                else {
+//                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
+//                }
+//
+//                Loot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest, Quality.DEFAULT);
+//                backpack.getLoots().add(newSlot);
+//
+//                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+//
+//
+//                return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
+//            }
+//
+//            if (tree.getTreeType() == TreeType.NORMAL_TREE
+//                    || tree.getTreeType() == TreeType.TREE_BARK
+//                    || tree.getTreeType() == TreeType.BURNT_TREE) {
+//                return new Result(false, "Can't harvest a normal, burnt tree or bark.");
+//            }
+//            else {
+//                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
+//            }
+//
+//            loot.setCount(Math.min(loot.getCount() + amountToHarvest, loot.getItem().getMaxSize()));
+//
+//            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+//
+//
+//            return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
+//
+//        } else {
+//
+       return new Result(false, "Target cell isn't a valid use case of the scythe.");
+
+   }
+
+    private static int getScytheEnergyCost() {
+        Game game = App.getCurrentUser().getCurrentGame();
+
+        int energyCost = 2;
+        if (game.getWeatherToday() == Weather.SNOW) {
+            energyCost *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            energyCost *= 1.5;
+        }
+        return energyCost;
     }
 
 
@@ -761,6 +1141,77 @@ public class InventoryController extends Controller {
             return new Result(false,"no product found");
         }
         return collectProducts(product, backpack, productloot, animal, player, game);
+    }
+
+    public Result addItem(String name, int count) {
+        // Validate inputs
+        if (count <= 0) {
+            return new Result(false, "Count must be positive");
+        }
+
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        if (game == null) {
+            return new Result(false, "No active game found");
+        }
+
+        Player player = game.getCurrentPlayer();
+        BackPack backpack = player.getInventory();
+
+        // Check if item exists in the game's item types
+        HashMap<String, ItemType> allItemTypes = App.getAllItemTypes();
+        ItemType itemType = allItemTypes.get(name);
+        if (itemType == null) {
+            return new Result(false, "Item '" + name + "' does not exist in the game");
+        }
+
+        // Check backpack capacity (unless it's the deluxe backpack)
+        if (backpack.getType() != BackpackType.DELUXE &&
+                backpack.getLoots().size() >= backpack.getType().getCapacity()) {
+            // Check if we already have this item
+            Loot existingLoot = backpack.findItemLoot(name);
+            if (existingLoot == null) {
+                return new Result(false, "Backpack is full");
+            }
+        }
+
+        try {
+            // Create the item with default quality
+            Loot newLoot = itemType.createAmountOfItem(count, Quality.DEFAULT);
+
+            // Check if item already exists in inventory
+            Loot existingLoot = backpack.findItemLoot(name);
+            if (existingLoot != null) {
+                // Add to existing count, respecting max stack size
+                int newCount = existingLoot.getCount() + count;
+                if (newCount > existingLoot.getItem().getMaxSize()) {
+                    // If stack would overflow, create new stacks as needed
+                    int remaining = newCount;
+                    existingLoot.setCount(existingLoot.getItem().getMaxSize());
+                    remaining -= existingLoot.getItem().getMaxSize();
+
+                    while (remaining > 0) {
+                        int addAmount = Math.min(remaining, existingLoot.getItem().getMaxSize());
+                        if (backpack.getType() != BackpackType.DELUXE &&
+                                backpack.getLoots().size() >= backpack.getType().getCapacity()) {
+                            return new Result(true, "Added " + (count - remaining) + " of " + name +
+                                    " (backpack full, couldn't add remaining " + remaining + ")");
+                        }
+                        backpack.addLoot(itemType.createAmountOfItem(addAmount, Quality.DEFAULT));
+                        remaining -= addAmount;
+                    }
+                } else {
+                    existingLoot.setCount(newCount);
+                }
+            } else {
+                // Add new item to inventory
+                backpack.addLoot(newLoot);
+            }
+
+            return new Result(true, "Added " + count + " of " + name + " to your backpack");
+        } catch (Exception e) {
+            return new Result(false, "Failed to add item: " + e.getMessage());
+        }
     }
 
 

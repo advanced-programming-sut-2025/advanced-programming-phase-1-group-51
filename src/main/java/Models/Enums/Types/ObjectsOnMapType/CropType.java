@@ -1,10 +1,11 @@
-package Models.Enums.Types.ItemTypes;
+package Models.Enums.Types.ObjectsOnMapType;
 
 import Models.Enums.Others.Quality;
 import Models.Enums.Others.Season;
+import Models.Enums.Types.ItemTypes.ItemType;
 import Models.Loot;
 
-public enum CropSeedsType implements ItemType{
+public enum CropType implements ItemType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
     CARROT("Carrot", "Carrot Seeds", 1, 1, 1, -1, -1, 3, true, -1, 35, true, 75, new Season[]{Season.SPRING}, false),
     CAULIFLOWER("Cauliflower", "Cauliflower Seeds", 1, 2, 4, 4, 1, 12, true, -1, 175, true, 75, new Season[]{Season.SPRING}, true),
@@ -65,9 +66,9 @@ public enum CropSeedsType implements ItemType{
     public final boolean canBeGiant;
 
 
-    CropSeedsType(String name, String source, int stageZeroDaysToNextStage, int stageOne,
-                  int stageTwo, int stageThree, int stageFour,
-                  int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
+    CropType(String name, String source, int stageZeroDaysToNextStage, int stageOne,
+             int stageTwo, int stageThree, int stageFour,
+             int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
         this.name = name;
         this.source = source;
         this.stageZero = stageZeroDaysToNextStage;
@@ -85,8 +86,8 @@ public enum CropSeedsType implements ItemType{
         this.canBeGiant = canBeGiant;
     }
 
-    public static CropSeedsType findCropBySeed(String seed) {
-        for (CropSeedsType crop : CropSeedsType.values()) {
+    public static CropType findCropBySeed(String seed) {
+        for (CropType crop : CropType.values()) {
             if (crop.source.equalsIgnoreCase(seed)) {
                 return crop;
             }
@@ -94,8 +95,8 @@ public enum CropSeedsType implements ItemType{
         return null;
     }
 
-    public static CropSeedsType findCropByName(String seed) {
-        for (CropSeedsType crop : CropSeedsType.values()) {
+    public static CropType findCropByName(String seed) {
+        for (CropType crop : CropType.values()) {
             if (crop.name.equalsIgnoreCase(seed)) {
                 return crop;
             }
@@ -104,32 +105,32 @@ public enum CropSeedsType implements ItemType{
     }
 
 
-    public CropSeedsType getRandomCropSeedsType(Season season) {
+    public CropType getRandomCropSeedsType(Season season) {
         if (name.compareToIgnoreCase("Random Crop") == 0) {
             if (season == Season.SPRING) {
-                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CAULIFLOWER, CropSeedsType.PARSNIP, CropSeedsType.POTATO
-                        , CropSeedsType.BLUE_JAZZ, CropSeedsType.TULIP};
+                CropType[] arr = new CropType[]{CropType.CAULIFLOWER, CropType.PARSNIP, CropType.POTATO
+                        , CropType.BLUE_JAZZ, CropType.TULIP};
                 int rand = (int)(Math.random()*5);
                 return arr[rand];
             } else if (season == Season.SUMMER) {
-                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CORN, CropSeedsType.HOT_PEPPER, CropSeedsType.RADISH
-                        , CropSeedsType.WHEAT, CropSeedsType.POPPY, CropSeedsType.SUNFLOWER, CropSeedsType.SUMMER_SPANGLE};
+                CropType[] arr = new CropType[]{CropType.CORN, CropType.HOT_PEPPER, CropType.RADISH
+                        , CropType.WHEAT, CropType.POPPY, CropType.SUNFLOWER, CropType.SUMMER_SPANGLE};
                 int rand = (int)(Math.random()*7);
                 return arr[rand];
             } else if (season == Season.FALL) {
-                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.ARTICHOKE, CropSeedsType.CORN, CropSeedsType.EGGPLANT,
-                        CropSeedsType.PUMPKIN, CropSeedsType.SUNFLOWER, CropSeedsType.FAIRY_ROSE};
+                CropType[] arr = new CropType[]{CropType.ARTICHOKE, CropType.CORN, CropType.EGGPLANT,
+                        CropType.PUMPKIN, CropType.SUNFLOWER, CropType.FAIRY_ROSE};
                 int rand = (int)(Math.random()*6);
                 return arr[rand];
             } else if (season == Season.WINTER) {
-                CropSeedsType[] arr = new CropSeedsType[]{POWDER_MELON};
+                CropType[] arr = new CropType[]{POWDER_MELON};
                 return arr[0];
             }
         }
         return this;
     }
 
-    public static String CropInfo(CropSeedsType crop){
+    public static String CropInfo(CropType crop){
         StringBuilder output = new StringBuilder();
         output.append("Name : ").append(crop.name).append("\n");
         output.append("Source : ").append(crop.source).append("\n");
@@ -144,6 +145,8 @@ public enum CropSeedsType implements ItemType{
         output.append("Can Become Giant : ").append(crop.canBeGiant).append("\n");
         return output.toString();
     }
+
+
 
 
     @Override

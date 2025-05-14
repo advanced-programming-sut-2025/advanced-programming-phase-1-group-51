@@ -1,12 +1,12 @@
 package Models.ObjectsShownOnMap;
 
-import Models.Enums.Types.ObjectsOnMapType.ForagingCropType;
+import Models.Enums.Types.ObjectsOnMapType.CropType;
 
 import java.time.LocalDateTime;
 
 public class Crop extends ObjectOnMap{
 
-    public ForagingCropType cropSeedsType;
+    public CropType cropSeedsType;
     private int daysToNextStage;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
@@ -16,11 +16,11 @@ public class Crop extends ObjectOnMap{
     private boolean isGiant = false;
 
 
-    public Crop(ForagingCropType plantType) {
+    public Crop(CropType plantType) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;
-        daysToNextStage = cropSeedsType.StageZero;
+        daysToNextStage = cropSeedsType.stageZero;
         this.hasBeenWateredToday = false;
     }
 
@@ -56,11 +56,11 @@ public class Crop extends ObjectOnMap{
         this.hasBeenFertilized = hasBeenFertilized;
     }
 
-    public ForagingCropType getCropSeedsType() {
+    public CropType getCropSeedsType() {
         return cropSeedsType;
     }
 
-    public void setCropSeedsType(ForagingCropType cropSeedsType) {
+    public void setCropSeedsType(CropType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
     }
 

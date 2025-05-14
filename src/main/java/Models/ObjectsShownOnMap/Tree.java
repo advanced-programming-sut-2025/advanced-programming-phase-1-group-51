@@ -1,18 +1,18 @@
 package Models.ObjectsShownOnMap;
 
-import Models.Enums.Types.ObjectsOnMapType.TreeType;
+import Models.Enums.Types.ObjectsOnMapType.ForagingTreeType;
 
 public class Tree extends ObjectOnMap{
 
-    private final TreeType treeType;
+    private ForagingTreeType treeType;
     private boolean hasBeenWateredToday;
 
-    public Tree(TreeType treeType) {
+    public Tree(ForagingTreeType treeType) {
         super(false, "plant", "green");
         this.treeType = treeType;
     }
 
-    public TreeType getTreeType() {
+    public ForagingTreeType getTreeType() {
         return treeType;
     }
 
@@ -38,23 +38,5 @@ public class Tree extends ObjectOnMap{
         return super.getType();
     }
 
-    @Override
-    public boolean isWalkable() {
-        return super.isWalkable();
-    }
 
-    @Override
-    public void setWalkable(boolean walkable) {
-        super.setWalkable(walkable);
-    }
-
-    @Override
-    public String getColor() {
-        return super.getColor();
-    }
-
-    @Override
-    public void setColor(String color) {
-        super.setColor(color);
-    }
 }

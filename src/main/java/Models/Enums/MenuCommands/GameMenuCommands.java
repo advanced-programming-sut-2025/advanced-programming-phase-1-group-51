@@ -3,16 +3,15 @@ package Models.Enums.MenuCommands;
 public enum GameMenuCommands implements Command {
 
     // game commands
-
+    GO_TO_MAIN("go\\s+to\\s+main\\s+menu"),
     SHOW_CURRENT_MENU("show\\s+current\\s+menu"),
     EXIT_GAME("exit\\s+game"),
     DELETE_GAME("delete\\s+game"),
     NEXT_TURN("next\\s+turn"),
-    GAME_NEW("^game\\s+new\\s+-u\\s+(?<username1>\\s+)(?:\\s+(?<username2>\\s+))?(?:\\s+(?<username3>\\s+))?(?:\\s+(?<extraInvalid>\\s+))?$"),
+    GAME_NEW("^game\\s+new\\s+-u\\s+(?<username1>\\S+)(?:\\s+(?<username2>\\S+))?(?:\\s+(?<username3>\\S+))?(?:\\s+(?<extraInvalid>\\S+))?$"),
     GAME_MAP("game\\s+map\\s+(?<mapNumber>\\S+)"),
     LOAD_GAME("load\\s+game"),
     SHOW_MONEY("show\\s+money"),
-
     // date and time
 
     TIME("time"),

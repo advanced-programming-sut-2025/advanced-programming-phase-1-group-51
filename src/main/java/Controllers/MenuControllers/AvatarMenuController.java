@@ -1,10 +1,8 @@
 package Controllers.MenuControllers;
 
-import Controllers.Controller;
-import Models.Game;
 import Models.Result;
 
-public class AvatarMenuController extends Controller {
+public class AvatarMenuController {
 
 
     public static Result showCurrentMenu(){

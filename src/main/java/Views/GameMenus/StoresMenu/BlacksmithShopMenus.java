@@ -2,6 +2,7 @@ package Views.GameMenus.StoresMenu;
 
 import Controllers.Others.OthersController;
 import Controllers.StoresControllers.BlackSmithShop;
+import Models.App;
 import Models.Enums.MenuCommands.GameMenuCommands;
 import Models.Game;
 import Views.PlayMenu;
@@ -15,7 +16,7 @@ public class BlacksmithShopMenus implements PlayMenu {
     private final OthersController OthersController = new OthersController();
     @Override
     public void check(Scanner scanner) {
-        String input = Game.scanner.nextLine();
+        String input = App.scanner.nextLine();
         Matcher matcher;
 
         if ((matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.getMatcher(input)) != null){
@@ -36,7 +37,7 @@ public class BlacksmithShopMenus implements PlayMenu {
         }
         else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.getMatcher(input)) != null){
             String name = matcher.group("toolName").trim();
-            System.out.println(BlackSmithShop.toolUpgrade(name));
+           // System.out.println(BlackSmithShop.toolUpgrade(name));
         }
         else if ((matcher = GameMenuCommands.GET_OUT.getMatcher(input)) != null){
             System.out.println(BlackSmithShop.exitStore());

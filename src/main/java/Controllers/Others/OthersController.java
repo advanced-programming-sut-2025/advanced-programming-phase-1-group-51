@@ -1,11 +1,12 @@
 package Controllers.Others;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Quality;
 import Models.Enums.Others.Weather;
 import Models.Enums.Types.ItemTypes.ElseType;
-import Models.Enums.Types.ObjectsOnMapType.TreeType;
+import Models.Enums.Types.ObjectsOnMapType.ForagingTreeType;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.BurntCell;
@@ -17,7 +18,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class OthersController {
+public class OthersController  extends BaseController {
 
 
     public Result BuildBuilding(String buildingName, int x, int y){
@@ -31,7 +32,7 @@ public class OthersController {
             Cells cell = farm.findCellFarm(x, y);
             if (cell != null) {
                 if (cell.getObjectOnCell() instanceof Tree) {
-                    cell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
+                    cell.setObjectOnCell(new Tree(ForagingTreeType.BURNT_TREE));
                 }
                 if (cell.getObjectOnCell() instanceof Crop) {
                     cell.setObjectOnCell(new BurntCell());
@@ -50,55 +51,55 @@ public class OthersController {
 
 
     public Result cheatAdvanceTime(int amountOfHours) {
-        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
-        LocalDateTime nextDateTime;
-        Game currentGame = App.getCurrentUser().getCurrentGame();
-        int howManyDays = amountOfHours / 24;
-        int howManyHours = amountOfHours % 24;
-        int howManyMonths = howManyDays / 28;
-        howManyDays %= 28;
-        int currentHour = currentDateTime.getHour();
-        int currentDay = currentDateTime.getDayOfMonth();
-        if (howManyHours + currentHour > 22) {
-            howManyHours = 22 - currentHour;
-        }
-        if (howManyDays + currentDay > 28) {
-            howManyMonths++;
-            howManyDays -= 28;
-        }
-        nextDateTime = currentDateTime.plusDays(howManyDays);
-        nextDateTime = nextDateTime.plusHours(howManyHours);
-        nextDateTime = nextDateTime.plusMonths(howManyMonths);
-        boolean check = nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0
-                || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
-        currentGame.setDate(nextDateTime);
-        currentGame.checkSeasonChange();
-        if (check) {
-            currentGame.newDayBackgroundChecks();
-        }
+//        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
+//        LocalDateTime nextDateTime;
+//        Game currentGame = App.getCurrentUser().getCurrentGame();
+//        int howManyDays = amountOfHours / 24;
+//        int howManyHours = amountOfHours % 24;
+//        int howManyMonths = howManyDays / 28;
+//        howManyDays %= 28;
+//        int currentHour = currentDateTime.getHour();
+//        int currentDay = currentDateTime.getDayOfMonth();
+//        if (howManyHours + currentHour > 22) {
+//            howManyHours = 22 - currentHour;
+//        }
+//        if (howManyDays + currentDay > 28) {
+//            howManyMonths++;
+//            howManyDays -= 28;
+//        }
+//        nextDateTime = currentDateTime.plusDays(howManyDays);
+//        nextDateTime = nextDateTime.plusHours(howManyHours);
+//        nextDateTime = nextDateTime.plusMonths(howManyMonths);
+//        boolean check = nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0
+//                || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
+//        currentGame.setDate(nextDateTime);
+//        currentGame.checkSeasonChange();
+//        if (check) {
+//            currentGame.newDayBackgroundChecks();
+//        }
         return new Result(true, "time changed successfully.");
     }
 
     public Result cheatAdvanceDate(int amountOfDays) {
-        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
-        LocalDateTime nextDateTime;
-        Game currentGame = App.getCurrentUser().getCurrentGame();
-        int howManyDays = amountOfDays % 28;
-        int howManyMonths = amountOfDays / 28;
-        int currentDay = currentDateTime.getDayOfMonth();
-        if (howManyDays + currentDay > 28) {
-            howManyMonths++;
-            howManyDays -= 28;
-        }
-        nextDateTime = currentDateTime.plusDays(howManyDays);
-        nextDateTime = nextDateTime.plusMonths(howManyMonths);
-        boolean check = (nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0)
-                || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
-        currentGame.setDate(nextDateTime);
-        if (check) {
-            currentGame.newDayBackgroundChecks();
-        }
-        currentGame.checkSeasonChange();
+//        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
+//        LocalDateTime nextDateTime;
+//        Game currentGame = App.getCurrentUser().getCurrentGame();
+//        int howManyDays = amountOfDays % 28;
+//        int howManyMonths = amountOfDays / 28;
+//        int currentDay = currentDateTime.getDayOfMonth();
+//        if (howManyDays + currentDay > 28) {
+//            howManyMonths++;
+//            howManyDays -= 28;
+//        }
+//        nextDateTime = currentDateTime.plusDays(howManyDays);
+//        nextDateTime = nextDateTime.plusMonths(howManyMonths);
+//        boolean check = (nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0)
+//                || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
+//        currentGame.setDate(nextDateTime);
+//        if (check) {
+//            currentGame.newDayBackgroundChecks();
+//        }
+//        currentGame.checkSeasonChange();
         return new Result(true, "Date changed successfully.");
     }
 
@@ -316,6 +317,12 @@ public class OthersController {
         Player player = game.getCurrentPlayer();
         player.setMoney(player.getMoney() + amount);
         return new Result(true,"you have " + player.getMoney() +" money now");
+    }
+
+
+    public Result StartTrade() {
+        App.setCurrentMenu(Menu.TradeMenu);
+        return new Result(true,"You are in Trade menu now");
     }
 
 }
