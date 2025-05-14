@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import Models.App;
 
 public class SignUpMenuController extends Controller {
 
@@ -20,7 +21,7 @@ public class SignUpMenuController extends Controller {
     }
 
     public Result goToLoginMenu(){
-        Game.setCurrentMenu(Menu.LoginMenu);
+        App.setCurrentMenu(Menu.LoginMenu);
         return new Result(true,"You are now in Login Menu");
     }
 
@@ -193,7 +194,7 @@ public class SignUpMenuController extends Controller {
     }
 
     public void exitMenu() {
-        Game.setCurrentMenu(Menu.ExitMenu);
+        App.setCurrentMenu(Menu.ExitMenu);
     }
 
 

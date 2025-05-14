@@ -1,22 +1,29 @@
 package Controllers.StoresControllers;
 
 import Models.*;
+import Models.Buildings.Barn;
+import Models.Buildings.Building;
+import Models.Buildings.Coop;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Quality;
+import Models.Enums.Recipes.CookingRecipes;
+import Models.Enums.Recipes.CraftingRecipes;
+import Models.Enums.Types.AnimalType;
 import Models.Enums.Types.ItemTypes.*;
 import Models.Enums.Types.StoresProductsTypes.FishShopProducts;
 import Models.Items.*;
+import Models.Maps.Cells;
+import Models.Maps.Farm;
+import Models.ObjectsShownOnMap.AnimalCell;
+
+import static Controllers.StoresControllers.BlackSmithShop.toolUpgrade;
 
 public class MarnieRanch {
 
-    public Result ShowAllProducts(String storeName) {
+    public Result ShowAllProducts() {
         User user = Game.getCurrentUser();
         Game game = user.getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
+        Store store = Game.getMap().getVillage().getStore("Marnie's Ranch");
 
         StringBuilder output = new StringBuilder();
 
@@ -33,13 +40,9 @@ public class MarnieRanch {
         return new Result(true, output.toString());
     }
 
-    public Result ShowAllAvailableProducts(String storeName) {
+    public Result ShowAllAvailableProducts() {
         Game game = Game.getCurrentUser().getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
+        Store store = Game.getMap().getVillage().getStore("Marnie's Ranch");
 
         StringBuilder output = new StringBuilder();
 
@@ -60,16 +63,285 @@ public class MarnieRanch {
         return new Result(true, output.toString());
     }
 
-    public Result Purchase(String storeName ,String productName, int count) {
+
+
+    public static Result BuyAnimal(String animalType, String animalName) {
+
+        User user = Game.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Farm farm = Game.getCurrentPlayer().getFarm();
+        Player player = Game.getCurrentPlayer();
+
+        AnimalType type;
+        int price;
+        if (animalType.equals("Hen")) {
+            type = AnimalType.HEN;
+            price = 800;
+        }
+        else if (animalType.equals("Cow")) {
+            type = AnimalType.COW;
+            price = 1500;
+        }
+        else if (animalType.equals("Goat")) {
+            type = AnimalType.GOAT;
+            price = 4000;
+        }
+        else if (animalType.equals("Duck")) {
+            type = AnimalType.DUCK;
+            price = 1200;
+        }
+        else if (animalType.equals("Sheep")) {
+            type = AnimalType.SHEEP;
+            price = 8000;
+        }
+        else if (animalType.equals("Rabbit")) {
+            type = AnimalType.RABBIT;
+            price = 8000;
+        }
+        else if (animalType.equals("Dinosaur")) {
+            type = AnimalType.DINOSAUR;
+            price = 14000;
+        }
+        else if (animalType.equals("Pig")) {
+            type = AnimalType.PIG;
+            price = 16000;
+        }
+        else {
+            return new Result(false, "Invalid animal name");
+        }
+
+        Animal animal = new Animal(price, animalName, type);
+
+        boolean repeatedName = false;
+        for (Building b : farm.getBuildings()) {
+            if (b instanceof Coop) {
+                for (Animal a : ((Coop) b).animals) {
+                    if (a.getName().equals(animalName)) {
+                        repeatedName = true;
+                    }
+                }
+            }
+            else if (b instanceof Barn) {
+                for (Animal a : ((Barn) b).animals) {
+                    if (a.getName().equals(animalName)) {
+                        repeatedName = true;
+                    }
+                }
+            }
+        }
+
+        if (repeatedName) {
+            return new Result(false, "Name taken before");
+        }
+
+        if (player.getMoney() < price) {
+            return new Result(false, "You don't have enough money");
+        }
+
+        Store store = Game.getMap().getVillage().getStore("Marnie's Ranch");
+        StoreProduct storeProduct = store.getProduct(animalType);
+        if (storeProduct.getRemainingCount() <= 0) {
+            return new Result(false, "this animal is not available now!");
+        }
+
+        if (animalType.equals("Hen")) {
+            return buyHen(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Duck")) {
+            return buyDuck(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Rabbit")) {
+            return buyRabbit(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Dinosaur")) {
+            return buyDinosaur(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Cow")) {
+            return buyCow(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Goat")) {
+            return buyGoat(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Sheep")) {
+            return buySheep(farm, player, price, animal, animalName, storeProduct);
+        }
+        else if (animalType.equals("Pig")) {
+            return buyPig(farm, player, price, animal, animalName, storeProduct);
+        }
+        return new Result(false, "invalid animal");
+    }
+
+    // Coop Animals
+
+    private static Result buyHen(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Coop) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Coop) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+                   
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+       
+        return new Result(false, "you need to build another Coop");
+    }
+
+    private static Result buyDuck(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Coop) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Big Coop");
+    }
+
+    private static Result buyRabbit(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Coop && ((Coop) building).coopType.equals("Deluxe Coop")) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Coop) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Deluxe Coop");
+    }
+
+
+    private static Result buyDinosaur(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Coop) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Big Coop");
+    }
+
+
+    // Barn Animals
+
+    private static Result buyCow(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Barn) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Barn) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Barn");
+    }
+
+    private static Result buyGoat(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Barn && (((Barn) building).barnType.equals("Big Barn") || ((Barn) building).barnType.equals("Deluxe Barn"))) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Barn) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Big Barn");
+    }
+
+    private static Result buySheep(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Barn) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+
+        return new Result(false, "you need to build another Deluxe Barn");
+    }
+
+
+    private static Result buyPig(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        for (Building building : farm.getBuildings()) {
+            if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
+                    player.setMoney(player.getMoney() - cost);
+                    ((Barn) building).animals.add(animal);
+                    player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
+                    storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
+                   
+                    return new Result(true, "you have bought " + name);
+                }
+            }
+        }
+       
+        return new Result(false, "you need to build another Deluxe Barn");
+    }
+
+    
+
+
+    private static void addAnimalToBuilding(Animal animal, Building building) {
+        for(Cells cell : building.buildingCells){
+            if(!(cell.getObjectOnCell() instanceof AnimalCell)){
+                cell.setObjectOnCell(new AnimalCell(animal));
+                break;
+            }
+        }
+    }
+
+
+    public Result Purchase(String productName, int count) {
         User user = Game.getCurrentUser();
         Game game = user.getCurrentGame();
         Player player = Game.getCurrentPlayer();
 
-        Store store = Game.getMap().getVillage().getStore(storeName);
+        Store store = Game.getMap().getVillage().getStore("Marnie's Ranch");
 
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
         StoreProduct product = store.getProduct(productName);
 
         if (product == null) {
@@ -88,15 +360,13 @@ public class MarnieRanch {
         ItemType type = product.getType().getItemType();
 
         if (type == null && product.getType().getIngredient() == null) {
-            Result res = handleBuyRecipe(productName, product, player);
+            Result res = handleBuyRecipe(productName, player);
             if (res.isSuccessful()) {
                 player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(Game.getSeason()) * count));
             }
             return res;
-        }
-
-        else if (type == null && product.getType().getIngredient() != null) {
-            Result res = handleUpgradeTool(productName, product, player);
+        } else if (type == null && product.getType().getIngredient() != null) {
+            Result res = toolUpgrade(productName, product, player);
             if (res.isSuccessful()) {
                 Loot Loot = player.getInventory().findItemLoot(product.getType().getIngredient().getName());
                 if (Loot == null || Loot.getCount() < 5) {
@@ -109,14 +379,12 @@ public class MarnieRanch {
                 player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(Game.getSeason())));
             }
             return res;
-        }
-
-        else {
+        } else {
             Item item = null;
             if (type instanceof FoodType) {
                 item = new Food((FoodType) type);
             } else if (type instanceof CropSeedsType) {
-                item = new Seed((CropSeedsType) type);
+                item = new CropSeed((CropSeedsType) type);
             } else if (type instanceof TreeSeedsType) {
                 item = new TreeSeed((TreeSeedsType) type);
             } else if (type instanceof FishType) {
@@ -125,9 +393,7 @@ public class MarnieRanch {
                 item = new Else((ElseType) type);
             } else if (type instanceof ForagingMineralType) {
                 item = new Mineral(Quality.DEFAULT, (ForagingMineralType) type);
-            }
-
-            else if (type instanceof ToolType) {
+            } else if (type instanceof ToolType) {
                 Quality q = Quality.DEFAULT;
                 if (product.getType().getName().equals(FishShopProducts.BAMBOO_POLE.getName())) {
                     q = Quality.SILVER;
@@ -151,52 +417,28 @@ public class MarnieRanch {
                 }
                 Loot newLoot = new Loot(item, count);
                 backpack.addLoot(newLoot);
-            }
-            else {
-                Loot.setCount(Loot.getCount() + 1);
+            } else {
+                loot.setCount(loot.getCount() + 1);
             }
 
             player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason()) * count));
-            return new Result(true, "You purchased " + productName);
+            return new Result(true, "You have purchased " + count + " of " + productName);
         }
     }
 
-    public Result Sell(String productName, int count) {
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-
-        Loot productLoot = player.getInventory().findItemLoot(productName);
-        if (productLoot == null) {
-            return new Result(false, "You don't have this product in your inventory");
+    public static Result handleBuyRecipe(String name, Player player) {
+        CraftingRecipes craft = CraftingRecipes.getCraftingRecipe(name.split(" ")[0]);
+        CookingRecipes cook = CookingRecipes.getCookingRecipe(name.split(" ")[0]);
+        if (craft != null) {
+            player.getCraftingRecipes().add(craft);
+            return new Result(true, name + " successfully added to recipes");
         }
-        int x = productLoot.getCount();
-        if(x < count){
-            return new Result(false,"You don't have this amount in you inventory");
+        if (cook != null) {
+            player.getCookingRecipes().add(cook);
+            return new Result(true, name + " successfully added to recipes");
         }
-        productLoot.setCount(x - count);
-        if (productLoot.getCount() <= 0) {
-            player.getInventory().removeLoot(productLoot);
-        }
-
-        double money = productLoot.getItem().getValue() * x;
-        if (productLoot.getItem().getQuality() == Quality.SILVER) {
-            money = money * 1.25;
-        }
-        else if (productLoot.getItem().getQuality() == Quality.GOLD) {
-            money = money * 1.5;
-        }
-        else if (productLoot.getItem().getQuality() == Quality.IRIDIUM) {
-            money = money * 2;
-        }
-        player.setMoney(player.getMoney() + (int) money);
-        return new Result(true,"You have sold " + count + " of " + productName);
+        return new Result(false, "Recipe not found");
     }
-
-    public Result BuyAnimal(String animalType, String animalName) {
-        return null;
-    }
-
 
 
     public Result exitStore() {

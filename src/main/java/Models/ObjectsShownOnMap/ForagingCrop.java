@@ -1,17 +1,15 @@
 package Models.ObjectsShownOnMap;
 
-public class ForagingCrop {
+import Models.Enums.Types.ObjectsOnMapType.ForagingCropType;
+
+public class ForagingCrop extends ObjectOnMap{
 
 
     private ForagingCropType foragingCropsType;
     private boolean canBeHarvested;
 
-    public ForagingCrop() {
-        super();
-    }
-
     public ForagingCrop(ForagingCropType type, boolean canBeHarvested) {
-        super(true, "foragingCrop", "green");
+        super(true, "plant", "green");
         this.foragingCropsType = type;
         this.canBeHarvested = canBeHarvested;
     }
@@ -31,4 +29,26 @@ public class ForagingCrop {
     public void setForagingCropsType(ForagingCropType foragingCropsType) {
         this.foragingCropsType = foragingCropsType;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
+    public String getType() {
+        return super.getType();
+    }
+
+    @Override
+    public boolean isWalkable() {
+        return super.isWalkable();
+    }
+
+
+    @Override
+    public String getColor() {
+        return super.getColor();
+    }
+
 }

@@ -3,7 +3,6 @@ package Controllers.Activity;
 import Controllers.Controller;
 import Models.*;
 import Models.Enums.Others.Weather;
-import Models.Enums.Types.AnimalType;
 import Models.Enums.Types.ItemTypes.ElseType;
 import Models.Items.Else;
 import Models.Items.Item;
@@ -11,7 +10,6 @@ import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.AnimalCell;
 import Models.ObjectsShownOnMap.BurntCell;
-
 import java.util.ArrayList;
 
 public class Husbandry extends Controller {
@@ -19,9 +17,9 @@ public class Husbandry extends Controller {
 
 
     public Result Pet(String animalName) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
         if (animal == null) {
             return new Result(false, "Animal was not found");
@@ -31,10 +29,12 @@ public class Husbandry extends Controller {
         return new Result(true, "you have pet " + animalName);
     }
 
+
+
     public Result animals() {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
 
         if (player.getAnimals().isEmpty()) {
             return new Result(false, "you don't ave any animal");
@@ -53,12 +53,12 @@ public class Husbandry extends Controller {
     }
 
     public Result ShepherdAnimals(String animalName, int x, int y) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = Game.getCurrentPlayer().getCurrentFarm(game);
+        Player player = game.getCurrentPlayer();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Animal animal = player.findAnimal(animalName);
-        Cells cell = farm.findCell(x, y);
+        Cells cell = farm.findCellFarm(x, y);
 
 
         if(animal == null){
@@ -72,7 +72,7 @@ public class Husbandry extends Controller {
             return new Result(false, "the chosen cell not empty");
         }
 
-        if (Game.getWeather() == Weather.SNOW || Game.getWeather() == Weather.STORM || Game.getWeather() == Weather.RAIN) {
+        if (game.getWeather() == Weather.SNOW || game.getWeather() == Weather.STORM || game.getWeather() == Weather.RAIN) {
             return new Result(true, "you can't shepherd in this weather");
         }
 
@@ -83,9 +83,9 @@ public class Husbandry extends Controller {
     }
 
     public Result FeedHay(String animalName) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
 
         BackPack BackPack = player.getInventory();
@@ -115,9 +115,9 @@ public class Husbandry extends Controller {
     }
 
     public Result Produces() {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        ArrayList<Animal> allAnimals = Game.getCurrentPlayer().getAnimals();
+        ArrayList<Animal> allAnimals = game.getCurrentPlayer().getAnimals();
         ArrayList<Animal> notCollectedAnimals = new ArrayList<>();
 
         for (Animal animal : allAnimals) {
@@ -138,9 +138,9 @@ public class Husbandry extends Controller {
     }
 
     public Result CollectProduce(String animalName) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
         BackPack BackPack = player.getInventory();
         Loot productLoot = null;
@@ -183,13 +183,10 @@ public class Husbandry extends Controller {
     }
 
 
-
-
-
     public Result SellAnimal(String animalName) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
 
         if (animal == null) {
@@ -203,17 +200,13 @@ public class Husbandry extends Controller {
     }
 
     public Result cheatSetFriendship(String animalName, int amount) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
 
         animal.setFriendshipLevel(amount);
         return new Result(true, "Friendship level  with " + animalName + "has set to " + amount);
     }
 
-    public Result fishing(String fishingPole) {
-        return null;
-
-    }
 }

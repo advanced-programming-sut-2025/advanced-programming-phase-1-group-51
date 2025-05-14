@@ -39,21 +39,13 @@ public class Player {
     private boolean isInVillage;
     private boolean isInFarm;
     private boolean isCloseToLake;
+    public boolean isInHouse;
     private int currentPlaceNumber;
-
-
-    public Loot getRefrigeratorLootByName(String slotName) {
-        for (Loot loot : refrigeratorLoots) {
-            if (loot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
-                return loot;
-            }
-        }
-        return null;
-    }
 
 
     public Player(User user) {
         this.isInVillage = false;
+        this.isInHouse = false;
         this.user = user;
         this.id = user.getId();
         this.inventory = new BackPack(BackpackType.DEFAULT);
@@ -68,6 +60,16 @@ public class Player {
         initializeInventory();
         initializeSkills();
         initializeRecipes();
+    }
+
+
+    public Loot getRefrigeratorLootByName(String slotName) {
+        for (Loot loot : refrigeratorLoots) {
+            if (loot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
+                return loot;
+            }
+        }
+        return null;
     }
 
 
@@ -287,6 +289,10 @@ public class Player {
 
     public Farm getCurrentFarm(Game game){
         return game.getFarmByNumber(currentPlaceNumber);
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
     }
 
     private void initializeSkills() {

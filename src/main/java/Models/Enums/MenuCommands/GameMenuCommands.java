@@ -11,6 +11,7 @@ public enum GameMenuCommands implements Command {
     GAME_NEW("^game\\s+new\\s+-u\\s+(?<username1>\\s+)(?:\\s+(?<username2>\\s+))?(?:\\s+(?<username3>\\s+))?(?:\\s+(?<extraInvalid>\\s+))?$"),
     GAME_MAP("game\\s+map\\s+(?<mapNumber>\\S+)"),
     LOAD_GAME("load\\s+game"),
+    SHOW_MONEY("show\\s+money"),
 
     // date and time
 
@@ -70,16 +71,14 @@ public enum GameMenuCommands implements Command {
 
     // plants and farming
 
-    PLOW("plow\\s+(?<direction>\\S+)"),
     PLANT("plant\\s+-s\\s+(?<seed>\\S+)\\s+-d\\s+(?<direction>\\S+)"),
     SHOW_PLANT("showPlant\\s+-l\\s+(?<x>\\S+)\\s+,\\s+?(<y>\\S+)"),
     FERTILIZE("fertilize\\s+-f\\s+(?<fertilizer>\\S+)\\s+-d\\s+(?<direction>\\S+)"),
     HOW_MUCH_WATER("howMuch\\s+water"),
-    HARVEST("harvest\\s+(?<direction>\\S+)"),
+    CROP_INFO("cropInfo\\s+-n\\s+(?<cropName>\\S+)"),
 
     // crafting
 
-    CRAFT_INFO("craftInfo\\s+-n\\s+(?<craftName>\\S+)"),
     CRAFTING_SHOW_RECIPES("crafting\\s+show\\s+recipes"),
     CRAFTING_CRAFT("crafting\\s+craft\\s+<itemName>"),
     PLACE_ITEM("place\\s+item\\s+-n\\s+(?<itemName>\\S+)\\s+-d\\s+(?<direction>\\S+)"),

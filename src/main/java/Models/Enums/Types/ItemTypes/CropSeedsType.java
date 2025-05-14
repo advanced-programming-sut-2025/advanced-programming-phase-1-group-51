@@ -50,11 +50,11 @@ public enum CropSeedsType implements ItemType{
 
     public final String name;
     public final String source;
-    public final int stageZeroDaysToNextStage;
-    public final int stageOneDaysToNextStage;
-    public final int stageTwoDaysToNextStage;
-    public final int stageThreeDaysToNextStage;
-    public final int stageFourDaysToNextStage;
+    public final int stageZero;
+    public final int stageOne;
+    public final int stageTwo;
+    public final int stageThree;
+    public final int stageFour;
     public final int totalHarvestTime;
     public final boolean oneTime;
     public final int regrowthTime;
@@ -65,16 +65,16 @@ public enum CropSeedsType implements ItemType{
     public final boolean canBeGiant;
 
 
-    CropSeedsType(String name, String source, int stageZeroDaysToNextStage, int stageOneDaysToNextStage,
-                  int stageTwoDaysToNextStage, int stageThreeDaysToNextStage, int stageFourDaysToNextStage,
+    CropSeedsType(String name, String source, int stageZeroDaysToNextStage, int stageOne,
+                  int stageTwo, int stageThree, int stageFour,
                   int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
         this.name = name;
         this.source = source;
-        this.stageZeroDaysToNextStage = stageZeroDaysToNextStage;
-        this.stageOneDaysToNextStage = stageOneDaysToNextStage;
-        this.stageTwoDaysToNextStage = stageTwoDaysToNextStage;
-        this.stageThreeDaysToNextStage = stageThreeDaysToNextStage;
-        this.stageFourDaysToNextStage = stageFourDaysToNextStage;
+        this.stageZero = stageZeroDaysToNextStage;
+        this.stageOne = stageOne;
+        this.stageTwo = stageTwo;
+        this.stageThree = stageThree;
+        this.stageFour = stageFour;
         this.totalHarvestTime = totalHarvestTime;
         this.oneTime = oneTime;
         this.regrowthTime = regrowthTime;
@@ -87,12 +87,22 @@ public enum CropSeedsType implements ItemType{
 
     public static CropSeedsType findCropBySeed(String seed) {
         for (CropSeedsType crop : CropSeedsType.values()) {
-            if (crop.source.compareToIgnoreCase(seed) == 0) {
+            if (crop.source.equalsIgnoreCase(seed)) {
                 return crop;
             }
         }
         return null;
     }
+
+    public static CropSeedsType findCropByName(String seed) {
+        for (CropSeedsType crop : CropSeedsType.values()) {
+            if (crop.name.equalsIgnoreCase(seed)) {
+                return crop;
+            }
+        }
+        return null;
+    }
+
 
     public CropSeedsType getRandomCropSeedsType(Season season) {
         if (name.compareToIgnoreCase("Random Crop") == 0) {
@@ -117,6 +127,22 @@ public enum CropSeedsType implements ItemType{
             }
         }
         return this;
+    }
+
+    public static String CropInfo(CropSeedsType crop){
+        StringBuilder output = new StringBuilder();
+        output.append("Name : ").append(crop.name).append("\n");
+        output.append("Source : ").append(crop.source).append("\n");
+        output.append("Stages : ").append(crop.name).append("\n");
+        output.append("Total Harvest Time : ").append(crop.totalHarvestTime).append("\n");
+        output.append("One Time : ").append(crop.oneTime).append("\n");
+        output.append("Regrowth Time : ").append(crop.regrowthTime).append("\n");
+        output.append("Base Sell Price : ").append(crop.baseSellPrice).append("\n");
+        output.append("is Edible : ").append(crop.isEdible).append("\n");
+        output.append("Base Energy : ").append(crop.energy).append("\n");
+        output.append("Season : ").append(crop.season).append("\n");
+        output.append("Can Become Giant : ").append(crop.canBeGiant).append("\n");
+        return output.toString();
     }
 
 

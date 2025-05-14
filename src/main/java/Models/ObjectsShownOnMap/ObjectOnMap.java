@@ -2,7 +2,7 @@ package Models.ObjectsShownOnMap;
 
 public abstract class ObjectOnMap {
 
-    public String type;
+    protected String type;
     public boolean isWalkable;
     public String color;
 
@@ -16,4 +16,17 @@ public abstract class ObjectOnMap {
     public String toString() {
         return type.substring(0, 1).toUpperCase();
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public boolean isWalkable() {
+        return isWalkable;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
 }

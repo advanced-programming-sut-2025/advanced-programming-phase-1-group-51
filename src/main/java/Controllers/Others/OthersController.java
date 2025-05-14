@@ -2,12 +2,16 @@ package Controllers.Others;
 
 import Models.*;
 import Models.Enums.MenuCommands.Menu;
+import Models.Enums.Others.Quality;
 import Models.Enums.Others.Weather;
 import Models.Enums.Types.ItemTypes.ElseType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.BurntCell;
+import Models.ObjectsShownOnMap.Crop;
 import Models.ObjectsShownOnMap.Lake;
+import Models.ObjectsShownOnMap.Tree;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -15,96 +19,40 @@ import java.time.format.DateTimeFormatter;
 
 public class OthersController {
 
-    public Result CheatAdvanceTime(String input) {
-
-        return null;
-    }
-
-    public Result CheatAdvanceDate(String input) {
-
-        return null;
-    }
-
-    public Result showCurrentSeason() {
-        return new Result(true, Game.getSeason().name());
-    }
-
-    public Result showCurrentWeather() {
-        return new Result(true, Game.getWeather().name());
-    }
-
-    public Result weatherForecast(){
-
-        return null;
-    }
-
-    // set tomorrow weather
-    public Result cheatTomorrowWeatherSet(String weather){
-
-        return  null;
-    }
-
-    public Result CheatThor(int x, int y){
-
-        Game currentGame = Game.getCurrentUser().getCurrentGame();
-        currentGame.getCurrentPlayer().getFarm().thor(x, y);
-        return null;
-    }
 
     public Result BuildBuilding(String buildingName, int x, int y){
         return null;
     }
 
-    
-    
-    
-    // estfgh
+
+    public Result CheatThor(int x, int y){
+        Game game = App.getCurrentUser().getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+            Cells cell = farm.findCellFarm(x, y);
+            if (cell != null) {
+                if (cell.getObjectOnCell() instanceof Tree) {
+                    cell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
+                }
+                if (cell.getObjectOnCell() instanceof Crop) {
+                    cell.setObjectOnCell(new BurntCell());
+                }
+            }
+            return new Result(true, "thor has hit to position: " + x + ", " + y);
+    }
 
 
-    public static Result showMoney() {
-        Game game = Game.getCurrentUser().getCurrentGame();
+
+    public Result showMoney() {
+        Game game = App.getCurrentUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        String money = String.valueOf(player.getMoney(game));
-        return new Result(true, money);
+        return new Result(true, "player's money is : " + player.getMoney());
     }
 
-    public static Result Time() {
-        Result Result = new Result();
-        Result.setSuccess(true);
-        Result.setMessage(Game.getCurrentUser().getCurrentGame().getDate().toLocalTime().toString());
-        return Result;
-    }
 
-    public static Result Date() {
-        Result Result = new Result();
-        Result.setSuccess(true);
-        Result.setMessage(Game.getCurrentUser().getCurrentGame().getDate().toLocalDate().toString());
-        return Result;
-    }
-
-    public static Result DateTime() {
-        Result Result = new Result();
-        Result.setSuccess(true);
-        Result.setMessage(Game.getCurrentUser().getCurrentGame()
-                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
-        return Result;
-    }
-
-    public static Result DayOfTheWeek() {
-        Result Result = new Result();
-        Result.setSuccess(true);
-        LocalDateTime currentDateTime = Game.getCurrentUser().getCurrentGame().getDate();
-        int currentDay = currentDateTime.getDayOfMonth();
-        int dayOfWeek = (currentDay - 1) % 7;
-        Result.setMessage(DayOfWeek.values()[dayOfWeek].toString().toLowerCase());
-        return Result;
-    }
-
-    public static Result handleCheatAdvanceTime(String input) {
-        int amountOfHours = Integer.parseInt(request.body.get("X"));
-        LocalDateTime currentDateTime = Game.getCurrentUser().getCurrentGame().getDate();
+    public Result cheatAdvanceTime(int amountOfHours) {
+        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
-        Game currentGame = Game.getCurrentUser().getCurrentGame();
+        Game currentGame = App.getCurrentUser().getCurrentGame();
         int howManyDays = amountOfHours / 24;
         int howManyHours = amountOfHours % 24;
         int howManyMonths = howManyDays / 28;
@@ -128,13 +76,13 @@ public class OthersController {
         if (check) {
             currentGame.newDayBackgroundChecks();
         }
-        return new Result(true, "Date and time set successfully.");
+        return new Result(true, "time changed successfully.");
     }
 
-    public static Result handleCheatAdvanceDate(int amountOfDays) {
-        LocalDateTime currentDateTime = Game.getCurrentUser().getCurrentGame().getDate();
+    public Result cheatAdvanceDate(int amountOfDays) {
+        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
-        Game currentGame = Game.getCurrentUser().getCurrentGame();
+        Game currentGame = App.getCurrentUser().getCurrentGame();
         int howManyDays = amountOfDays % 28;
         int howManyMonths = amountOfDays / 28;
         int currentDay = currentDateTime.getDayOfMonth();
@@ -151,27 +99,48 @@ public class OthersController {
             currentGame.newDayBackgroundChecks();
         }
         currentGame.checkSeasonChange();
-        return new Result(true, "Date set successfully.");
+        return new Result(true, "Date changed successfully.");
     }
 
 
-    public static Result Season() {
-        return new Result(true, Game.getCurrentUser().getCurrentGame().getSeason().toString());
+    public Result Time() {
+        return new Result(true, App.getCurrentUser().getCurrentGame().getDate().toLocalTime().toString());
+    }
+
+    public Result Date() {
+        return new Result(true,App.getCurrentUser().getCurrentGame().getDate().toLocalDate().toString());
+    }
+
+    public Result DateTime() {
+        return new Result(true, App.getCurrentUser().getCurrentGame()
+                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
+    }
+
+    public Result DayOfTheWeek() {
+        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
+        int currentDay = currentDateTime.getDayOfMonth();
+        int dayOfWeek = (currentDay - 1) % 7;
+        String day = DayOfWeek.values()[dayOfWeek].toString().toLowerCase();
+        return new Result(true, day);
+    }
+
+    public Result season() {
+        return new Result(true, App.getCurrentUser().getCurrentGame().getSeason().name());
     }
 
 
-    public static Result weather() {
-        return new Result(true, Game.getCurrentUser().getCurrentGame().getWeatherToday().toString());
+    public Result weather() {
+        return new Result(true, App.getCurrentUser().getCurrentGame().getWeatherToday().name());
     }
 
-    public static Result WeatherForecast() {
+    public Result weatherForecast() {
         return new Result(true, "Tomorrow's weather forecast is: "
-                + Game.getCurrentUser().getCurrentGame().getWeatherTomorrow().toString());
+                + App.getCurrentUser().getCurrentGame().getWeatherTomorrow().toString());
     }
 
-    public static Result setWeatherCheat(String type) {
+    public Result setWeatherCheat(String type) {
         Weather weather = Weather.getWeatherByName(type);
-        Game game = Game.getCurrentUser().getCurrentGame();
+        Game game = App.getCurrentUser().getCurrentGame();
         if (weather == null) {
             return new Result(false, "Weather type is invalid.");
         } else {
@@ -180,13 +149,13 @@ public class OthersController {
         return new Result(true, "Tomorrow's weather set successfully.");
     }
 
-    public static Result GreenhouseBuild() {
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+    public Result GreenhouseBuild() {
+        Game game = App.getCurrentUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
         Farm farm = player.getFarm();
         BackPack backpack = player.getInventory();
 
-        Cells testCell = farm.findCell(25, 4);
+        Cells testCell = farm.findCellFarm(25, 4);
 
         if (testCell.getObjectOnCell() instanceof Lake) {
             return new Result(false, "Greenhouse already built.");
@@ -218,15 +187,15 @@ public class OthersController {
         //Greenhouse runs from x : [22, 28] & y : [3, 10]
         for (int i = 23; i < 28; i++) {
             for (int j = 4; j < 10; j++) {
-                Cells cell = farm.findCell(i, j);
+                Cells cell = farm.findCellFarm(i, j);
                 cell.setObjectOnCell(new BurntCell());
             }
         }
 
-        Cells cell = farm.findCell(25, 10);
+        Cells cell = farm.findCellFarm(25, 10);
         cell.setObjectOnCell(new BurntCell());
 
-        Cells cell1 = farm.findCell(25, 4);
+        Cells cell1 = farm.findCellFarm(25, 4);
         cell1.setObjectOnCell(new Lake());
 
 
@@ -235,66 +204,67 @@ public class OthersController {
 
 
     public Result enterStore(String name) {
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player player = Game.getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         if (!player.isInVillage()) {
             return new Result(false, "You are not in the village");
         }
 
         boolean open = false;
-        if (name.compareToIgnoreCase("Blacksmith") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        if (name.equalsIgnoreCase("Blacksmith")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.BlacksmithShopMenu);
+                App.setCurrentMenu(Menu.BlacksmithShopMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("JojaMart") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("JojaMart")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.JojaMartShopMenu);
+                App.setCurrentMenu(Menu.JojaMartShopMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("Pierre's General Store") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("Pierre's General Store")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.PierreGeneralStoreMenu);
+                App.setCurrentMenu(Menu.PierreGeneralStoreMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("Carpenter's Shop") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("Carpenter's Shop")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.CarpenterShopMenu);
+                App.setCurrentMenu(Menu.CarpenterShopMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("Fish Shop") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("Fish Shop")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.FishShopMenu);
+                App.setCurrentMenu(Menu.FishShopMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("The Stardrop Saloon") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("The Stardrop Saloon")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.StardropSaloonMenu);
+                App.setCurrentMenu(Menu.StardropSaloonMenu);
             }
         }
 
-        else if (name.compareToIgnoreCase("Marnie's Ranch") == 0) {
-            Store store = Game.getMap().getVillage().getStore(name);
+        else if (name.equalsIgnoreCase("Marnie's Ranch")) {
+            Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 open = true;
-                Game.setCurrentMenu(Menu.MarnieRanchMenu);
+                App.setCurrentMenu(Menu.MarnieRanchMenu);
             }
         }
         else {
@@ -308,8 +278,40 @@ public class OthersController {
         return new Result(true, "You are now in " + name);
     }
 
+    public Result Sell(String productName, int count) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        Loot productLoot = player.getInventory().findItemLoot(productName);
+        if (productLoot == null) {
+            return new Result(false, "You don't have this product in your inventory");
+        }
+        int x = productLoot.getCount();
+        if(x < count){
+            return new Result(false,"You don't have this amount in you inventory");
+        }
+        productLoot.setCount(x - count);
+        if (productLoot.getCount() <= 0) {
+            player.getInventory().removeLoot(productLoot);
+        }
+
+        double money = productLoot.getItem().getValue() * x;
+        if (productLoot.getItem().getQuality() == Quality.SILVER) {
+            money = money * 1.25;
+        }
+        else if (productLoot.getItem().getQuality() == Quality.GOLD) {
+            money = money * 1.5;
+        }
+        else if (productLoot.getItem().getQuality() == Quality.IRIDIUM) {
+            money = money * 2;
+        }
+        player.setMoney(player.getMoney() + (int) money);
+        return new Result(true,"You have sold " + count + " of " + productName);
+    }
+
     public Result cheatAddMoney(int amount) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         player.setMoney(player.getMoney() + amount);

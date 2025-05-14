@@ -6,10 +6,16 @@ import Models.Maps.Cells;
 import java.util.ArrayList;
 
 public class Barn extends Building {
-    public ArrayList<Animal> Animals = new ArrayList<>();
+    public String barnType;
+    public ArrayList<Animal> animals = new ArrayList<>();
+    public int capacity;
 
-    public Barn(ArrayList<Cells> buildingCells, ArrayList<Animal> animals) {
+    public Barn() {
+    }
+
+    public Barn(ArrayList<Cells> buildingCells, String barnType, int capacity) {
         super(buildingCells);
-        Animals = animals;
+        this.barnType = barnType;
+        this.capacity = capacity;
     }
 }

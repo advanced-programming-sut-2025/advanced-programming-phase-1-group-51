@@ -16,22 +16,20 @@ import java.util.Scanner;
 public class Game {
 
     public static final Scanner scanner = new Scanner(System.in);
-    public static ArrayList<Player> players = new ArrayList<>();
-    private static Menu currentMenu = Menu.SignUpMenu;
-    private static User currentUser = null;
-    private static boolean isGameOver = false;
-    private static Season season = Season.SPRING;
-    private static Map map;
-    private static Weather weather = Weather.SUNNY;
+    public ArrayList<Player> players;
+    private boolean isGameOver = false;
+    private Season season;
+    private Map map;
+    private Weather weather = Weather.SUNNY;
     private LocalDateTime date;
     private Weather weatherToday;
     private Weather weatherTomorrow;
-    private static Player currentPlayer;
+    private Player currentPlayer;
     public boolean hasTurnCycleFinished;
-    private static Player GameStarterPlayer;
-    private static Player secondPlayer;
-    private static Player thirdPlayer;
-    private static Player fourthPlayer;
+    private Player GameStarterPlayer;
+    private Player secondPlayer;
+    private Player thirdPlayer;
+    private Player fourthPlayer;
 
 
     public Game(ArrayList<Player> players, Player currentPlayer) {
@@ -48,18 +46,16 @@ public class Game {
         this.secondPlayer = null;
         this.thirdPlayer = null;
         this.fourthPlayer = null;
+        this.map = Map.makeMap();
 
     }
 
-    public static Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public static void setCurrentPlayer(Player player) {
+    public void setCurrentPlayer(Player player) {
         currentPlayer = player;
-    }
-    public static Menu getCurrentMenu() {
-        return currentMenu;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -70,33 +66,17 @@ public class Game {
         this.players = players;
     }
 
-    public static void setCurrentMenu(Menu currentMenu) {
-        Game.currentMenu = currentMenu;
-    }
 
-    public static User getCurrentUser() {
-        return currentUser;
-    }
 
-    public static void setCurrentUser(User currentUser) {
-        Game.currentUser = currentUser;
-    }
-
-    public static boolean isIsGameOver() {
+    public boolean isIsGameOver() {
         return isGameOver;
     }
 
-    public static void setIsGameOver(boolean isGameOver) {
-        Game.isGameOver = isGameOver;
-    }
 
-    public static Season getSeason() {
+    public Season getSeason() {
         return season;
     }
 
-    public static void setSeason(Season season) {
-        Game.season = season;
-    }
 
     public LocalDateTime getDate() {
         return date;
@@ -122,31 +102,23 @@ public class Game {
         this.weatherTomorrow = weatherTomorrow;
     }
 
-    public static Map getMap() {
+    public Map getMap() {
         return map;
     }
 
-    public static void setMap(Map map) {
-        Game.map = map;
-    }
 
-    public static Weather getWeather() {
+    public Weather getWeather() {
         return weather;
     }
 
-    public static void setWeather(Weather weather) {
-        Game.weather = weather;
-    }
 
-    public static Result showCurrentMenu() {
-        return new Result(true, currentMenu.name());
-    }
 
-    public static Player getGameStarterPlayer() {
+
+    public Player getGameStarterPlayer() {
         return GameStarterPlayer;
     }
 
-    public static void setGameStarterPlayer(Player gameStarterPlayer) {
+    public void setGameStarterPlayer(Player gameStarterPlayer) {
         GameStarterPlayer = gameStarterPlayer;
     }
 
@@ -186,30 +158,46 @@ public class Game {
         this.hasTurnCycleFinished = hasTurnCycleFinished;
     }
 
-    public static Player getSecondPlayer() {
+    public Player getSecondPlayer() {
         return secondPlayer;
     }
 
-    public static void setSecondPlayer(Player secondPlayer) {
-        Game.secondPlayer = secondPlayer;
-    }
-
-    public static Player getThirdPlayer() {
+    public Player getThirdPlayer() {
         return thirdPlayer;
     }
 
-    public static void setThirdPlayer(Player thirdPlayer) {
-        Game.thirdPlayer = thirdPlayer;
-    }
 
-    public static Player getFourthPlayer() {
+    public Player getFourthPlayer() {
         return fourthPlayer;
     }
 
-    public static void setFourthPlayer(Player fourthPlayer) {
-        Game.fourthPlayer = fourthPlayer;
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
     }
 
+    public void setSeason(Season season) {
+        this.season = season;
+    }
 
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
+
+    public void setSecondPlayer(Player secondPlayer) {
+        this.secondPlayer = secondPlayer;
+    }
+
+    public void setThirdPlayer(Player thirdPlayer) {
+        this.thirdPlayer = thirdPlayer;
+    }
+
+    public void setFourthPlayer(Player fourthPlayer) {
+        this.fourthPlayer = fourthPlayer;
+    }
 }
 

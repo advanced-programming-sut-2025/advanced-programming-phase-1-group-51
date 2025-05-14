@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 
 public class GameMenu implements PlayMenu{
 
-    private final turnAndSaveGameController SavingNextTurnController = new turnAndSaveGameController();
+    private final TurnAndSaveGameController SavingNextTurnController = new TurnAndSaveGameController();
     private final MovementAndMapController MovementAndMapController = new MovementAndMapController();
     private final EnergyController EnergyController = new EnergyController();
     private final InventoryController InventoryController = new InventoryController();
@@ -59,16 +59,16 @@ public class GameMenu implements PlayMenu{
             System.out.println(OthersController.DayOfTheWeek());
         }
         else if ((matcher = GameMenuCommands.TIME_CHEAT.getMatcher(input)) != null){
-            System.out.println(OthersController.CheatAdvanceTime(matcher.group("X").trim()));
+            System.out.println(OthersController.cheatAdvanceTime(Integer.parseInt(matcher.group("X").trim())));
         }
         else if ((matcher = GameMenuCommands.DATE_CHEAT.getMatcher(input)) != null){
-            System.out.println(OthersController.CheatAdvanceDate(matcher.group("X").trim()));
+            System.out.println(OthersController.cheatAdvanceDate(Integer.parseInt(matcher.group("X").trim())));
         }
         else if ((matcher = GameMenuCommands.SEASON.getMatcher(input)) != null){
-            System.out.println(OthersController.showCurrentSeason());
+            System.out.println(OthersController.season());
         }
         else if ((matcher = GameMenuCommands.WEATHER.getMatcher(input)) != null){
-            System.out.println(OthersController.showCurrentWeather());
+            System.out.println(OthersController.weather());
         }
         else if ((matcher = GameMenuCommands.WEATHER_FORECAST.getMatcher(input)) != null){
             System.out.println(OthersController.weatherForecast());
@@ -80,7 +80,7 @@ public class GameMenu implements PlayMenu{
         }
         else if ((matcher = GameMenuCommands.CHEAT_WEATHER_SET.getMatcher(input)) != null){
             String weather = matcher.group("Type").trim();
-            System.out.println(OthersController.cheatTomorrowWeatherSet(weather));
+            System.out.println(OthersController.setWeatherCheat(weather));
         }
         else if((matcher = GameMenuCommands.GREEN_HOUSE_BUILD.getMatcher(input)) != null){
             System.out.println(OthersController.GreenhouseBuild());
@@ -136,14 +136,10 @@ public class GameMenu implements PlayMenu{
             String direction = matcher.group("direction").trim();
             System.out.println(InventoryController.toolUse(direction));
         }
-        else if ((matcher = GameMenuCommands.PLOW.getMatcher(input)) != null){
-            String direction = matcher.group("direction").trim();
-            System.out.println(Farming.plow(direction));
-        }
         else if ((matcher = GameMenuCommands.PLANT.getMatcher(input)) != null){
             String seed = matcher.group("seed").trim();
             String direction = matcher.group("direction").trim();
-            System.out.println(Farming.PlantSeeds(seed, direction));
+            System.out.println(Farming.PlantSeed(seed, direction));
         }
         else if ((matcher = GameMenuCommands.SHOW_PLANT.getMatcher(input)) != null){
             int x = Integer.parseInt(matcher.group("x").trim());
@@ -158,13 +154,9 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.HOW_MUCH_WATER.getMatcher(input)) != null){
             System.out.println(Farming.howMuchWater());
         }
-        else if ((matcher = GameMenuCommands.HARVEST.getMatcher(input)) != null){
-            String direction = matcher.group("direction").trim();
-            System.out.println(Farming.harvest(direction));
-        }
-        else if ((matcher = GameMenuCommands.CRAFT_INFO.getMatcher(input)) != null){
-            String name = matcher.group("craftName").trim();
-            System.out.println(Crafting.craftInfo(name));
+        else if ((matcher = GameMenuCommands.CROP_INFO.getMatcher(input)) != null){
+            String name = matcher.group("cropName").trim();
+            System.out.println(Farming.cropInfo(name));
         }
         else if ((matcher = GameMenuCommands.CRAFTING_SHOW_RECIPES.getMatcher(input)) != null){
             System.out.println(Crafting.showCraftRecipes());
@@ -235,10 +227,6 @@ public class GameMenu implements PlayMenu{
         else if ((matcher = GameMenuCommands.SELL_ANIMAL.getMatcher(input)) != null){
             String name = matcher.group("name").trim();
             System.out.println(Husbandry.SellAnimal(name));
-        }
-        else if ((matcher = GameMenuCommands.FISHING.getMatcher(input)) != null){
-            String pole = matcher.group("fishingPole").trim();
-            System.out.println(Husbandry.fishing(pole));
         }
         else if ((matcher = GameMenuCommands.CHEAT_SET_FRIENDSHIP.getMatcher(input)) != null){
             String name = matcher.group("animalName").trim();
@@ -344,6 +332,12 @@ public class GameMenu implements PlayMenu{
         }
         else if ((matcher = GameMenuCommands.ENTER_STORE.getMatcher(input)) != null){
             System.out.println(OthersController.enterStore(matcher.group("storeName")));
+        }
+        else if ((matcher = GameMenuCommands.CHEAT_ADD.getMatcher(input)) != null){
+            System.out.println(OthersController.cheatAddMoney(Integer.parseInt(matcher.group("count"))));
+        }
+        else if ((matcher = GameMenuCommands.SHOW_MONEY.getMatcher(input)) != null){
+            System.out.println(OthersController.showMoney());
         }
         else{
             System.out.println("Invalid Command!");

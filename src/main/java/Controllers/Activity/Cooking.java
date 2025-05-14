@@ -9,187 +9,164 @@ import Models.Items.Food;
 
 public class Cooking extends Controller {
 
-
     public Result TakeOutOfRefrigerator(String itemName) {
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        BackPack backpack = player.getInventory();
-
+        Player player = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
         Loot refrigeratorLoot = player.getRefrigeratorLootByName(itemName);
-
 
         if (refrigeratorLoot == null) {
             return new Result(false, "You don't have this item in your refrigerator.");
         }
 
-        if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
-            return new Result(false, "Your inventory is full.");
-        }
+        BackPack backpack = player.getInventory();
+        boolean isFull = backpack.getType().getCapacity() == backpack.getLoots().size();
+        if (isFull) return new Result(false, "Your inventory is full.");
 
-        Loot backpackLoot = backpack.findItemLoot(itemName);
-
-        if (backpackLoot == null) {
-            backpack.getLoots().add(refrigeratorLoot);
-            player.getRefrigeratorLoots().remove(refrigeratorLoot);
+        Loot existingLoot = backpack.findItemLoot(itemName);
+        if (existingLoot != null) {
+            int newCount = existingLoot.getCount() + refrigeratorLoot.getCount();
+            existingLoot.setCount(Math.min(newCount, existingLoot.getItem().getMaxSize()));
         } else {
-            player.getRefrigeratorLoots().remove(refrigeratorLoot);
-            backpackLoot.setCount(Math.min(backpackLoot.getCount() + refrigeratorLoot.getCount(), backpackLoot.getItem().getMaxSize()));
+            backpack.getLoots().add(refrigeratorLoot);
         }
-
+        player.getRefrigeratorLoots().remove(refrigeratorLoot);
         return new Result(true, "Food has been added to your backpack.");
     }
 
     public Result PutInRefrigerator(String itemName) {
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        BackPack backpack = player.getInventory();
+        Game currentGame = App.getCurrentUser().getCurrentGame();
+        Player currentPlayer = currentGame.getCurrentPlayer();
+        BackPack playerBackpack = currentPlayer.getInventory();
+        Loot itemToStore = playerBackpack.findItemLoot(itemName);
 
-        Loot backpackLoot = backpack.findItemLoot(itemName);
-
-        if (backpackLoot == null) {
+        if (itemToStore == null) {
             return new Result(false, "This item is not in your backpack");
         }
 
-        if (!(backpackLoot.getItem() instanceof Food) || backpackLoot.getItem().getEnergyCost() >= 0) {
+        boolean isEdible = itemToStore.getItem() instanceof Food;
+        boolean hasNegativeEnergy = itemToStore.getItem().getEnergyCost() < 0;
+        if (!isEdible || !hasNegativeEnergy) {
             return new Result(false, "You can only put edibles in the refrigerator.");
         }
 
-        Loot refrigeratorLoot = player.getRefrigeratorLootByName(itemName);
-        backpack.getLoots().remove(backpackLoot);
+        Loot fridgeItem = currentPlayer.getRefrigeratorLootByName(itemName);
+        playerBackpack.getLoots().remove(itemToStore);
 
-        if (refrigeratorLoot == null) {
-            player.getRefrigeratorLoots().add(backpackLoot);
+        if (fridgeItem != null) {
+            int combinedCount = fridgeItem.getCount() + itemToStore.getCount();
+            fridgeItem.setCount(Math.min(combinedCount, fridgeItem.getItem().getMaxSize()));
         } else {
-            refrigeratorLoot.setCount(Math.min(refrigeratorLoot.getCount() + backpackLoot.getCount(), refrigeratorLoot.getItem().getMaxSize()));
+            currentPlayer.getRefrigeratorLoots().add(itemToStore);
         }
-
         return new Result(true, "Your food added to refrigerator successfully");
     }
 
     public Result prepareFood(String foodName){
-        CookingRecipes foodRecipe = null;
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        Player chef = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        CookingRecipes desiredRecipe = null;
 
-        for (CookingRecipes recipes : player.getCookingRecipes()) {
-            if (recipes.name.compareToIgnoreCase(foodName) == 0) {
-                foodRecipe = recipes;
-                break;
-            }
+        for (CookingRecipes r : chef.getCookingRecipes()) {
+            if (r.name.equalsIgnoreCase(foodName)) desiredRecipe = r;
         }
+        if (desiredRecipe == null) return new Result(false, "No recipe found for: " + foodName);
 
-        if (foodRecipe == null) {
-            return new Result(false, "No recipe exists for: " + foodName);
-        }
-
-        BackPack backpack = player.getInventory();
-
-        if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
+        BackPack ingredientsContainer = chef.getInventory();
+        if (ingredientsContainer.getType().getCapacity() == ingredientsContainer.getLoots().size()) {
             return new Result(false, "Your inventory is full.");
         }
 
-        if (player.getCurrentTurnUsedEnergy() + 3 > 50) {
-            return new Result(false, "You will exceed your max energy usage limit in this turn!");
+        int energyCost = 3;
+        if (chef.getCurrentTurnUsedEnergy() + energyCost > 50) {
+            return new Result(false, "You don't have enough Energy! for this turn!");
+        }
+        if (chef.getEnergy() - energyCost < 0) {
+            return new Result(false, "You don't have enough Energy!");
         }
 
-        if (player.getEnergy() - 3 < 0) {
-            return new Result(false, "You don't have enough energy to cook a food.");
+        chef.setEnergy(chef.getEnergy() - energyCost);
+        chef.setCurrentTurnUsedEnergy(chef.getCurrentTurnUsedEnergy() + energyCost);
+
+        for (Loot required : desiredRecipe.ingredients) {
+            String ingredientName = required.getItem().getName();
+            int needed = required.getCount();
+            int available = 0;
+
+            Loot inBackpack = ingredientsContainer.findItemLoot(ingredientName);
+            Loot inFridge = chef.getRefrigeratorLootByName(ingredientName);
+
+            if (inBackpack != null) available += inBackpack.getCount();
+            if (inFridge != null) available += inFridge.getCount();
+            if (available < needed) return new Result(false, "You don't have the ingredients to cook this recipe.");
         }
 
-        player.setEnergy(player.getEnergy() - 3);
-        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + 3);
-
-        for (Loot ingredient : foodRecipe.ingredients) {
-            Loot backpackLoot = backpack.findItemLoot(ingredient.getItem().getName());
-            Loot refrigeratorLoot = player.getRefrigeratorLootByName(ingredient.getItem().getName());
-
-            int availableAmount = 0;
-
-            if (refrigeratorLoot != null) {
-                availableAmount += refrigeratorLoot.getCount();
-            }
-
-            if (backpackLoot != null) {
-                availableAmount += backpackLoot.getCount();
-            }
-
-            if (availableAmount < ingredient.getCount()) {
-                return new Result(false, "You don't have enough ingredients to cook this recipe.");
-            }
+        for (Loot component : desiredRecipe.ingredients) {
+            processIngredientRemoval(component, chef, ingredientsContainer);
         }
 
-
-        for (Loot ingredient : foodRecipe.ingredients) {
-            Loot backpackLoot = backpack.findItemLoot(ingredient.getItem().getName());
-            Loot refrigeratorLoot = player.getRefrigeratorLootByName(ingredient.getItem().getName());
-
-            int neededCount = ingredient.getCount();
-
-            //first check the refrigerator
-
-            if (refrigeratorLoot != null) {
-                int availableAmountInFridge = refrigeratorLoot.getCount();
-
-                if (availableAmountInFridge > neededCount) {
-                    refrigeratorLoot.setCount(availableAmountInFridge - neededCount);
-                    neededCount = 0;
-                } else {
-                    neededCount -= availableAmountInFridge;
-                    player.getRefrigeratorLoots().remove(refrigeratorLoot);
-                }
-            }
-
-            if (neededCount > 0) {
-                backpackLoot.setCount(backpackLoot.getCount() - neededCount);
-                if (backpackLoot.getCount() == 0) {
-                    backpack.getLoots().remove(backpackLoot);
-                }
-                neededCount = 0;
-            }
-        }
-
-        Loot cookedfoodLoot = new Loot(new Food(Quality.DEFAULT, foodRecipe.cookingResultType), 1);
-
-        Loot destinationLoot = backpack.findItemLoot(cookedfoodLoot.getItem().getName());
-
-        if (destinationLoot == null) {
-            backpack.getLoots().add(cookedfoodLoot);
-        } else {
-            destinationLoot.setCount(destinationLoot.getCount() + cookedfoodLoot.getCount());
-        }
+        Food preparedFood = new Food(Quality.DEFAULT, desiredRecipe.craftingResultType);
+        Loot foodLoot = new Loot(preparedFood, 1);
+        addToInventory(foodLoot, ingredientsContainer);
 
         return new Result(true, "You cooked " + foodName);
     }
 
-    public Result Eating(String foodName){
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        BackPack backpack = player.getInventory();
+    private void processIngredientRemoval(Loot ingredient, Player player, BackPack backpack) {
+        int remaining = ingredient.getCount();
+        Loot fridgeItem = player.getRefrigeratorLootByName(ingredient.getItem().getName());
 
-        Loot backpackLoot = backpack.findItemLoot(foodName);
+        if (fridgeItem != null) {
+            int fridgeQty = fridgeItem.getCount();
+            if (fridgeQty >= remaining) {
+                fridgeItem.setCount(fridgeQty - remaining);
+                return;
+            } else {
+                remaining -= fridgeQty;
+                player.getRefrigeratorLoots().remove(fridgeItem);
+            }
+        }
 
-        if(backpackLoot == null){
+        Loot backpackItem = backpack.findItemLoot(ingredient.getItem().getName());
+        if (backpackItem != null) {
+            backpackItem.setCount(backpackItem.getCount() - remaining);
+            if (backpackItem.getCount() <= 0) {
+                backpack.getLoots().remove(backpackItem);
+            }
+        }
+    }
+
+    private void addToInventory(Loot item, BackPack backpack) {
+        Loot existing = backpack.findItemLoot(item.getItem().getName());
+        if (existing == null) {
+            backpack.getLoots().add(item);
+        } else {
+            existing.setCount(existing.getCount() + item.getCount());
+        }
+    }
+
+    public Result Eating(String foodName) {
+        Player consumer = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        Loot foodItem = consumer.getInventory().findItemLoot(foodName);
+
+        if (foodItem == null) {
             return new Result(false, "You can only eat foods that are in your inventory or refrigerator");
         }
-        player.setEnergy(player.getEnergy() + FoodType.getEnergy(foodName));
-        backpackLoot.setCount(backpackLoot.getCount() - 1);
 
-        return new Result(false, "You ate " + foodName);
+        int energyGain = FoodType.getEnergy(foodName);
+        consumer.setEnergy(consumer.getEnergy() + energyGain);
+        foodItem.setCount(foodItem.getCount() - 1);
+
+        return new Result(true, "You ate " + foodName);
     }
 
     public Result showCookingRecipes() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Cooking recipes : \n");
+        Player recipeOwner = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        String header = "Cooking recipes : \n";
+        StringBuilder recipeList = new StringBuilder(header);
 
-        Game game = Game.getCurrentUser().getCurrentGame();
-        Player currentPlayer = game.getCurrentPlayer();
-
-        for (CookingRecipes recipe : currentPlayer.getCookingRecipes()) {
-            stringBuilder.append(recipe.toString()).append("\n");
+        for (CookingRecipes r : recipeOwner.getCookingRecipes()) {
+            recipeList.append(r.toString()).append("\n");
         }
 
-        return new Result(true, stringBuilder.toString());
+        return new Result(true, recipeList.toString());
     }
 
 }

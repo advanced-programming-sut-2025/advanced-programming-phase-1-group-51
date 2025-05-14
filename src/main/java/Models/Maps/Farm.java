@@ -33,21 +33,9 @@ public class Farm {
         this.cells = cells;
     }
 
-    public void thor(int x, int y){
-        Cells cell = findCell(x, y);
-        if (cell != null) {
-            if (cell.getObjectOnCell() instanceof Tree) {
-                cell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
-            }
-            if (cell.getObjectOnCell() instanceof Crop) {
-                cell.setObjectOnCell(new BurntCell());
-            }
-        }
-        System.out.println("thor has hit to position: " + x + ", " + y);
-    }
 
 
-    public Cells findCell(int x, int y) {
+    public Cells findCellFarm(int x, int y) {
         for (Cells cell : cells) {
             if (cell.getPosition().getX() == x && cell.getPosition().getY() == y) {
                 return cell;

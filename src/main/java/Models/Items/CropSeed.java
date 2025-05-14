@@ -3,11 +3,11 @@ package Models.Items;
 import Models.Enums.Others.Quality;
 import Models.Enums.Types.ItemTypes.CropSeedsType;
 
-public class Seed extends Item{
+public class CropSeed extends Item{
 
     private CropSeedsType cropSeedsType;
 
-    public Seed() {
+    public CropSeed() {
     }
 
     public CropSeedsType getCropType() {
@@ -18,7 +18,7 @@ public class Seed extends Item{
         this.cropSeedsType = cropSeedsType;
     }
 
-    public Seed(CropSeedsType cropSeedsType) {
+    public CropSeed(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
         this.name = cropSeedsType.source;
         this.quality = Quality.DEFAULT;

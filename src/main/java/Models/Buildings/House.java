@@ -4,12 +4,13 @@ import Models.Maps.Cells;
 
 import java.util.ArrayList;
 
-public class GreenHouse extends Building {
+public class House extends  Building {
 
-    public GreenHouse() {
+    public House() {
     }
 
-    public GreenHouse(ArrayList<Cells> buildingCells) {
+    public House(ArrayList<Cells> buildingCells) {
         super(buildingCells);
+
     }
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Mine extends Building{
 
-    public ArrayList<ForagingMineralType> minerals = new ArrayList<>();
+    public Mine() {
+    }
 
-    public Mine(ArrayList<Cells> buildingCells, ArrayList<ForagingMineralType> minerals) {
+    public Mine(ArrayList<Cells> buildingCells) {
         super(buildingCells);
-        this.minerals = minerals;
     }
 }

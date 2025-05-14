@@ -1,12 +1,12 @@
 package Models.ObjectsShownOnMap;
 
-import Models.Enums.Types.ObjectsOnMapType.ForgingCropType;
+import Models.Enums.Types.ObjectsOnMapType.ForagingCropType;
 
 import java.time.LocalDateTime;
 
 public class Crop extends ObjectOnMap{
 
-    public ForgingCropType cropSeedsType;
+    public ForagingCropType cropSeedsType;
     private int daysToNextStage;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
@@ -16,7 +16,7 @@ public class Crop extends ObjectOnMap{
     private boolean isGiant = false;
 
 
-    public Crop(ForgingCropType plantType) {
+    public Crop(ForagingCropType plantType) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;
@@ -56,11 +56,11 @@ public class Crop extends ObjectOnMap{
         this.hasBeenFertilized = hasBeenFertilized;
     }
 
-    public ForgingCropType getCropSeedsType() {
+    public ForagingCropType getCropSeedsType() {
         return cropSeedsType;
     }
 
-    public void setCropSeedsType(ForgingCropType cropSeedsType) {
+    public void setCropSeedsType(ForagingCropType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
     }
 
@@ -86,5 +86,14 @@ public class Crop extends ObjectOnMap{
 
     public void setGiant(boolean giant) {
         isGiant = giant;
+    }
+
+    public String plantInformation() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("name : ").append(cropSeedsType.name).append("\n");
+        builder.append("time to next stage : ").append(getDaysToNextStage()).append("\n");
+        builder.append("stage number : ").append(stageNumber).append("\n");
+        builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
+        return builder.toString();
     }
 }

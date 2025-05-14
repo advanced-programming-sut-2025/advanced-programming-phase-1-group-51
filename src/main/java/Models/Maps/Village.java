@@ -23,7 +23,7 @@ public class Village {
         Store s3 = new Store("Pierre", 9, 17, "Pierre's General Store");
         Store s4 = new Store("Robin", 9, 20, "Carpenter's Shop");
         Store s5 = new Store("Willy", 9, 17, "Fish Shop");
-        Store s6 = new Store("Marnie", 9, 16, "Marnie's Shop");
+        Store s6 = new Store("Marnie", 9, 16, "Marnie's Ranch");
         Store s7 = new Store("Gus", 12, 24, "The Stardrop Saloon");
 
         for (BlackSmithProducts p : BlackSmithProducts.values()) {
@@ -62,7 +62,7 @@ public class Village {
 
     public Store getStore(String storeName) {
         for (Store store : stores) {
-            if (store.getName().compareToIgnoreCase(storeName) == 0) {
+            if (store.getName().equalsIgnoreCase(storeName)) {
                 return store;
             }
         }
@@ -79,5 +79,16 @@ public class Village {
 
     public ArrayList<Cells> getCells() {
         return cells;
+    }
+
+
+
+    public Cells findCellVillage(int x, int y) {
+        for (Cells cell : cells) {
+            if (cell.getPosition().getX() == x && cell.getPosition().getY() == y) {
+                return cell;
+            }
+        }
+        return null;
     }
 }

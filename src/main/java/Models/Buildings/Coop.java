@@ -6,23 +6,16 @@ import Models.Maps.Cells;
 import java.util.ArrayList;
 
 public class Coop extends Building {
-    private ArrayList<Animal> Animals = new ArrayList<>();
-    private final int capacity = 4;
+    public String coopType;
+    public ArrayList<Animal> animals = new ArrayList<>();
+    public int capacity;
 
-    public Coop(ArrayList<Cells> buildingCells, ArrayList<Animal> animals) {
+    public Coop() {
+    }
+
+    public Coop(ArrayList<Cells> buildingCells, String coopType, int capacity) {
         super(buildingCells);
-        Animals = animals;
-    }
-
-    public Coop(ArrayList<Animal> animals) {
-        Animals = animals;
-    }
-
-    public ArrayList<Animal> getAnimals() {
-        return Animals;
-    }
-
-    public void setAnimals(ArrayList<Animal> animals) {
-        Animals = animals;
+        this.coopType = "Coop";
+        this.capacity = capacity;
     }
 }

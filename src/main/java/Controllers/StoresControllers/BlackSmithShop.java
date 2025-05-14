@@ -3,19 +3,19 @@ package Controllers.StoresControllers;
 import Models.*;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Quality;
+import Models.Enums.Recipes.CookingRecipes;
+import Models.Enums.Recipes.CraftingRecipes;
 import Models.Enums.Types.ItemTypes.*;
+import Models.Enums.Types.StoresProductsTypes.BlackSmithProducts;
 import Models.Enums.Types.StoresProductsTypes.FishShopProducts;
+import Models.Enums.Types.TrashcanType;
 import Models.Items.*;
 
 public class BlackSmithShop {
-    public Result ShowAllProducts(String storeName) {
+    public Result ShowAllProducts() {
         User user = Game.getCurrentUser();
         Game game = user.getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
+        Store store = Game.getMap().getVillage().getStore("Blacksmith");
 
         StringBuilder output = new StringBuilder();
 
@@ -32,13 +32,9 @@ public class BlackSmithShop {
         return new Result(true, output.toString());
     }
 
-    public Result ShowAllAvailableProducts(String storeName) {
+    public Result ShowAllAvailableProducts() {
         Game game = Game.getCurrentUser().getCurrentGame();
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
+        Store store = Game.getMap().getVillage().getStore("Blacksmith");
 
         StringBuilder output = new StringBuilder();
 
@@ -59,16 +55,11 @@ public class BlackSmithShop {
         return new Result(true, output.toString());
     }
 
-    public Result Purchase(String storeName ,String productName, int count) {
+    public Result Purchase(String productName, int count) {
         User user = Game.getCurrentUser();
         Game game = user.getCurrentGame();
         Player player = Game.getCurrentPlayer();
-
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if(storeName == null){
-            return new Result(false,"no such store found");
-        }
+        Store store = Game.getMap().getVillage().getStore("Blacksmith");
         StoreProduct product = store.getProduct(productName);
 
         if (product == null) {
@@ -83,19 +74,24 @@ public class BlackSmithShop {
             return new Result(false, "Not enough money");
         }
 
-        product.setRemainingCount(product.getRemainingCount() - count);
         ItemType type = product.getType().getItemType();
 
         if (type == null && product.getType().getIngredient() == null) {
-            Result res = handleBuyRecipe(productName, product, player);
-            if (res.isSuccessful()) {
-                player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(Game.getSeason()) * count));
+            CraftingRecipes craft = CraftingRecipes.getCraftingRecipe(productName.split(" ")[0]);
+            CookingRecipes cook = CookingRecipes.getCookingRecipe(productName.split(" ")[0]);
+            if (craft != null) {
+                player.getCraftingRecipes().add(craft);
+                return new Result(true, productName + " successfully added to recipes");
             }
-            return res;
-        }
+            if (cook != null) {
+                player.getCookingRecipes().add(cook);
+                return new Result(true, productName + " successfully added to recipes");
+            }
+            return new Result(false, "Recipe not found");
 
+        }
         else if (type == null && product.getType().getIngredient() != null) {
-            Result res = handleUpgradeTool(productName, product, player);
+            Result res = toolUpgrade(productName, product, player);
             if (res.isSuccessful()) {
                 Loot Loot = player.getInventory().findItemLoot(product.getType().getIngredient().getName());
                 if (Loot == null || Loot.getCount() < 5) {
@@ -109,13 +105,12 @@ public class BlackSmithShop {
             }
             return res;
         }
-
         else {
             Item item = null;
             if (type instanceof FoodType) {
                 item = new Food((FoodType) type);
             } else if (type instanceof CropSeedsType) {
-                item = new Seed((CropSeedsType) type);
+                item = new CropSeed((CropSeedsType) type);
             } else if (type instanceof TreeSeedsType) {
                 item = new TreeSeed((TreeSeedsType) type);
             } else if (type instanceof FishType) {
@@ -124,9 +119,7 @@ public class BlackSmithShop {
                 item = new Else((ElseType) type);
             } else if (type instanceof ForagingMineralType) {
                 item = new Mineral(Quality.DEFAULT, (ForagingMineralType) type);
-            }
-
-            else if (type instanceof ToolType) {
+            } else if (type instanceof ToolType) {
                 Quality q = Quality.DEFAULT;
                 if (product.getType().getName().equals(FishShopProducts.BAMBOO_POLE.getName())) {
                     q = Quality.SILVER;
@@ -150,83 +143,36 @@ public class BlackSmithShop {
                 }
                 Loot newLoot = new Loot(item, count);
                 backpack.addLoot(newLoot);
+            } else {
+                loot.setCount(loot.getCount() + 1);
+            }
+            product.setRemainingCount(product.getRemainingCount() - count);
+            player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason()) * count));
+            return new Result(true, "You have purchased " + count + " of " + productName);
+        }
+    }
+
+
+
+    public static Result toolUpgrade(String name, StoreProduct p, Player player) {
+        BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
+        BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
+        if (trashCan != null) {
+            TrashcanType type = trashCan.getTrashcan();
+            player.setTrashcanType(type);
+            return new Result(true, "Trashcan successfully updated");
+        }
+        else if (tool != null) {
+            Quality q = tool.getTool();
+            if (player.getItemInHand() instanceof Tool t) {
+                t.setQuality(q);
+                return new Result(true, "Tool successfully updated");
             }
             else {
-                Loot.setCount(Loot.getCount() + 1);
+                return new Result(false, "Your equipped item must be a tool");
             }
-
-            player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason()) * count));
-            return new Result(true, "You purchased " + productName);
         }
-    }
-
-    public Result Purchase(String storeName ,String productName, int count) {
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-
-        Store store = Game.getMap().getVillage().getStore(storeName);
-
-        if (storeName == null) {
-            return new Result(false, "no such store found");
-        }
-        StoreProduct product = store.getProduct(productName);
-
-        if (product == null) {
-            return new Result(false, "Store doesn't have this product");
-        }
-
-        if (product.getRemainingCount() < count) {
-            return new Result(false, "Not enough available products");
-        }
-
-        if (product.getType().getProductPrice(Game.getSeason()) * count > player.getMoney()) {
-            return new Result(false, "Not enough money");
-        }
-
-        product.setRemainingCount(product.getRemainingCount() - count);
-        ItemType type = product.getType().getItemType();
-
-    }
-
-    public Result Sell(String productName, int count) {
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-
-        Loot productLoot = player.getInventory().findItemLoot(productName);
-        if (productLoot == null) {
-            return new Result(false, "You don't have this product in your inventory");
-        }
-        int x = productLoot.getCount();
-        if(x < count){
-            return new Result(false,"You don't have this amount in you inventory");
-        }
-        productLoot.setCount(x - count);
-        if (productLoot.getCount() <= 0) {
-            player.getInventory().removeLoot(productLoot);
-        }
-
-        double money = productLoot.getItem().getValue() * x;
-        if (productLoot.getItem().getQuality() == Quality.SILVER) {
-            money = money * 1.25;
-        }
-        else if (productLoot.getItem().getQuality() == Quality.GOLD) {
-            money = money * 1.5;
-        }
-        else if (productLoot.getItem().getQuality() == Quality.IRIDIUM) {
-            money = money * 2;
-        }
-        player.setMoney(player.getMoney() + (int) money);
-        return new Result(true,"You have sold " + count + " of " + productName);
-    }
-
-
-
-    public  Result toolUpgrade(String item){
-
-
-        return null;
+        return new Result(false, "Upgrade option not found");
     }
 
     public Result exitStore() {

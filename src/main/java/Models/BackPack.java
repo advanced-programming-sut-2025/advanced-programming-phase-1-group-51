@@ -1,6 +1,7 @@
 package Models;
 
 import Models.Enums.Types.BackpackType;
+import Models.Items.Tool;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,17 @@ public class BackPack {
         for (Loot loot : loots) {
             if (loot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
                 return loot;
+            }
+        }
+        return null;
+    }
+
+    public Tool getWateringCan() {
+        for (Loot loot : loots) {
+            if (loot.getItem() instanceof Tool) {
+                if (((Tool) loot.getItem()).getType().waterCapacity > 0) {
+                    return (Tool) loot.getItem();
+                }
             }
         }
         return null;

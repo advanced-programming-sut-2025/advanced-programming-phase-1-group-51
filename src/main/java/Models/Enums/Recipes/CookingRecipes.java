@@ -9,8 +9,9 @@ import Models.Items.Else;
 import Models.Items.Food;
 import Models.Loot;
 
-public enum CookingRecipes {
+import java.util.Arrays;
 
+public enum CookingRecipes {
 
     FRIED_EGG("Fried Egg", 0, 0, 0, 0, FoodType.FRIED_EGG,
             new Loot(new Else(ElseType.EGG), 1)),
@@ -66,34 +67,50 @@ public enum CookingRecipes {
     public final int miningLevel;
     public final int foragingLevel;
     public final int fishingLevel;
-    public final FoodType cookingResultType;
+    public final FoodType craftingResultType;
     public final Loot[] ingredients;
-
-    CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
-            , FoodType cookingResultType, Loot[] ingredients) {
-        this.name = name;
-        this.farmingLevel = farmingLevel;
-        this.miningLevel = miningLevel;
-        this.foragingLevel = foragingLevel;
-        this.fishingLevel = fishingLevel;
-        this.cookingResultType = cookingResultType;
-        this.ingredients = ingredients;
-    }
-
-    /// For single ingredient cooking recipes.
-    CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
-            , FoodType cookingResultType, Loot ingredient) {
-        this.name = name;
-        this.farmingLevel = farmingLevel;
-        this.miningLevel = miningLevel;
-        this.foragingLevel = foragingLevel;
-        this.fishingLevel = fishingLevel;
-        this.cookingResultType = cookingResultType;
-        this.ingredients = new Loot[]{ingredient};
-    }
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(name).append("\n");
+        stringBuilder.append("Farming Level: ").append(farmingLevel).append("\n");
+        stringBuilder.append("Mining Level: ").append(miningLevel).append("\n");
+        stringBuilder.append("Foraging Level: ").append(foragingLevel).append("\n");
+        stringBuilder.append("Fishing Level: ").append(fishingLevel).append("\n");
+        stringBuilder.append(Arrays.toString(ingredients)).append("\n");
+        return stringBuilder.toString();
+    }
+
+    CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
+            , FoodType craftingResultType, Loot[] ingredients) {
+        this.name = name;
+        this.farmingLevel = farmingLevel;
+        this.miningLevel = miningLevel;
+        this.foragingLevel = foragingLevel;
+        this.fishingLevel = fishingLevel;
+        this.craftingResultType = craftingResultType;
+        this.ingredients = ingredients;
+    }
+
+    /// For single ingredient crafting recipes.
+    CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
+            , FoodType craftingResultType, Loot ingredient) {
+        this.name = name;
+        this.farmingLevel = farmingLevel;
+        this.miningLevel = miningLevel;
+        this.foragingLevel = foragingLevel;
+        this.fishingLevel = fishingLevel;
+        this.craftingResultType = craftingResultType;
+        this.ingredients = new Loot[]{ingredient};
+    }
+
+    public static CookingRecipes getCookingRecipe(String name) {
+        for (CookingRecipes cr : CookingRecipes.values()) {
+            if (cr.name.equalsIgnoreCase(name)) {
+                return cr;
+            }
+        }
+        return null;
     }
 }

@@ -28,10 +28,11 @@ public class InventoryController extends Controller {
 
 
     public Result showInventory() {
-        Player currentPlayer = Game.getCurrentPlayer();
-        StringBuilder output = new StringBuilder();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player currentPlayer = game.getCurrentPlayer();
         BackPack inventory = currentPlayer.getInventory();
-
+        StringBuilder output = new StringBuilder();
 
         output.append("Backpack Type: ").append(inventory.getType()).append("\n");
         output.append("Capacity: ");
@@ -58,17 +59,19 @@ public class InventoryController extends Controller {
     }
 
     public Result inventoryTrashFull(String itemName) {
-        User user = Game.getCurrentUser();
+        User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        BackPack backpack = Game.getCurrentPlayer().getInventory();
-        Loot loot = backpack.findItemLoot(itemName);
-
-        return new Result(false, "Item not found in inventory: " + itemName);
+        Player player = game.getCurrentPlayer();
+        BackPack backpack = player.getInventory();
+        Loot itemLoot = backpack.findItemLoot(itemName);
+        backpack.getLoots().remove(itemLoot);
+        return new Result(false, itemName + "totally removed from backpack");
     }
 
     public Result inventoryTrashNotFull(String itemName, int itemCount) {
-        Player currentPlayer = Game.getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player currentPlayer = game.getCurrentPlayer();
         if (itemCount <= 0) {
             return new Result(false, "Item count must be positive.");
         }
@@ -113,7 +116,9 @@ public class InventoryController extends Controller {
 
 
     public Result toolEquip(String toolName) {
-        Player player = Game.getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         ToolType toolType = ToolType.findToolTypeByName(toolName);
         if (toolType == null) {
             return new Result(false, "Invalid tool name: " + toolName);
@@ -136,7 +141,9 @@ public class InventoryController extends Controller {
     }
 
     public Result showCurrentTool() {
-        Player player = Game.getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 
         Item itemInHand = player.getItemInHand();
 
@@ -150,7 +157,9 @@ public class InventoryController extends Controller {
     }
 
     public Result showAvailableTools() {
-        Player player = Game.getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 
         BackPack backpack = player.getInventory();
         if (backpack == null || backpack.getLoots().isEmpty()) {
@@ -192,48 +201,11 @@ public class InventoryController extends Controller {
         return new Result(true, output.toString());
     }
 
-    private static Direction directionManaging(String direction, int playerX, int playerY) {
-        int directionX = playerX;
-        int directionY = playerY;
 
-        switch (direction.toLowerCase()) {
-            case "up":
-                directionY--;
-                break;
-            case "down":
-                directionY++;
-                break;
-            case "left":
-                directionX--;
-                break;
-            case "right":
-                directionX++;
-                break;
-            case "up left":
-                directionX--;
-                directionY--;
-                break;
-            case "up right":
-                directionX++;
-                directionY--;
-                break;
-            case "down left":
-                directionX--;
-                directionY++;
-                break;
-            case "down right":
-                directionX++;
-                directionY++;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid direction: " + direction);
-        }
-
-        return new Direction(directionX, directionY);
-    }
-
-    public static Result toolUse(String direction) {
-        Player player = Game.getCurrentPlayer();
+    public Result toolUse(String direction) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 
         if (player.getItemInHand() == null) {
             return new Result(false, "You don't have any item in your hand");
@@ -249,56 +221,64 @@ public class InventoryController extends Controller {
         Tool toolInHand = (Tool) player.getItemInHand();
         ToolType toolType = toolInHand.getType();
 
+        Farm farm = player.getCurrentFarm(game);
+        int playerX = player.getPosition().getX();
+        int playerY = player.getPosition().getY();
+        Direction newDirection = Direction.directionManaging(direction,playerX, playerY);
+        int targetCellX = newDirection.getX();
+        int targetCellY = newDirection.getY();
+        Cells targetCell = farm.findCellFarm(targetCellX, targetCellY);
+
         if (toolType == ToolType.HOE) {
-            return hoeUse( player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality(),direction);
+            return hoeUse(player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality(),targetCell, player);
         } 
         else if (toolType == ToolType.PICKAXE) {
-            return pickaxeUse(direction
+            return pickaxeUse(targetCell, player
                     , player.getMiningSkill().getLevel()
                     , toolInHand.getQuality()
                     , player.getMiningSkill().getLevel().energyCostDiscount);
         }
         else if (toolType == ToolType.AXE) {
-            return axeUse(direction, toolInHand.getQuality()
+            return axeUse(targetCell, player, toolInHand.getQuality()
                     , player.getForagingSkill().getLevel().energyCostDiscount);
         }
         else if (toolType == ToolType.WATERING_CAN_DEFAULT) {
-            return wateringCanUse(direction, toolType
+            return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
-                    , toolInHand);
+                    , toolInHand, game);
         } 
         else if (toolType == ToolType.WATERING_CAN_COPPER) {
-            return wateringCanUse(direction, toolType
+            return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
-                    , toolInHand);
+                    , toolInHand, game);
         } 
         else if (toolType == ToolType.WATERING_CAN_IRON) {
-            return wateringCanUse(direction, toolType
+            return wateringCanUse(targetCell,player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
-                    , toolInHand);
+                    , toolInHand, game);
         }
         else if (toolType == ToolType.WATERING_CAN_GOLD) {
-            return wateringCanUse(direction, toolType
+            return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
-                    , toolInHand);
+                    , toolInHand, game);
         } 
         else if (toolType == ToolType.WATERING_CAN_IRIDIUM) {
-            return wateringCanUse(direction, toolType
+            return wateringCanUse(targetCell, player, toolType
                     , player.getFarmingSkill().getLevel().energyCostDiscount, toolInHand.getQuality()
-                    , toolInHand);
+                    , toolInHand, game);
         } 
         else if (toolType == ToolType.FISHING_ROD) {
-            return fishingRodUse(direction, toolInHand.getQuality()
-                    , player.getFishingSkill().getLevel().energyCostDiscount);
+            return fishingRodUse(targetCell, player, toolInHand.getQuality()
+                    , player.getFishingSkill().getLevel().energyCostDiscount, game);
         } 
         else if (toolType == ToolType.SCYTHE) {
-            return scytheUse(direction);
+            return scytheUse(targetCell, player, game);
         }
         else if (toolType == ToolType.MILK_PAIL) {
-            return milkPailUse(direction);
+            return milkPailUse(targetCell, player, game);
         } 
         else if (toolType == ToolType.SHEAR) {
-            return shearUse(direction);
+            return shearUse(targetCell, player, game);
         } 
         else {
             return new Result(false, "Invalid tool");
@@ -308,23 +288,17 @@ public class InventoryController extends Controller {
 
 
 
-    private static Result hoeUse(int energyDiscount, Quality quality, String direction){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
+    private Result hoeUse(int energyDiscount, Quality quality, Cells targetCell, Player player){
 
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int takenEnergy = 0;
         int playerEnergy = player.getEnergy();
 
-        if (takenEnergy + turnUsedEnergy > 50) {
+        if (targetCell == null) {
+            return new Result(false, "Target cell does not exist");
+        }
+
+        else if (takenEnergy + turnUsedEnergy > 50) {
             return new Result(false, "You don't have enough energy in this turn");
         }
 
@@ -332,9 +306,6 @@ public class InventoryController extends Controller {
             return new Result(false, "You don't have enough energy.");
         }
 
-        else if (targetCell == null) {
-            return new Result(false, "Target cell does not exist");
-        }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
         player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + takenEnergy);
@@ -346,48 +317,29 @@ public class InventoryController extends Controller {
         return new Result(true, "Target cell is now plowed.");
     }
 
-    private static Result pickaxeUse(String direction, SkillLevel skillLevel
+    private Result pickaxeUse(Cells targetCell, Player player, SkillLevel skillLevel
             , Quality quality, int energyDiscount){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
 
 
         return null;
     }
 
-    private static Result axeUse(String direction, Quality quality, int energyDiscount) {
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
+    private Result axeUse(Cells targetCell, Player player, Quality quality, int energyDiscount) {
 
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int takenEnergy = 0;
         int playerEnergy = player.getEnergy();
 
+        if (targetCell == null) {
+            return new Result(false, "Target cell does not exist");
+        }
 
-        if (targetCellX + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn.");
-        } 
+        else if (takenEnergy + turnUsedEnergy > 50) {
+            return new Result(false, "You don't have enough energy in this turn");
+        }
+
         else if (playerEnergy - takenEnergy < 0) {
             return new Result(false, "You don't have enough energy.");
-        } 
-        else if (targetCell == null) {
-            return new Result(false, "Target cell does not exist.");
         }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
@@ -496,34 +448,23 @@ public class InventoryController extends Controller {
         }
     }
 
-    private static Result wateringCanUse(String direction, ToolType wateringCanType
-            , int energyDiscount, Quality quality, Tool toolInHand){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
+    private Result wateringCanUse(Cells targetCell, Player player, ToolType wateringCanType
+            , int energyDiscount, Quality quality, Tool toolInHand, Game game){
 
         int takenEnergy = 0;
-        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int playerEnergy = player.getEnergy();
 
-        if (takenEnergy + currentEnergyUsed > 50) {
-            return new Result(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-
-        if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
-        }
-
         if (targetCell == null) {
-            return new Result(false, "Target cell not found.");
+            return new Result(false, "Target cell does not exist");
+        }
+
+        else if (takenEnergy + turnUsedEnergy > 50) {
+            return new Result(false, "You don't have enough energy in this turn");
+        }
+
+        else if (playerEnergy - takenEnergy < 0) {
+            return new Result(false, "You don't have enough energy.");
         }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
@@ -560,36 +501,26 @@ public class InventoryController extends Controller {
         return new Result(false, "No operation was performed.");
     }
 
-    private static Result fishingRodUse(String direction, Quality quality, int skillEnergyDiscount) {
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
+    private Result fishingRodUse(Cells targetCell, Player player, Quality quality, int skillEnergyDiscount, Game game) {
 
-        int energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
-        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int takenEnergy = calculateFishingEnergyCost(skillEnergyDiscount, quality);
+        int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int playerEnergy = player.getEnergy();
 
-        if (energyCost + currentEnergyUsed > 50) {
+        if (targetCell == null) {
+            return new Result(false, "Target cell does not exist");
+        }
+
+        else if (takenEnergy + turnUsedEnergy > 50) {
             return new Result(false, "You don't have enough energy in this turn");
         }
 
-        if (playerEnergy - energyCost < 0) {
+        else if (playerEnergy - takenEnergy < 0) {
             return new Result(false, "You don't have enough energy.");
         }
 
-        if (targetCell == null) {
-            return new Result(false, "Target cell not found.");
-        }
-
-        player.setEnergy(player.getEnergy() - energyCost);
-        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + energyCost);
+        player.setEnergy(player.getEnergy() - takenEnergy);
+        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + takenEnergy);
 
         if (targetCell.getObjectOnCell() instanceof Lake) {
             int randomNumber = (int) (Math.random() * 2);
@@ -629,7 +560,7 @@ public class InventoryController extends Controller {
         return new Result(false, "You only can fish in Lake");
     }
 
-    private static int calculateFishingEnergyCost(int discount, Quality quality) {
+    private int calculateFishingEnergyCost(int discount, Quality quality) {
         int answer = 0;
         if (quality == Quality.COPPER) {
             answer = 8;
@@ -647,8 +578,8 @@ public class InventoryController extends Controller {
         if (answer < 0) {
             answer = 0;
         }
-
-        Game game = Game.getCurrentUser().getCurrentGame();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         if (game.getWeatherToday() == Weather.SNOW) {
             answer *= 2;
         }
@@ -768,35 +699,25 @@ public class InventoryController extends Controller {
 
 
 
-    private static Result milkPailUse(String direction){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
-        Item equippedItem = player.getItemInHand();
+    private static Result milkPailUse(Cells targetCell, Player player, Game game){
         BackPack backpack = player.getInventory();
         Loot productloot = null;
         int takenEnergy = 4;
-        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
+        int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
         int playerEnergy = player.getEnergy();
-
-        if (takenEnergy + currentEnergyUsed > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
-        }
-
-        if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
-        }
 
         if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalCell)) {
             return new Result(false, "Target cell not found.");
         }
+
+        else if (takenEnergy + turnUsedEnergy > 50) {
+            return new Result(false, "You don't have enough energy in this turn");
+        }
+
+        else if (playerEnergy - takenEnergy < 0) {
+            return new Result(false, "You don't have enough energy.");
+        }
+
         Animal animal = ((AnimalCell) targetCell.getObjectOnCell()).animal;
         if (animal == null) {
             return new Result(false, "no animal found");
@@ -811,34 +732,22 @@ public class InventoryController extends Controller {
         return collectProducts(product, backpack, productloot, animal, player, game);
     }
 
-    private static Result shearUse(String direction){
-        User user = Game.getCurrentUser();
-        Game game = user.getCurrentGame();
-        Player player = Game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
-        Direction newDirection = directionManaging(direction, playerX, playerY);
-        int targetCellX = newDirection.getX();
-        int targetCellY = newDirection.getY();
-        Cells targetCell = farm.findCell(targetCellX, targetCellY);
-        Item equippedItem = player.getItemInHand();
+    private static Result shearUse(Cells targetCell, Player player, Game game){
         BackPack backpack = player.getInventory();
-        double takenEnergy = 4;
-        double currentEnergyUsed = player.getCurrentTurnUsedEnergy();
-        double playerEnergy = player.getEnergy();
+        int takenEnergy = 4;
+        int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
+        int playerEnergy = player.getEnergy();
         Loot productloot = null;
-        if (takenEnergy + currentEnergyUsed > 50) {
-            return new Result(false, "You can't perform this activity." +
-                    "You will exceed your energy usage limit.");
-        }
 
-        if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
-        }
 
         if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalCell)) {
             return new Result(false, "Target cell not found.");
+        }
+        else if (takenEnergy + turnUsedEnergy > 50) {
+            return new Result(false, "You don't have enough energy in this turn");
+        }
+        else if (playerEnergy - takenEnergy < 0) {
+            return new Result(false, "You don't have enough energy.");
         }
         Animal animal = ((AnimalCell) targetCell.getObjectOnCell()).animal;
         if (animal == null) {

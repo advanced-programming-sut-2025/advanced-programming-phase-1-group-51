@@ -6,19 +6,27 @@ import java.util.Currency;
 
 public class EnergyController {
 
-    Player currentPlayer = Game.getCurrentPlayer();
 
     public Result energyShow() {
-        return new Result(true , "Your Energy Is " + currentPlayer.getEnergy());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        return new Result(true , "Your Energy Is " + player.getEnergy());
     }
 
     public Result cheatEnergySet(int energy) {
-        currentPlayer.setEnergy(energy);
-        return new Result(true , "Your Energy Is " + currentPlayer.getEnergy());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.setEnergy(energy);
+        return new Result(true , "Your Energy Is " + player.getEnergy());
     }
 
     public Result cheatEnergyUnlimited() {
-        currentPlayer.setEnergy(1_000_000_000);
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.setEnergy(1_000_000_000);
          return new Result(true, "Energy set unlimited successfully!");
     }
 }

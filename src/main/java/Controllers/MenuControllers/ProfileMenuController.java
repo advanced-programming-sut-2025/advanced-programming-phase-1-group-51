@@ -1,6 +1,7 @@
 package Controllers.MenuControllers;
 
 import Controllers.Controller;
+import Models.App;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
 import Models.Result;
@@ -16,7 +17,7 @@ public class ProfileMenuController extends Controller {
 
     public void showCurrentUserInfo() {
 
-        User currentUser = Game.getCurrentUser();
+        User currentUser = App.getCurrentUser();
 
         System.out.println("<<<<<    USER INFORMATION     >>>>>");
         System.out.println("USERNAME : " + currentUser.getUsername());
@@ -28,7 +29,7 @@ public class ProfileMenuController extends Controller {
 
     public Result changeUsername(String newUsername) {
 
-        User currentUser = Game.getCurrentUser();
+        User currentUser = App.getCurrentUser();
 
         if (newUsername.equals(currentUser.getUsername())) {
             return new Result(false, "please enter a new username!");
@@ -50,9 +51,8 @@ public class ProfileMenuController extends Controller {
 
 
 
-
     public Result changeNickname(String newNickname) {
-        User currentUser = Game.getCurrentUser();
+        User currentUser = App.getCurrentUser();
 
         if (newNickname.equals(currentUser.getUsername())) {
             return new Result(false, "please enter a new nickname!");
@@ -67,7 +67,7 @@ public class ProfileMenuController extends Controller {
 
     public Result changeEmail(String newEmail) {
 
-        User currentUser = Game.getCurrentUser();
+        User currentUser = App.getCurrentUser();
 
         if (newEmail.equals(currentUser.getEmail())) {
             return new Result(false, "please enter a new email!");
@@ -89,10 +89,9 @@ public class ProfileMenuController extends Controller {
 
 
 
-
     public Result changePassword(String newPassword, String oldPassword) {
 
-        User currentUser = Game.getCurrentUser();
+        User currentUser = App.getCurrentUser();
 
         if (!oldPassword.equals(currentUser.getUsername())) {
             return new Result(false, "Old password is incorrect!");

@@ -1,6 +1,7 @@
 package Controllers.MenuControllers;
 
 import Controllers.Controller;
+import Models.App;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Game;
@@ -24,8 +25,8 @@ public class LoginMenuController extends Controller {
         if(LoggedInFlag != null){
             //TODO
         }
-        Game.setCurrentUser(user);
-        Game.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentUser(user);
+        App.setCurrentMenu(Menu.MainMenu);
         return new Result(true, "User logged in successfully");
     }
 
@@ -93,7 +94,7 @@ public class LoginMenuController extends Controller {
     }
 
     public Result goToSignUpMenu() {
-        Game.setCurrentMenu(Menu.SignUpMenu);
+        App.setCurrentMenu(Menu.SignUpMenu);
         return new Result(true, "You are now in Signup menu");
     }
 
@@ -109,7 +110,7 @@ public class LoginMenuController extends Controller {
     }
 
     public void exitMenu() {
-        Game.setCurrentMenu(Menu.ExitMenu);
+        App.setCurrentMenu(Menu.ExitMenu);
     }
 
 }
