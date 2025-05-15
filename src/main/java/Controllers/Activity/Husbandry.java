@@ -1,5 +1,6 @@
 package Controllers.Activity;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.Others.Weather;
 import Models.Enums.Types.ItemTypes.ElseType;
@@ -11,7 +12,7 @@ import Models.ObjectsShownOnMap.AnimalCell;
 import Models.ObjectsShownOnMap.BurntCell;
 import java.util.ArrayList;
 
-public class Husbandry {
+public class Husbandry extends BaseController {
 
 
 
@@ -21,11 +22,12 @@ public class Husbandry {
         Player player = game.getCurrentPlayer();
         Animal animal = player.findAnimal(animalName);
         if (animal == null) {
-            return new Result(false, "Animal was not found");
+            return  Result.failure( "Animal was not found");
         }
         animal.setHasBeenPetToday(true);
         animal.setFriendshipLevel(animal.getFriendshipLevel() + 15);
-        return new Result(true, "you have pet " + animalName);
+        return saveGameState(game)
+                .combine(Result.success( "you have pet " + animalName));
     }
 
 
@@ -36,7 +38,7 @@ public class Husbandry {
         Player player = game.getCurrentPlayer();
 
         if (player.getAnimals().isEmpty()) {
-            return new Result(false, "you don't ave any animal");
+            return  Result.failure( "you don't ave any animal");
         }
 
         StringBuilder String = new StringBuilder();
@@ -48,7 +50,8 @@ public class Husbandry {
                     append("hasBeenFedToDay: ").append(animal.isHasBeenFedHayToday() || animal.isHasBeenFedGrassToday()).append("\n").
                     append("----------------------------------------").append("\n");
         }
-        return new Result(true, String.toString());
+        return saveGameState(game)
+                .combine(Result.success( String.toString()));
     }
 
     public Result ShepherdAnimals(String animalName, int x, int y) {
@@ -61,24 +64,26 @@ public class Husbandry {
 
 
         if(animal == null){
-            return new Result(false, "animal not found");
+            return  Result.failure( "animal not found");
         }
 
        else if (cell == null) {
-            return new Result(false, "cell not found");
+            return  Result.failure( "cell not found");
         }
         else if(!(cell.getObjectOnCell() instanceof BurntCell)){
-            return new Result(false, "the chosen cell not empty");
+            return  Result.failure( "the chosen cell not empty");
         }
 
         if (game.getWeather() == Weather.SNOW || game.getWeather() == Weather.STORM || game.getWeather() == Weather.RAIN) {
-            return new Result(true, "you can't shepherd in this weather");
+            return saveGameState(game)
+                .combine(Result.success( "you can't shepherd in this weather"));
         }
 
         cell.setObjectOnCell(new AnimalCell(animal));
         animal.setHasBeenFedGrassToday(true);
         animal.setFriendshipLevel(animal.getFriendshipLevel() + 8);
-        return new Result(true, "you have shepherd " + animalName);
+        return saveGameState(game)
+                .combine(Result.success( "you have shepherd " + animalName));
     }
 
     public Result FeedHay(String animalName) {
@@ -91,7 +96,7 @@ public class Husbandry {
         Loot loot = null;
 
         if (animal == null) {
-            return new Result(false, "Animal not found");
+            return  Result.failure( "Animal not found");
         }
 
         for (Loot Loot : BackPack.getLoots()) {
@@ -100,7 +105,7 @@ public class Husbandry {
         }
 
         if (loot == null) {
-            return new Result(false, "You don't have any hay to feed the animals");
+            return  Result.failure( "You don't have any hay to feed the animals");
         }
 
         loot.setCount(loot.getCount() - 1);
@@ -110,7 +115,8 @@ public class Husbandry {
         }
         animal.setHasBeenFedHayToday(true);
 
-        return new Result(true, "You fed " + animalName);
+        return saveGameState(game)
+                .combine(Result.success( "You fed " + animalName));
     }
 
     public Result Produces() {
@@ -125,7 +131,7 @@ public class Husbandry {
             }
         }
         if (notCollectedAnimals.isEmpty()) {
-            return new Result(false, "No products found");
+            return  Result.failure( "No products found");
         }
         StringBuilder animalString = new StringBuilder();
         for (Animal animal : notCollectedAnimals) {
@@ -133,7 +139,8 @@ public class Husbandry {
                     .append("product: ").append(animal.getProduct().getName()).append(" ").
                     append(animal.getProduct().getQuality()).append("\n");
         }
-        return new Result(true, animalString.toString());
+        return saveGameState(game)
+                .combine(Result.success( animalString.toString()));
     }
 
     public Result CollectProduce(String animalName) {
@@ -145,11 +152,11 @@ public class Husbandry {
         Loot productLoot = null;
 
         if (animal == null) {
-            return new Result(false, "no animal found");
+            return  Result.failure( "no animal found");
         }
         Item product = animal.getProduct();
         if (product == null) {
-            return new Result(false, "no product found");
+            return  Result.failure( "no product found");
         }
 
 
@@ -164,21 +171,23 @@ public class Husbandry {
 
         if (productLoot == null) {
             if (BackPack.getLoots().size() == BackPack.getType().getCapacity()) {
-                return new Result(false, "your BackPack is full");
+                return  Result.failure( "your BackPack is full");
             }
             Loot newLoot = new Loot(item, animal.getType().productPerDay);
 
             BackPack.addLoot(newLoot);
             animal.setHasBeenCollected(true);
             animal.setProduct(null);
-            return new Result(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+            return saveGameState(game)
+                .combine(Result.success( "you have collected " + animal.getType().productPerDay + " of " + product.getName()));
         }
 
         productLoot.setCount(productLoot.getCount() + animal.getType().productPerDay);
         animal.setHasBeenCollected(true);
         animal.setProduct(null);
 
-        return new Result(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+        return saveGameState(game)
+                .combine(Result.success( "you have collected " + animal.getType().productPerDay + " of " + product.getName()));
     }
 
 
@@ -189,13 +198,14 @@ public class Husbandry {
         Animal animal = player.findAnimal(animalName);
 
         if (animal == null) {
-            return new Result(false, "no animal found");
+            return  Result.failure( "no animal found");
         }
 
         int price = (int) (animal.getType().price * ((double) animal.getFriendshipLevel() / 1000 + 0.3));
         player.setMoney(player.getMoney() + price);
         player.getAnimals().remove(animal);
-        return new Result(true, "you have sold " + animalName + " for " + price);
+        return saveGameState(game)
+                .combine(Result.success( "you have sold " + animalName + " for " + price));
     }
 
     public Result cheatSetFriendship(String animalName, int amount) {
@@ -205,7 +215,8 @@ public class Husbandry {
         Animal animal = player.findAnimal(animalName);
 
         animal.setFriendshipLevel(amount);
-        return new Result(true, "Friendship level  with " + animalName + "has set to " + amount);
+        return saveGameState(game)
+                .combine(Result.success( "Friendship level  with " + animalName + "has set to " + amount));
     }
 
 }

@@ -3,7 +3,6 @@ package Models.Maps;
 import Models.ObjectsShownOnMap.ObjectOnMap;
 
 public class Cells {
-
     private Position position;
     private ObjectOnMap objectOnCell;
     public boolean hasBeenPlowed = false;
@@ -11,6 +10,11 @@ public class Cells {
     public Cells(Position position, ObjectOnMap objectOnCell) {
         this.position = position;
         this.objectOnCell = objectOnCell;
+    }
+
+    public char getDisplayChar() {
+        if (objectOnCell == null) return '.';
+        return objectOnCell.toString().charAt(0);
     }
 
     public Position getPosition() {

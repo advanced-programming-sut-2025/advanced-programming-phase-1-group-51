@@ -38,7 +38,8 @@ public class OthersController  extends BaseController {
                     cell.setObjectOnCell(new BurntCell());
                 }
             }
-            return new Result(true, "thor has hit to position: " + x + ", " + y);
+            return saveGameState(game)
+                .combine(Result.success( "thor has hit to position: " + x + ", " + y));
     }
 
 
@@ -46,11 +47,15 @@ public class OthersController  extends BaseController {
     public Result showMoney() {
         Game game = App.getCurrentUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        return new Result(true, "player's money is : " + player.getMoney());
+        return saveGameState(game)
+                .combine(Result.success( "player's money is : " + player.getMoney()));
     }
 
 
     public Result cheatAdvanceTime(int amountOfHours) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 //        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
 //        LocalDateTime nextDateTime;
 //        Game currentGame = App.getCurrentUser().getCurrentGame();
@@ -77,10 +82,14 @@ public class OthersController  extends BaseController {
 //        if (check) {
 //            currentGame.newDayBackgroundChecks();
 //        }
-        return new Result(true, "time changed successfully.");
+        return saveGameState(game)
+                .combine(Result.success( "time changed successfully."));
     }
 
     public Result cheatAdvanceDate(int amountOfDays) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 //        LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
 //        LocalDateTime nextDateTime;
 //        Game currentGame = App.getCurrentUser().getCurrentGame();
@@ -100,54 +109,77 @@ public class OthersController  extends BaseController {
 //            currentGame.newDayBackgroundChecks();
 //        }
 //        currentGame.checkSeasonChange();
-        return new Result(true, "Date changed successfully.");
+        return saveGameState(game)
+                .combine(Result.success( "Date changed successfully."));
     }
 
 
     public Result Time() {
-        return new Result(true, App.getCurrentUser().getCurrentGame().getDate().toLocalTime().toString());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success( App.getCurrentUser().getCurrentGame().getDate().toLocalTime().toString()));
     }
 
     public Result Date() {
-        return new Result(true,App.getCurrentUser().getCurrentGame().getDate().toLocalDate().toString());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success(App.getCurrentUser().getCurrentGame().getDate().toLocalDate().toString()));
     }
 
     public Result DateTime() {
-        return new Result(true, App.getCurrentUser().getCurrentGame()
-                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success( App.getCurrentUser().getCurrentGame()
+                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString()));
     }
 
     public Result DayOfTheWeek() {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         LocalDateTime currentDateTime = App.getCurrentUser().getCurrentGame().getDate();
         int currentDay = currentDateTime.getDayOfMonth();
         int dayOfWeek = (currentDay - 1) % 7;
         String day = DayOfWeek.values()[dayOfWeek].toString().toLowerCase();
-        return new Result(true, day);
+        return saveGameState(game)
+                .combine(Result.success( day));
     }
 
     public Result season() {
-        return new Result(true, App.getCurrentUser().getCurrentGame().getSeason().name());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success( App.getCurrentUser().getCurrentGame().getSeason().name()));
     }
 
 
     public Result weather() {
-        return new Result(true, App.getCurrentUser().getCurrentGame().getWeatherToday().name());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success( App.getCurrentUser().getCurrentGame().getWeatherToday().name()));
     }
 
     public Result weatherForecast() {
-        return new Result(true, "Tomorrow's weather forecast is: "
-                + App.getCurrentUser().getCurrentGame().getWeatherTomorrow().toString());
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        return saveGameState(game)
+                .combine(Result.success( "Tomorrow's weather forecast is: "
+                + App.getCurrentUser().getCurrentGame().getWeatherTomorrow().toString()));
     }
 
     public Result setWeatherCheat(String type) {
         Weather weather = Weather.getWeatherByName(type);
         Game game = App.getCurrentUser().getCurrentGame();
         if (weather == null) {
-            return new Result(false, "Weather type is invalid.");
+            return  Result.failure( "Weather type is invalid.");
         } else {
             game.setWeatherTomorrow(weather);
         }
-        return new Result(true, "Tomorrow's weather set successfully.");
+        return saveGameState(game)
+                .combine(Result.success( "Tomorrow's weather set successfully."));
     }
 
     public Result GreenhouseBuild() {
@@ -159,21 +191,21 @@ public class OthersController  extends BaseController {
         Cells testCell = farm.findCellFarm(25, 4);
 
         if (testCell.getObjectOnCell() instanceof Lake) {
-            return new Result(false, "Greenhouse already built.");
+            return  Result.failure( "Greenhouse already built.");
         }
 
         Loot loot = backpack.findItemLoot(ElseType.WOOD.name);
 
         if (loot == null) {
-            return new Result(false, "You don't have any wood.");
+            return  Result.failure( "You don't have any wood.");
         }
 
         if (loot.getCount() < 500) {
-            return new Result(false, "You don't have enough wood.");
+            return  Result.failure( "You don't have enough wood.");
         }
 
         if (player.getMoney() < 1000) {
-            return new Result(false, "You don't have enough money.");
+            return  Result.failure( "You don't have enough money.");
         }
 
         loot.setCount(loot.getCount() - 500);
@@ -200,7 +232,8 @@ public class OthersController  extends BaseController {
         cell1.setObjectOnCell(new Lake());
 
 
-        return new Result(true, "Greenhouse built successfully.");
+        return saveGameState(game)
+                .combine(Result.success( "Greenhouse built successfully."));
     }
 
 
@@ -209,7 +242,7 @@ public class OthersController  extends BaseController {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         if (!player.isInVillage()) {
-            return new Result(false, "You are not in the village");
+            return  Result.failure( "You are not in the village");
         }
 
         boolean open = false;
@@ -269,14 +302,15 @@ public class OthersController  extends BaseController {
             }
         }
         else {
-            return new Result(false, "this store does not exist");
+            return  Result.failure( "this store does not exist");
         }
 
         if (!open) {
-            return new Result(false, "Store is closed now");
+            return  Result.failure( "Store is closed now");
         }
 
-        return new Result(true, "You are now in " + name);
+        return saveGameState(game)
+                .combine(Result.success( "You are now in " + name));
     }
 
     public Result Sell(String productName, int count) {
@@ -286,11 +320,11 @@ public class OthersController  extends BaseController {
 
         Loot productLoot = player.getInventory().findItemLoot(productName);
         if (productLoot == null) {
-            return new Result(false, "You don't have this product in your inventory");
+            return  Result.failure( "You don't have this product in your inventory");
         }
         int x = productLoot.getCount();
         if(x < count){
-            return new Result(false,"You don't have this amount in you inventory");
+            return  Result.failure("You don't have this amount in you inventory");
         }
         productLoot.setCount(x - count);
         if (productLoot.getCount() <= 0) {
@@ -308,7 +342,8 @@ public class OthersController  extends BaseController {
             money = money * 2;
         }
         player.setMoney(player.getMoney() + (int) money);
-        return new Result(true,"You have sold " + count + " of " + productName);
+        return saveGameState(game)
+                .combine(Result.success("You have sold " + count + " of " + productName));
     }
 
     public Result cheatAddMoney(int amount) {
@@ -316,13 +351,17 @@ public class OthersController  extends BaseController {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         player.setMoney(player.getMoney() + amount);
-        return new Result(true,"you have " + player.getMoney() +" money now");
+        return saveGameState(game)
+                .combine(Result.success("you have " + player.getMoney() +" money now"));
     }
 
 
     public Result StartTrade() {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         App.setCurrentMenu(Menu.TradeMenu);
-        return new Result(true,"You are in Trade menu now");
+        return saveGameState(game)
+                .combine(Result.success("You are in Trade menu now"));
     }
 
 }

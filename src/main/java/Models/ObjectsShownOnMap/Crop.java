@@ -96,4 +96,5 @@ public class Crop extends ObjectOnMap{
         builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
         return builder.toString();
     }
+
 }

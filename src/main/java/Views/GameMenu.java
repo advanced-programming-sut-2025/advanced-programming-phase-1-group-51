@@ -101,10 +101,10 @@ public class GameMenu implements PlayMenu{
             int x = Integer.parseInt(matcher.group("x").trim());
             int y = Integer.parseInt(matcher.group("y").trim());
             int size = Integer.parseInt(matcher.group("size").trim());
-            System.out.println(MovementAndMapController.printMap(x,y,size));
+            MovementAndMapController.printMap(x,y,size);
         }
         else if ((matcher = GameMenuCommands.HELP_READING_MAP.getMatcher(input)) != null){
-            System.out.println(MovementAndMapController.helpReadingMap());
+            MovementAndMapController.helpReadingMap();
         }
         else if ((matcher = GameMenuCommands.ENERGY_SHOW.getMatcher(input)) != null){
             System.out.println(EnergyController.energyShow());

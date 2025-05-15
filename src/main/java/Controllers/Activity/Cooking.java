@@ -1,23 +1,26 @@
 package Controllers.Activity;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.Others.Quality;
 import Models.Enums.Recipes.CookingRecipes;
 import Models.Items.Food;
 
-public class Cooking {
+public class Cooking extends BaseController {
 
     public Result TakeOutOfRefrigerator(String itemName) {
-        Player player = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         Loot refrigeratorLoot = player.getRefrigeratorLootByName(itemName);
 
         if (refrigeratorLoot == null) {
-            return new Result(false, "You don't have this item in your refrigerator.");
+            return  Result.failure( "You don't have this item in your refrigerator.");
         }
 
         BackPack backpack = player.getInventory();
         boolean isFull = backpack.getType().getCapacity() == backpack.getLoots().size();
-        if (isFull) return new Result(false, "Your inventory is full.");
+        if (isFull) return  Result.failure( "Your inventory is full.");
 
         Loot existingLoot = backpack.findItemLoot(itemName);
         if (existingLoot != null) {
@@ -27,61 +30,66 @@ public class Cooking {
             backpack.getLoots().add(refrigeratorLoot);
         }
         player.getRefrigeratorLoots().remove(refrigeratorLoot);
-        return new Result(true, "Food has been added to your backpack.");
+        return saveGameState(game)
+                .combine(Result.success( "Food has been added to your backpack."));
     }
 
     public Result PutInRefrigerator(String itemName) {
-        Game currentGame = App.getCurrentUser().getCurrentGame();
-        Player currentPlayer = currentGame.getCurrentPlayer();
-        BackPack playerBackpack = currentPlayer.getInventory();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        BackPack playerBackpack = player.getInventory();
         Loot itemToStore = playerBackpack.findItemLoot(itemName);
 
         if (itemToStore == null) {
-            return new Result(false, "This item is not in your backpack");
+            return  Result.failure( "This item is not in your backpack");
         }
 
         boolean isEdible = itemToStore.getItem() instanceof Food;
         boolean hasNegativeEnergy = itemToStore.getItem().getEnergyCost() < 0;
         if (!isEdible || !hasNegativeEnergy) {
-            return new Result(false, "You can only put edibles in the refrigerator.");
+            return  Result.failure( "You can only put edibles in the refrigerator.");
         }
 
-        Loot fridgeItem = currentPlayer.getRefrigeratorLootByName(itemName);
+        Loot fridgeItem = player.getRefrigeratorLootByName(itemName);
         playerBackpack.getLoots().remove(itemToStore);
 
         if (fridgeItem != null) {
             int combinedCount = fridgeItem.getCount() + itemToStore.getCount();
             fridgeItem.setCount(Math.min(combinedCount, fridgeItem.getItem().getMaxSize()));
         } else {
-            currentPlayer.getRefrigeratorLoots().add(itemToStore);
+            player.getRefrigeratorLoots().add(itemToStore);
         }
-        return new Result(true, "Your food added to refrigerator successfully");
+        return saveGameState(game)
+                .combine(Result.success( "Your food added to refrigerator successfully"));
     }
 
     public Result prepareFood(String foodName){
-        Player chef = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         CookingRecipes desiredRecipe = null;
 
-        for (CookingRecipes r : chef.getCookingRecipes()) {
+        for (CookingRecipes r : player.getCookingRecipes()) {
             if (r.name.equalsIgnoreCase(foodName)) desiredRecipe = r;
         }
-        if (desiredRecipe == null) return new Result(false, "No recipe found for: " + foodName);
+        if (desiredRecipe == null) return  Result.failure( "No recipe found for: " + foodName);
 
-        BackPack ingredientsContainer = chef.getInventory();
+        BackPack ingredientsContainer = player.getInventory();
         if (ingredientsContainer.getType().getCapacity() == ingredientsContainer.getLoots().size()) {
-            return new Result(false, "Your inventory is full.");
+            return  Result.failure( "Your inventory is full.");
         }
 
         int energyCost = 3;
-        if (chef.getCurrentTurnUsedEnergy() + energyCost > 50) {
-            return new Result(false, "You don't have enough Energy! for this turn!");
+        if (player.getCurrentTurnUsedEnergy() + energyCost > 50) {
+            return  Result.failure( "You don't have enough Energy! for this turn!");
         }
-        if (chef.getEnergy() - energyCost < 0) {
-            return new Result(false, "You don't have enough Energy!");
+        if (player.getEnergy() - energyCost < 0) {
+            return  Result.failure( "You don't have enough Energy!");
         }
 
-        chef.setEnergy(chef.getEnergy() - energyCost);
-        chef.setCurrentTurnUsedEnergy(chef.getCurrentTurnUsedEnergy() + energyCost);
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + energyCost);
 
         for (Loot required : desiredRecipe.ingredients) {
             String ingredientName = required.getItem().getName();
@@ -89,22 +97,23 @@ public class Cooking {
             int available = 0;
 
             Loot inBackpack = ingredientsContainer.findItemLoot(ingredientName);
-            Loot inFridge = chef.getRefrigeratorLootByName(ingredientName);
+            Loot inFridge = player.getRefrigeratorLootByName(ingredientName);
 
             if (inBackpack != null) available += inBackpack.getCount();
             if (inFridge != null) available += inFridge.getCount();
-            if (available < needed) return new Result(false, "You don't have the ingredients to cook this recipe.");
+            if (available < needed) return  Result.failure( "You don't have the ingredients to cook this recipe.");
         }
 
         for (Loot component : desiredRecipe.ingredients) {
-            processIngredientRemoval(component, chef, ingredientsContainer);
+            processIngredientRemoval(component, player, ingredientsContainer);
         }
 
         Food preparedFood = new Food(Quality.DEFAULT, desiredRecipe.craftingResultType);
         Loot foodLoot = new Loot(preparedFood, 1);
         addToInventory(foodLoot, ingredientsContainer);
 
-        return new Result(true, "You cooked " + foodName);
+        return saveGameState(game)
+                .combine(Result.success( "You cooked " + foodName));
     }
 
     private void processIngredientRemoval(Loot ingredient, Player player, BackPack backpack) {
@@ -148,11 +157,11 @@ public class Cooking {
         Loot loot = backpack.findItemLoot(foodName);
 
         if (loot == null) {
-            return new Result(false, "Item not in your inventory");
+            return  Result.failure( "Item not in your inventory");
         }
 
         if (!(loot.getItem() instanceof Food) || loot.getItem().getEnergyCost() >= 0) {
-            return new Result(false, "its not edible.");
+            return  Result.failure( "its not edible.");
         }
 
         Food food = (Food) loot.getItem();
@@ -165,20 +174,24 @@ public class Cooking {
         player.getActiveBuffs().add(new ActiveBuff(food.getBuff()));
         player.setEnergy((int) Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
 
-        return new Result(true, "You ate " + foodName);
+        return saveGameState(game)
+                .combine(Result.success( "You ate " + foodName));
     }
 
 
     public Result showCookingRecipes() {
-        Player recipeOwner = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         String header = "Cooking recipes : \n";
         StringBuilder recipeList = new StringBuilder(header);
 
-        for (CookingRecipes r : recipeOwner.getCookingRecipes()) {
+        for (CookingRecipes r : player.getCookingRecipes()) {
             recipeList.append(r.toString()).append("\n");
         }
 
-        return new Result(true, recipeList.toString());
+        return saveGameState(game)
+                .combine(Result.success( recipeList.toString()));
     }
 
 }

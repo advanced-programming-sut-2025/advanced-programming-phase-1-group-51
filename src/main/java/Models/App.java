@@ -5,6 +5,7 @@ import Models.Enums.Types.ItemTypes.*;
 import Models.Enums.Types.ObjectsOnMapType.CropType;
 import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Services.GameStorageService;
+import Services.UserService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.Scanner;
 
 public class App {
 
-
     public static final Scanner scanner = new Scanner(System.in);
     final private static ArrayList<User> users = new ArrayList<>();
     private static User currentUser = null;
@@ -21,15 +21,7 @@ public class App {
     private static final HashMap<String, ItemType> allItemTypes = new HashMap<>();
 
     static {
-        try {
-            // Load users at application start
-            new GameStorageService().loadAllUsers();
-        } catch (IOException e) {
-            System.err.println("Failed to load user data: " + e.getMessage());
-        }
-    }
-
-    static {
+        // Initialize item types
         for (CropType cropSeedsType : CropType.values()) {
             allItemTypes.put(cropSeedsType.source, cropSeedsType);
         }
@@ -51,8 +43,25 @@ public class App {
         for (ToolType toolType : ToolType.values()) {
             allItemTypes.put(toolType.name, toolType);
         }
+
+        // Initialize user data through UserService only
+        initializeUserData();
     }
 
+    private static void initializeUserData() {
+        UserService userService = new UserService();
+        Result loadResult = userService.loadAllUsers();
+
+        if (!loadResult.isSuccessful()) {
+            System.err.println("Failed to load users: " + loadResult.getMessage());
+        }
+
+        // Check for active session
+        Result activeUserResult = userService.loadActiveUser();
+        if (activeUserResult.isSuccessful() && getCurrentUser() != null) {
+            setCurrentMenu(Menu.MainMenu);
+        }
+    }
 
     public static Menu getCurrentMenu() {
         return currentMenu;
@@ -73,4 +82,10 @@ public class App {
     public static void setCurrentUser(User currentUser) {
         App.currentUser = currentUser;
     }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+
 }

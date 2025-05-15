@@ -52,17 +52,19 @@ public class InventoryController  extends BaseController {
             }
         }
 
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
     public Result inventoryTrashFull(String itemName) {
+        // TODO
         User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         BackPack backpack = player.getInventory();
         Loot itemLoot = backpack.findItemLoot(itemName);
         backpack.getLoots().remove(itemLoot);
-        return new Result(false, itemName + "totally removed from backpack");
+        return  Result.failure( itemName + "totally removed from backpack");
     }
 
     public Result inventoryTrashNotFull(String itemName, int itemCount) {
@@ -70,7 +72,7 @@ public class InventoryController  extends BaseController {
         Game game = user.getCurrentGame();
         Player currentPlayer = game.getCurrentPlayer();
         if (itemCount <= 0) {
-            return new Result(false, "Item count must be positive.");
+            return  Result.failure( "Item count must be positive.");
         }
 
         BackPack inventory = currentPlayer.getInventory();
@@ -82,7 +84,7 @@ public class InventoryController  extends BaseController {
             if (loot.getItem().getName().equalsIgnoreCase(itemName)) {
                 int currentCount = loot.getCount();
                 if (currentCount < itemCount) {
-                    return new Result(false, "Not enough " + itemName +
+                    return  Result.failure( "Not enough " + itemName +
                             " in inventory. You only have " + currentCount);
                 }
 
@@ -104,11 +106,12 @@ public class InventoryController  extends BaseController {
                 if (cashBack > 0) {
                     message += " You received " + cashBack + " gold.";
                 }
-                return new Result(true, message);
+                return saveGameState(game)
+                .combine(Result.success( message));
             }
         }
 
-        return new Result(false, "Item not found in inventory: " + itemName);
+        return  Result.failure( "Item not found in inventory: " + itemName);
     }
 
 
@@ -118,7 +121,7 @@ public class InventoryController  extends BaseController {
         Player player = game.getCurrentPlayer();
         ToolType toolType = ToolType.findToolTypeByName(toolName);
         if (toolType == null) {
-            return new Result(false, "Invalid tool name: " + toolName);
+            return  Result.failure( "Invalid tool name: " + toolName);
         }
 
         // Search player's inventory for this tool
@@ -129,12 +132,13 @@ public class InventoryController  extends BaseController {
                 if (toolItem.getType() == toolType) {
                     // Found the tool - set it in hand
                     player.setItemInHand(toolItem);
-                    return new Result(true, toolName + " equipped successfully");
+                    return saveGameState(game)
+                .combine(Result.success( toolName + " equipped successfully"));
                 }
             }
         }
 
-        return new Result(false, "You don't have a " + toolName + " in your inventory");
+        return  Result.failure( "You don't have a " + toolName + " in your inventory");
     }
 
     public Result showCurrentTool() {
@@ -146,10 +150,11 @@ public class InventoryController  extends BaseController {
 
         if (itemInHand instanceof Tool) {
             Tool tool = (Tool) itemInHand;
-            return new Result(true, "You have a " + tool.getName() + " in your hand");
+            return saveGameState(game)
+                .combine(Result.success( "You have a " + tool.getName() + " in your hand"));
         }
         else {
-            return new Result(false, "You don't have a tool in your hands");
+            return  Result.failure( "You don't have a tool in your hands");
         }
     }
 
@@ -160,7 +165,7 @@ public class InventoryController  extends BaseController {
 
         BackPack backpack = player.getInventory();
         if (backpack == null || backpack.getLoots().isEmpty()) {
-            return new Result(false, "Your backpack is empty");
+            return  Result.failure( "Your backpack is empty");
         }
 
         StringBuilder output = new StringBuilder();
@@ -183,7 +188,7 @@ public class InventoryController  extends BaseController {
         }
 
         if (!hasTools) {
-            return new Result(false, "You don't have any tools in your backpack");
+            return  Result.failure( "You don't have any tools in your backpack");
         }
 
         // Format the output
@@ -195,7 +200,8 @@ public class InventoryController  extends BaseController {
         // Add water info for watering cans
         output.append("\nNote: Watering cans show their current water level\n");
 
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
 
@@ -205,14 +211,14 @@ public class InventoryController  extends BaseController {
         Player player = game.getCurrentPlayer();
 
         if (player.getItemInHand() == null) {
-            return new Result(false, "You don't have any item in your hand");
+            return  Result.failure( "You don't have any item in your hand");
         }
         if (!(player.getItemInHand() instanceof Tool)) {
-            return new Result(false, "You don't have any tool in your hand");
+            return  Result.failure( "You don't have any tool in your hand");
         }
         if (!(direction.equals("up") || direction.equals("down") || direction.equals("left") || direction.equals("right") || 
                 direction.equals("up left") || direction.equals("up right") || direction.equals("down left") || direction.equals("down right") )) {
-            return new Result(false, "wrong direction.");
+            return  Result.failure( "wrong direction.");
         }
 
         Tool toolInHand = (Tool) player.getItemInHand();
@@ -278,7 +284,7 @@ public class InventoryController  extends BaseController {
             return shearUse(targetCell, player, game);
         }
         else {
-            return new Result(false, "Invalid tool");
+            return  Result.failure( "Invalid tool");
         }
     }
 
@@ -303,15 +309,15 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
-            return new Result(false, "Target cell does not exist");
+            return  Result.failure( "Target cell does not exist");
         }
 
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
 
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
 
@@ -319,13 +325,14 @@ public class InventoryController  extends BaseController {
         player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + takenEnergy);
 
         if (!(targetCell.getObjectOnCell() instanceof BurntCell)) {
-            return new Result(false, "cell in this direction is not empty");
+            return  Result.failure( "cell in this direction is not empty");
         }
         targetCell.setHasBeenPlowed(true);
-        return new Result(true, "Target cell is now plowed.");
+        return saveGameState(game)
+                .combine(Result.success( "Target cell is now plowed."));
     }
 
-    private static boolean canPickaxeMineThis( ForagingMineralType target, Quality pickaxeQuality) {
+    private boolean canPickaxeMineThis( ForagingMineralType target, Quality pickaxeQuality) {
         if (pickaxeQuality == Quality.DEFAULT) {
             if (target ==  ForagingMineralType.STONE) {
                 return true;
@@ -379,16 +386,16 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (energyCost + currentEnergyUsed > 50) {
-            return new Result(false, "You can't perform this activity. " +
+            return  Result.failure( "You can't perform this activity. " +
                     "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
         if (targetCell == null) {
-            return new Result(false, "Target cell not found.");
+            return  Result.failure( "Target cell not found.");
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
@@ -404,7 +411,7 @@ public class InventoryController  extends BaseController {
 
             if (!canPickaxeMineThis(type, quality)) {
 
-                return new Result(false, "Pickaxe is too weak to mine this block.");
+                return  Result.failure( "Pickaxe is too weak to mine this block.");
             }
 
 //            player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + 10);
@@ -440,7 +447,8 @@ public class InventoryController  extends BaseController {
 //            }
 
 
-            return new Result(true, "Mined stone/mineral at target cell.");
+            return saveGameState(game)
+                .combine(Result.success( "Mined stone/mineral at target cell."));
         }
 
         if (targetCell.getObjectOnCell() instanceof DroppedItemCell) {
@@ -453,30 +461,33 @@ public class InventoryController  extends BaseController {
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
                 if (backpackSlot == null) {
 
-                    return new Result(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                    return  Result.failure( "Backpack was full! Couldn't retrieve item from the ground.");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ")."));
                 }
             } else {
                 if (backpackSlot == null) {
                     backpack.getLoots().add(droppedSlot);
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ")."));
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ")."));
                 }
             }
         }
 
-        if (targetCell.getObjectOnCell() instanceof ArtisanBlockCell) {
-            ArtisanBlockCell block = (ArtisanBlockCell) targetCell.getObjectOnCell();
+        if (targetCell.getObjectOnCell() instanceof ArtisanCell) {
+            ArtisanCell block = (ArtisanCell) targetCell.getObjectOnCell();
             Loot droppedSlot = new Loot(new Else(ElseType.getElseTypeByName(block.getArtisanType().name), Quality.DEFAULT), 1);
 
             BackPack backpack = player.getInventory();
@@ -485,30 +496,33 @@ public class InventoryController  extends BaseController {
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
                 if (backpackSlot == null) {
 
-                    return new Result(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                    return  Result.failure( "Backpack was full! Couldn't retrieve item from the ground.");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ")."));
                 }
             } else {
                 if (backpackSlot == null) {
                     backpack.getLoots().add(droppedSlot);
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ")."));
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxSize()));
                     targetCell.setObjectOnCell(new BurntCell());
 
-                    return new Result(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                    return saveGameState(game)
+                .combine(Result.success( "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ")."));
                 }
             }
         }
 
 
-        return new Result(false, "No operation was performed.");
+        return  Result.failure( "No operation was performed.");
     }
 
     private Result axeUse(Cells targetCell, Player player, Quality quality, int energyDiscount, Game game) {
@@ -529,22 +543,22 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
-            return new Result(false, "Target cell does not exist");
+            return  Result.failure( "Target cell does not exist");
         }
 
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
 
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
         player.setCurrentTurnUsedEnergy(player.getCurrentTurnUsedEnergy() + takenEnergy);
 
         if (!(targetCell.getObjectOnCell() instanceof Tree tree)) {
-            return new Result(false, "Target cell is not a tree or wood");
+            return  Result.failure( "Target cell is not a tree or wood");
         }
 
         if (tree.getTreeType() == ForagingTreeType.NORMAL_TREE) {
@@ -556,12 +570,13 @@ public class InventoryController  extends BaseController {
 
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
                 if (loot == null) {
-                    return new Result(false,
+                    return  Result.failure(
                             "yous backpack is full");
                 }
 
                 loot.setCount(Math.min(loot.getCount() + woodCount, loot.getItem().getMaxSize()));
-                return new Result(true, "you got " + woodCount + " woods");
+                return saveGameState(game)
+                .combine(Result.success( "you got " + woodCount + " woods"));
             }
 
             else {
@@ -571,7 +586,8 @@ public class InventoryController  extends BaseController {
                 else {
                     loot.setCount(Math.min(loot.getCount() + woodCount, loot.getItem().getMaxSize()));
                 }
-                return new Result(true, "You got " + woodCount + " woods.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + woodCount + " woods."));
             }
         }
 
@@ -584,11 +600,12 @@ public class InventoryController  extends BaseController {
 
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
                 if (loot == null) {
-                    return new Result(false,
+                    return  Result.failure(
                             "Your backpack is full");
                 }
                 loot.setCount(Math.min(loot.getCount() + woodCount, loot.getItem().getMaxSize()));
-                return new Result(true, "You got " + woodCount + " woods.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + woodCount + " woods."));
             }
             else {
                 if (loot == null) {
@@ -596,7 +613,8 @@ public class InventoryController  extends BaseController {
                 } else {
                     loot.setCount(Math.min(loot.getCount() + woodCount, loot.getItem().getMaxSize()));
                 }
-                return new Result(true, "You received " + woodCount + " wood.");
+                return saveGameState(game)
+                .combine(Result.success( "You received " + woodCount + " wood."));
             }
         }
 
@@ -608,17 +626,19 @@ public class InventoryController  extends BaseController {
 
             if (loot == null) {
                 if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
-                    return new Result(false,
+                    return  Result.failure(
                             "Your backpack is full");
                 }
 
                 Loot lootToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1, Quality.DEFAULT);
                 backpack.getLoots().add(lootToAdd);
-                return new Result(true, "You got " + 1 + " coal.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + 1 + " coal."));
             }
             else {
                 loot.setCount(Math.min(loot.getCount() + 1, loot.getItem().getMaxSize()));
-                return new Result(true, "You got " + 1 + " coal.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + 1 + " coal."));
             }
         }
 
@@ -637,11 +657,13 @@ public class InventoryController  extends BaseController {
              //   Loot lootToAdd = TreeType.findTreeBySeed(tree.getTreeType().seed).createAmountOfItem(2, Quality.DEFAULT);
               //  backpack.getLoots().add(lootToAdd);
 
-                return new Result(true, "You got " + 2 + " tree seeds.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + 2 + " tree seeds."));
             }
             else {
                 loot.setCount(Math.min(loot.getCount() + 2, loot.getItem().getMaxSize()));
-                return new Result(true, "You got " + 2 + " tree seeds.");
+                return saveGameState(game)
+                .combine(Result.success( "You got " + 2 + " tree seeds."));
             }
         }
     }
@@ -665,15 +687,15 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
-            return new Result(false, "Target cell does not exist");
+            return  Result.failure( "Target cell does not exist");
         }
 
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
 
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
@@ -682,32 +704,35 @@ public class InventoryController  extends BaseController {
         if (targetCell.getObjectOnCell() instanceof Lake) {
             toolInHand.setWaterReserve(wateringCanType.waterCapacity);
 
-            return new Result(true, "Water filled successfully.");
+            return saveGameState(game)
+                .combine(Result.success( "Water filled successfully."));
         }
 
         if (targetCell.getObjectOnCell() instanceof Tree tree) {
             if (toolInHand.getWaterReserve() == 0) {
 
-                return new Result(false, "Watering can is empty.");
+                return  Result.failure( "Watering can is empty.");
             }
             tree.setHasBeenWateredToday(true);
 
-            return new Result(true, "Tree watered successfully.");
+            return saveGameState(game)
+                .combine(Result.success( "Tree watered successfully."));
         }
 
         if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (toolInHand.getWaterReserve() == 0) {
 
-                return new Result(false, "Watering can is empty.");
+                return  Result.failure( "Watering can is empty.");
             }
             crop.setHasBeenWateredToday(true);
             crop.setLastWateringDate(game.getDate());
 
-            return new Result(true, "Crop watered successfully.");
+            return saveGameState(game)
+                .combine(Result.success( "Crop watered successfully."));
         }
 
 
-        return new Result(false, "No operation was performed.");
+        return  Result.failure( "No operation was performed.");
     }
 
     private Result fishingRodUse(Cells targetCell, Player player, Quality quality, int skillEnergyDiscount, Game game) {
@@ -717,15 +742,15 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null) {
-            return new Result(false, "Target cell does not exist");
+            return  Result.failure( "Target cell does not exist");
         }
 
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
 
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
         player.setEnergy(player.getEnergy() - takenEnergy);
@@ -738,7 +763,7 @@ public class InventoryController  extends BaseController {
             int numberOfFishes = (int) (((double) randomNumber)
                     * weatherModifier * (double) (playerLevel + 2));
             if (numberOfFishes == 0) {
-                return new Result(false, "You could not catch fish");
+                return  Result.failure( "You could not catch fish");
             }
             ArrayList<FishType> values = getValidFishTypes(game.getSeason(), playerLevel);
             int randomFishNumber = (int) (Math.random() * values.size());
@@ -756,17 +781,18 @@ public class InventoryController  extends BaseController {
 
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
 
-                return new Result(false, "You didn't have enough space. But caught a fish anyways.");
+                return  Result.failure( "You didn't have enough space. But caught a fish anyways.");
             }
 
             addFishes(fish, backpack, numberOfFishes);
 
 
-            return new Result(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
+            return saveGameState(game)
+                .combine(Result.success( "Fishing done! You caught " + numberOfFishes + " of " + fishType.name));
         }
 
 
-        return new Result(false, "You only can fish in Lake");
+        return  Result.failure( "You only can fish in Lake");
     }
 
     private int calculateFishingEnergyCost(int discount, Quality quality) {
@@ -799,7 +825,7 @@ public class InventoryController  extends BaseController {
         return answer;
     }
 
-    private static void addFishes(Fish fish, BackPack backpack, int numberOfFishes) {
+    private void addFishes(Fish fish, BackPack backpack, int numberOfFishes) {
         for (Loot  loot  : backpack.getLoots()) {
             if (loot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
                 loot.setCount(loot.getCount() + numberOfFishes);
@@ -810,7 +836,7 @@ public class InventoryController  extends BaseController {
         backpack.addLoot(newLoot);
     }
 
-    private static ArrayList<FishType> getValidFishTypes(Season season, int playerLevel) {
+    private ArrayList<FishType> getValidFishTypes(Season season, int playerLevel) {
         if (playerLevel == 4) {
             FishType[] values = FishType.values();
             ArrayList<FishType> finalValues = new ArrayList<>();
@@ -831,7 +857,7 @@ public class InventoryController  extends BaseController {
         return finalValues;
     }
 
-    private static Quality setFishQuality(double qualityNumber) {
+    private Quality setFishQuality(double qualityNumber) {
         if (qualityNumber >= 0.5 && qualityNumber < 0.7)
             return Quality.SILVER;
         else if (qualityNumber >= 0.7 && qualityNumber < 0.9)
@@ -841,7 +867,7 @@ public class InventoryController  extends BaseController {
         return Quality.COPPER;
     }
 
-    private static double setPoleModifier(Quality quality) {
+    private double setPoleModifier(Quality quality) {
         if (quality == Quality.COPPER)
             return 0.1;
         else if (quality == Quality.SILVER)
@@ -851,7 +877,7 @@ public class InventoryController  extends BaseController {
         return 1.2;
     }
 
-    private static double setWeatherModifierFishing(Game game) {
+    private double setWeatherModifierFishing(Game game) {
         double weatherModifier;
         if (game.getWeatherToday().equals(Weather.SUNNY))
             weatherModifier = 1.5;
@@ -867,23 +893,23 @@ public class InventoryController  extends BaseController {
 
 
 
-  private static Result scytheUse(Cells targetCell, Player player, Game game){
+  private Result scytheUse(Cells targetCell, Player player, Game game){
 //
 //        int energyCost = getScytheEnergyCost();
 //        int currentEnergyUsed = player.getCurrentTurnUsedEnergy();
 //        int playerEnergy = player.getEnergy();
 //
 //        if (energyCost + currentEnergyUsed > 50) {
-//            return new Result(false, "You can't perform this activity. " +
+//            return  Result.failure( "You can't perform this activity. " +
 //                    "You will exceed your energy usage limit.");
 //        }
 //
 //        if (playerEnergy - energyCost < 0) {
-//            return new Result(false, "You don't have enough energy.");
+//            return  Result.failure( "You don't have enough energy.");
 //        }
 //
 //        if (targetCell == null) {
-//            return new Result(false, "Target cell not found.");
+//            return  Result.failure( "Target cell not found.");
 //        }
 //
 //        player.setEnergy(player.getEnergy() - energyCost);
@@ -927,11 +953,12 @@ public class InventoryController  extends BaseController {
 //
 //            player.getUnbuffedForagingSkill().setXp(player.getUnbuffedForagingSkill().getXp() + 10);
 //
-//            return new Result(true, "Removed " + name + "from tile.");
+//            return saveGameState(game)
+              //  .combine(Result.success( "Removed " + name + "from tile.");
 //        } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
 //
 //            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
-//                return new Result(false, "Crop isn't ready for harvest.");
+//                return  Result.failure( "Crop isn't ready for harvest.");
 //            }
 //
 //            int amountToHarvest = crop.isGiant() ? 10 : 1;
@@ -942,7 +969,7 @@ public class InventoryController  extends BaseController {
 //            if (slot == null) {
 //                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
 //
-//                    return new Result(false, "Not enough inventory space.");
+//                    return  Result.failure( "Not enough inventory space.");
 //                }
 //
 //                Loot newSlot = new Loot(FoodType.findFoodByName(crop.cropSeedsType.name), amountToHarvest);
@@ -957,7 +984,8 @@ public class InventoryController  extends BaseController {
 //                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 //
 //
-//                return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
+//                return saveGameState(game)
+    //            .combine(Result.success( "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
 //            }
 //
 //            if (crop.cropSeedsType.oneTime) {
@@ -971,11 +999,12 @@ public class InventoryController  extends BaseController {
 //            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxSize()));
 //
 //
-//            return new Result(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
+//            return saveGameState(game)
+         //       .combine(Result.success( "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
 //        } else if (targetCell.getObjectOnCell() instanceof Tree tree) {
 //
 //            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(game.getDate())) {
-//                return new Result(false, "Tree isn't ready for harvest.");
+//                return  Result.failure( "Tree isn't ready for harvest.");
 //            }
 //
 //            int amountToHarvest = 1;
@@ -986,13 +1015,13 @@ public class InventoryController  extends BaseController {
 //            if (loot == null) {
 //                if (backpack.getType().getCapacity() == player.getInventory().getLoots().size()) {
 //
-//                    return new Result(false, "Not enough inventory space.");
+//                    return  Result.failure( "Not enough inventory space.");
 //                }
 //
 //                if (tree.getTreeType() == TreeType.NORMAL_TREE
 //                        || tree.getTreeType() == TreeType.TREE_BARK
 //                        || tree.getTreeType() == TreeType.BURNT_TREE) {
-//                    return new Result(false, "Tree isn't harvestable.");
+//                    return  Result.failure( "Tree isn't harvestable.");
 //                }
 //                else {
 //                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
@@ -1004,13 +1033,14 @@ public class InventoryController  extends BaseController {
 //                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 //
 //
-//                return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
+//                return saveGameState(game)
+     //           .combine(Result.success( "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
 //            }
 //
 //            if (tree.getTreeType() == TreeType.NORMAL_TREE
 //                    || tree.getTreeType() == TreeType.TREE_BARK
 //                    || tree.getTreeType() == TreeType.BURNT_TREE) {
-//                return new Result(false, "Can't harvest a normal, burnt tree or bark.");
+//                return  Result.failure( "Can't harvest a normal, burnt tree or bark.");
 //            }
 //            else {
 //                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
@@ -1021,15 +1051,16 @@ public class InventoryController  extends BaseController {
 //            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 //
 //
-//            return new Result(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
+//            return saveGameState(game)
+     //           .combine(Result.success( "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
 //
 //        } else {
 //
-       return new Result(false, "Target cell isn't a valid use case of the scythe.");
+       return  Result.failure( "Target cell isn't a valid use case of the scythe.");
 
    }
 
-    private static int getScytheEnergyCost() {
+    private int getScytheEnergyCost() {
         Game game = App.getCurrentUser().getCurrentGame();
 
         int energyCost = 2;
@@ -1044,9 +1075,7 @@ public class InventoryController  extends BaseController {
 
 
 
-
-
-    public static  Result collectProducts(Item product, BackPack backpack, Loot productloot, Animal animal, Player player, Game game) {
+    public  Result collectProducts(Item product, BackPack backpack, Loot productloot, Animal animal, Player player, Game game) {
         Item item = new Else(((Else) product).getElseType(), ((Else) product).getQuality());
         for (Loot loot : backpack.getLoots()) {
             if (loot.getItem().getName().equals(product.getName())) {
@@ -1055,7 +1084,7 @@ public class InventoryController  extends BaseController {
         }
         if (productloot == null) {
             if (backpack.getLoots().size() == backpack.getType().getCapacity()) {
-                return new Result(false, "your backpack is full");
+                return  Result.failure( "your backpack is full");
             }
             Loot newLoot = new Loot(item, animal.getType().productPerDay);
             backpack.addLoot(newLoot);
@@ -1064,7 +1093,8 @@ public class InventoryController  extends BaseController {
                 animal.setFriendshipLevel(animal.getFriendshipLevel() + 5);
             }
             animal.setProduct(null);
-            return new Result(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+            return saveGameState(game)
+                .combine(Result.success( "you have collected " + animal.getType().productPerDay + " of " + product.getName()));
         }
         productloot.setCount(productloot.getCount() + animal.getType().productPerDay);
         if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
@@ -1072,14 +1102,15 @@ public class InventoryController  extends BaseController {
             animal.setFriendshipLevel(animal.getFriendshipLevel() + 15);
         }
         animal.setProduct(null);
-        return new Result(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+        return saveGameState(game)
+                .combine(Result.success( "you have collected " + animal.getType().productPerDay + " of " + product.getName()));
     }
 
 
 
 
 
-    private static Result milkPailUse(Cells targetCell, Player player, Game game){
+    private Result milkPailUse(Cells targetCell, Player player, Game game){
         BackPack backpack = player.getInventory();
         Loot productloot = null;
         int takenEnergy = 4;
@@ -1087,32 +1118,32 @@ public class InventoryController  extends BaseController {
         int playerEnergy = player.getEnergy();
 
         if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalCell)) {
-            return new Result(false, "Target cell not found.");
+            return  Result.failure( "Target cell not found.");
         }
 
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
 
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
 
         Animal animal = ((AnimalCell) targetCell.getObjectOnCell()).animal;
         if (animal == null) {
-            return new Result(false, "no animal found");
+            return  Result.failure( "no animal found");
         }
         if (!animal.getType().equals(AnimalType.COW) && !animal.getType().equals(AnimalType.GOAT)) {
-            return new Result(false, "wrong cell selected");
+            return  Result.failure( "wrong cell selected");
         }
         Item product = animal.getProduct();
         if (product == null) {
-            return new Result(false,"no product found");
+            return  Result.failure("no product found");
         }
         return collectProducts(product, backpack, productloot, animal, player, game);
     }
 
-    private static Result shearUse(Cells targetCell, Player player, Game game){
+    private Result shearUse(Cells targetCell, Player player, Game game){
         BackPack backpack = player.getInventory();
         int takenEnergy = 4;
         int turnUsedEnergy = player.getCurrentTurnUsedEnergy();
@@ -1121,24 +1152,24 @@ public class InventoryController  extends BaseController {
 
 
         if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalCell)) {
-            return new Result(false, "Target cell not found.");
+            return  Result.failure( "Target cell not found.");
         }
         else if (takenEnergy + turnUsedEnergy > 50) {
-            return new Result(false, "You don't have enough energy in this turn");
+            return  Result.failure( "You don't have enough energy in this turn");
         }
         else if (playerEnergy - takenEnergy < 0) {
-            return new Result(false, "You don't have enough energy.");
+            return  Result.failure( "You don't have enough energy.");
         }
         Animal animal = ((AnimalCell) targetCell.getObjectOnCell()).animal;
         if (animal == null) {
-            return new Result(false, "no animal found");
+            return  Result.failure( "no animal found");
         }
         if (!animal.getType().equals(AnimalType.SHEEP)) {
-            return new Result(false, "wrong cell selected");
+            return  Result.failure( "wrong cell selected");
         }
         Item product = animal.getProduct();
         if (product == null) {
-            return new Result(false,"no product found");
+            return  Result.failure("no product found");
         }
         return collectProducts(product, backpack, productloot, animal, player, game);
     }
@@ -1146,13 +1177,13 @@ public class InventoryController  extends BaseController {
     public Result addItem(String name, int count) {
         // Validate inputs
         if (count <= 0) {
-            return new Result(false, "Count must be positive");
+            return  Result.failure( "Count must be positive");
         }
 
         User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
         if (game == null) {
-            return new Result(false, "No active game found");
+            return  Result.failure( "No active game found");
         }
 
         Player player = game.getCurrentPlayer();
@@ -1162,7 +1193,7 @@ public class InventoryController  extends BaseController {
         HashMap<String, ItemType> allItemTypes = App.getAllItemTypes();
         ItemType itemType = allItemTypes.get(name);
         if (itemType == null) {
-            return new Result(false, "Item '" + name + "' does not exist in the game");
+            return  Result.failure( "Item '" + name + "' does not exist in the game");
         }
 
         // Check backpack capacity (unless it's the deluxe backpack)
@@ -1171,7 +1202,7 @@ public class InventoryController  extends BaseController {
             // Check if we already have this item
             Loot existingLoot = backpack.findItemLoot(name);
             if (existingLoot == null) {
-                return new Result(false, "Backpack is full");
+                return  Result.failure( "Backpack is full");
             }
         }
 
@@ -1194,8 +1225,9 @@ public class InventoryController  extends BaseController {
                         int addAmount = Math.min(remaining, existingLoot.getItem().getMaxSize());
                         if (backpack.getType() != BackpackType.DELUXE &&
                                 backpack.getLoots().size() >= backpack.getType().getCapacity()) {
-                            return new Result(true, "Added " + (count - remaining) + " of " + name +
-                                    " (backpack full, couldn't add remaining " + remaining + ")");
+                            return saveGameState(game)
+                .combine(Result.success( "Added " + (count - remaining) + " of " + name +
+                                    " (backpack full, couldn't add remaining " + remaining + ")"));
                         }
                         backpack.addLoot(itemType.createAmountOfItem(addAmount, Quality.DEFAULT));
                         remaining -= addAmount;
@@ -1208,9 +1240,10 @@ public class InventoryController  extends BaseController {
                 backpack.addLoot(newLoot);
             }
 
-            return new Result(true, "Added " + count + " of " + name + " to your backpack");
+            return saveGameState(game)
+                .combine(Result.success( "Added " + count + " of " + name + " to your backpack"));
         } catch (Exception e) {
-            return new Result(false, "Failed to add item: " + e.getMessage());
+            return  Result.failure( "Failed to add item: " + e.getMessage());
         }
     }
 

@@ -1,16 +1,19 @@
 package Controllers.Activity;
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.Recipes.CraftingRecipes;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.Maps.Village;
 
-public class Crafting {
+public class Crafting extends BaseController {
 
 
 
     public Result showCraftingRecipes() {
-        Player player = App.getCurrentUser().getCurrentGame().getCurrentPlayer();
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
         String header = "Crafting recipes : \n";
         StringBuilder recipeList = new StringBuilder(header);
         if(player.isInHouse()){
@@ -19,13 +22,13 @@ public class Crafting {
             recipeList.append(r.toString()).append("\n");
         }
 
-        return new Result(true, recipeList.toString());
+        return saveGameState(game)
+                .combine(Result.success( recipeList.toString()));
         }
-        return new Result(false, "You are not in house!");
+        return  Result.failure( "You are not in house!");
     }
 
     public Result craftingCraft(String itemName) {
-
         User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
@@ -39,21 +42,21 @@ public class Crafting {
             }
 
             if (craftingRecipes == null) {
-                return new Result(false, "No recipe exists for: " + craftingRecipes);
+                return  Result.failure( "No recipe exists for: " + craftingRecipes);
             }
 
             BackPack backpack = player.getInventory();
 
             if (backpack.getType().getCapacity() == backpack.getLoots().size()) {
-                return new Result(false, "Your inventory is full.");
+                return  Result.failure( "Your inventory is full.");
             }
 
             if (player.getEnergy() - 2 < 0) {
-                return new Result(false, "You don't have enough energy to craft Item");
+                return  Result.failure( "You don't have enough energy to craft Item");
             }
 
             if (player.getCurrentTurnUsedEnergy() + 2 > 50) {
-                return new Result(false, "You don't have enough energy in this turn");
+                return  Result.failure( "You don't have enough energy in this turn");
             }
 
 
@@ -66,7 +69,7 @@ public class Crafting {
                 }
 
                 if (availableAmount < ingredient.getCount()) {
-                    return new Result(false, "You don't have enough ingredients to craft this Item");
+                    return  Result.failure( "You don't have enough ingredients to craft this Item");
                 }
 
                 int neededCount = ingredient.getCount();
@@ -91,10 +94,11 @@ public class Crafting {
 //            destinationLoot.setCount(destinationLoot.getCount() + craftedItemLoot.getCount());
 //        }
 
-            return new Result(true, "You crafted " + itemName);
+            return saveGameState(game)
+                .combine(Result.success( "You crafted " + itemName));
 
         }
-        return new Result(false, "You are not in house!");
+        return  Result.failure( "You are not in house!");
 
     }
 
@@ -118,14 +122,14 @@ public class Crafting {
             targetCell = village.findCellVillage(targetCellX, targetCellY);
         }
         else{
-            return new Result(false,"You are not in village or farm");
+            return  Result.failure("You are not in village or farm");
         }
 
 
         Loot backpackloot = player.getInventory().findItemLoot(name);
 
         if (backpackloot == null) {
-            return new Result(false, "There is not any " + name + " in your inventory");
+            return  Result.failure( "There is not any " + name + " in your inventory");
         }
 
 
@@ -133,7 +137,8 @@ public class Crafting {
         if (backpackloot.getCount() == 0) {
 
         }
-        return new Result(true, "You placed " + name + " in " + direction);
+        return saveGameState(game)
+                .combine(Result.success( "You placed " + name + " in " + direction));
     }
 
 

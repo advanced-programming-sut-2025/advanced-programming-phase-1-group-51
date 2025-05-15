@@ -1,5 +1,6 @@
 package Controllers.StoresControllers;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Buildings.Barn;
 import Models.Buildings.Building;
@@ -12,15 +13,16 @@ import Models.Enums.Types.AnimalType;
 import Models.Enums.Types.ItemTypes.*;
 import Models.Enums.Types.ObjectsOnMapType.CropType;
 import Models.Enums.Types.ObjectsOnMapType.TreeType;
+import Models.Enums.Types.StoresProductsTypes.BlackSmithProducts;
 import Models.Enums.Types.StoresProductsTypes.FishShopProducts;
+import Models.Enums.Types.TrashcanType;
 import Models.Items.*;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.AnimalCell;
 
-import static Controllers.StoresControllers.BlackSmithShop.toolUpgrade;
 
-public class MarnieRanch {
+public class MarnieRanch extends BaseController {
 
     public Result ShowAllProducts() {
         User user = App.getCurrentUser();
@@ -39,7 +41,8 @@ public class MarnieRanch {
             }
             output.append("\n");
         }
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
     public Result ShowAllAvailableProducts() {
@@ -62,12 +65,13 @@ public class MarnieRanch {
             }
         }
 
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
 
 
-    public static Result BuyAnimal(String animalType, String animalName) {
+    public Result BuyAnimal(String animalType, String animalName) {
 
         User user = App.getCurrentUser();
         Game game = user.getCurrentGame();
@@ -110,7 +114,7 @@ public class MarnieRanch {
             price = 16000;
         }
         else {
-            return new Result(false, "Invalid animal name");
+            return  Result.failure( "Invalid animal name");
         }
 
         Animal animal = new Animal(price, animalName, type);
@@ -134,17 +138,17 @@ public class MarnieRanch {
         }
 
         if (repeatedName) {
-            return new Result(false, "Name taken before");
+            return  Result.failure( "Name taken before");
         }
 
         if (player.getMoney() < price) {
-            return new Result(false, "You don't have enough money");
+            return  Result.failure( "You don't have enough money");
         }
 
         Store store = game.getMap().getVillage().getStore("Marnie's Ranch");
         StoreProduct storeProduct = store.getProduct(animalType);
         if (storeProduct.getRemainingCount() <= 0) {
-            return new Result(false, "this animal is not available now!");
+            return  Result.failure( "this animal is not available now!");
         }
 
         if (animalType.equals("Hen")) {
@@ -171,12 +175,14 @@ public class MarnieRanch {
         else if (animalType.equals("Pig")) {
             return buyPig(farm, player, price, animal, animalName, storeProduct);
         }
-        return new Result(false, "invalid animal");
+        return  Result.failure( "invalid animal");
     }
 
     // Coop Animals
 
-    private static Result buyHen(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyHen(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
@@ -186,15 +192,18 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
                    
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
        
-        return new Result(false, "you need to build another Coop");
+        return  Result.failure( "you need to build another Coop");
     }
 
-    private static Result buyDuck(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyDuck(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
@@ -204,15 +213,18 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Big Coop");
+        return  Result.failure( "you need to build another Big Coop");
     }
 
-    private static Result buyRabbit(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyRabbit(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Deluxe Coop")) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
@@ -222,16 +234,19 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Deluxe Coop");
+        return  Result.failure( "you need to build another Deluxe Coop");
     }
 
 
-    private static Result buyDinosaur(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyDinosaur(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
@@ -241,18 +256,21 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Big Coop");
+        return  Result.failure( "you need to build another Big Coop");
     }
 
 
     // Barn Animals
 
-    private static Result buyCow(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyCow(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
@@ -262,15 +280,18 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Barn");
+        return  Result.failure( "you need to build another Barn");
     }
 
-    private static Result buyGoat(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyGoat(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && (((Barn) building).barnType.equals("Big Barn") || ((Barn) building).barnType.equals("Deluxe Barn"))) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
@@ -280,15 +301,18 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Big Barn");
+        return  Result.failure( "you need to build another Big Barn");
     }
 
-    private static Result buySheep(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buySheep(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
@@ -298,16 +322,19 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
 
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
 
-        return new Result(false, "you need to build another Deluxe Barn");
+        return  Result.failure( "you need to build another Deluxe Barn");
     }
 
 
-    private static Result buyPig(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+    private Result buyPig(Farm farm, Player player, int cost, Animal animal, String name, StoreProduct storeProduct) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
@@ -317,18 +344,19 @@ public class MarnieRanch {
                     addAnimalToBuilding(animal, building);
                     storeProduct.setRemainingCount(storeProduct.getRemainingCount() - 1);
                    
-                    return new Result(true, "you have bought " + name);
+                    return saveGameState(game)
+                .combine(Result.success( "you have bought " + name));
                 }
             }
         }
        
-        return new Result(false, "you need to build another Deluxe Barn");
+        return  Result.failure( "you need to build another Deluxe Barn");
     }
 
     
 
 
-    private static void addAnimalToBuilding(Animal animal, Building building) {
+    private void addAnimalToBuilding(Animal animal, Building building) {
         for(Cells cell : building.buildingCells){
             if(!(cell.getObjectOnCell() instanceof AnimalCell)){
                 cell.setObjectOnCell(new AnimalCell(animal));
@@ -348,15 +376,15 @@ public class MarnieRanch {
         StoreProduct product = store.getProduct(productName);
 
         if (product == null) {
-            return new Result(false, "Store doesn't have this product");
+            return  Result.failure( "Store doesn't have this product");
         }
 
         if (product.getRemainingCount() < count) {
-            return new Result(false, "Not enough available products");
+            return  Result.failure( "Not enough available products");
         }
 
         if (product.getType().getProductPrice(game.getSeason()) * count > player.getMoney()) {
-            return new Result(false, "Not enough money");
+            return  Result.failure( "Not enough money");
         }
 
         product.setRemainingCount(product.getRemainingCount() - count);
@@ -373,7 +401,7 @@ public class MarnieRanch {
             if (res.isSuccessful()) {
                 Loot Loot = player.getInventory().findItemLoot(product.getType().getIngredient().getName());
                 if (Loot == null || Loot.getCount() < 5) {
-                    return new Result(false, "you don't have enough ingredients");
+                    return  Result.failure( "you don't have enough ingredients");
                 }
                 Loot.setCount(Loot.getCount() - 5);
                 if (Loot.getCount() == 0) {
@@ -412,13 +440,13 @@ public class MarnieRanch {
                 item = new Tool(q, (ToolType) type, (int) product.getType().getProductPrice(game.getSeason()));
             }
             if (item == null) {
-                return new Result(false, "No such item");
+                return  Result.failure( "No such item");
             }
             BackPack backpack = player.getInventory();
             Loot loot = backpack.findItemLoot(item.getName());
             if (loot == null) {
                 if (backpack.getLoots().size() == backpack.getType().getCapacity()) {
-                    return new Result(false, "You don't have enough space in your backpack.");
+                    return  Result.failure( "You don't have enough space in your backpack.");
                 }
                 Loot newLoot = new Loot(item, count);
                 backpack.addLoot(newLoot);
@@ -427,28 +455,61 @@ public class MarnieRanch {
             }
 
             player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason()) * count));
-            return new Result(true, "You have purchased " + count + " of " + productName);
+            return saveGameState(game)
+                .combine(Result.success( "You have purchased " + count + " of " + productName));
         }
     }
 
-    public static Result handleBuyRecipe(String name, Player player) {
+    public Result handleBuyRecipe(String name, Player player) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         CraftingRecipes craft = CraftingRecipes.getCraftingRecipe(name.split(" ")[0]);
         CookingRecipes cook = CookingRecipes.getCookingRecipe(name.split(" ")[0]);
         if (craft != null) {
             player.getCraftingRecipes().add(craft);
-            return new Result(true, name + " successfully added to recipes");
+            return saveGameState(game)
+                .combine(Result.success( name + " successfully added to recipes"));
         }
         if (cook != null) {
             player.getCookingRecipes().add(cook);
-            return new Result(true, name + " successfully added to recipes");
+            return saveGameState(game)
+                .combine(Result.success( name + " successfully added to recipes"));
         }
-        return new Result(false, "Recipe not found");
+        return  Result.failure( "Recipe not found");
     }
 
 
+    public Result toolUpgrade(String name, StoreProduct p, Player player) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
+        BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
+        BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
+        if (trashCan != null) {
+            TrashcanType type = trashCan.getTrashcan();
+            player.setTrashcanType(type);
+            return saveGameState(game)
+                    .combine(Result.success( "Trashcan successfully updated"));
+        }
+        else if (tool != null) {
+            Quality q = tool.getTool();
+            if (player.getItemInHand() instanceof Tool t) {
+                t.setQuality(q);
+                return saveGameState(game)
+                        .combine(Result.success( "Tool successfully updated"));
+            }
+            else {
+                return  Result.failure( "Your equipped item must be a tool");
+            }
+        }
+        return  Result.failure( "Upgrade option not found");
+    }
+
     public Result exitStore() {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         String name = App.getCurrentMenu().name();
         App.setCurrentMenu(Menu.GameMenu);
-        return new Result(true, "You leaved " + name);
+        return saveGameState(game)
+                .combine(Result.success( "You leaved " + name));
     }
 }

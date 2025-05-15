@@ -1,5 +1,6 @@
 package Controllers.StoresControllers;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Quality;
@@ -13,9 +14,8 @@ import Models.Enums.Types.StoresProductsTypes.FishShopProducts;
 import Models.Enums.Types.TrashcanType;
 import Models.Items.*;
 
-import static Controllers.StoresControllers.BlackSmithShop.toolUpgrade;
 
-public class CarpenterShop {
+public class CarpenterShop extends BaseController {
 
     public Result ShowAllProducts() {
         User user = App.getCurrentUser();
@@ -34,7 +34,8 @@ public class CarpenterShop {
             }
             output.append("\n");
         }
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
     public Result ShowAllAvailableProducts() {
@@ -57,7 +58,8 @@ public class CarpenterShop {
             }
         }
 
-        return new Result(true, output.toString());
+        return saveGameState(game)
+                .combine(Result.success( output.toString()));
     }
 
     public Result Purchase(String productName, int count) {
@@ -68,15 +70,15 @@ public class CarpenterShop {
         StoreProduct product = store.getProduct(productName);
 
         if (product == null) {
-            return new Result(false, "Store doesn't have this product");
+            return  Result.failure( "Store doesn't have this product");
         }
 
         if (product.getRemainingCount() < count) {
-            return new Result(false, "Not enough available products");
+            return  Result.failure( "Not enough available products");
         }
 
         if (product.getType().getProductPrice(game.getSeason()) * count > player.getMoney()) {
-            return new Result(false, "Not enough money");
+            return  Result.failure( "Not enough money");
         }
 
         ItemType type = product.getType().getItemType();
@@ -86,13 +88,15 @@ public class CarpenterShop {
             CookingRecipes cook = CookingRecipes.getCookingRecipe(productName.split(" ")[0]);
             if (craft != null) {
                 player.getCraftingRecipes().add(craft);
-                return new Result(true, productName + " successfully added to recipes");
+                return saveGameState(game)
+                .combine(Result.success( productName + " successfully added to recipes"));
             }
             if (cook != null) {
                 player.getCookingRecipes().add(cook);
-                return new Result(true, productName + " successfully added to recipes");
+                return saveGameState(game)
+                .combine(Result.success( productName + " successfully added to recipes"));
             }
-            return new Result(false, "Recipe not found");
+            return  Result.failure( "Recipe not found");
 
         }
         else if (type == null && product.getType().getIngredient() != null) {
@@ -100,7 +104,7 @@ public class CarpenterShop {
             if (res.isSuccessful()) {
                 Loot Loot = player.getInventory().findItemLoot(product.getType().getIngredient().getName());
                 if (Loot == null || Loot.getCount() < 5) {
-                    return new Result(false, "you don't have enough ingredients");
+                    return  Result.failure( "you don't have enough ingredients");
                 }
                 Loot.setCount(Loot.getCount() - 5);
                 if (Loot.getCount() == 0) {
@@ -140,13 +144,13 @@ public class CarpenterShop {
                 item = new Tool(q, (ToolType) type, (int) product.getType().getProductPrice(game.getSeason()));
             }
             if (item == null) {
-                return new Result(false, "No such item");
+                return  Result.failure( "No such item");
             }
             BackPack backpack = player.getInventory();
             Loot loot = backpack.findItemLoot(item.getName());
             if (loot == null) {
                 if (backpack.getLoots().size() == backpack.getType().getCapacity()) {
-                    return new Result(false, "You don't have enough space in your backpack.");
+                    return  Result.failure( "You don't have enough space in your backpack.");
                 }
                 Loot newLoot = new Loot(item, count);
                 backpack.addLoot(newLoot);
@@ -155,36 +159,44 @@ public class CarpenterShop {
             }
             product.setRemainingCount(product.getRemainingCount() - count);
             player.setMoney((int) (player.getMoney() - product.getType().getProductPrice(game.getSeason()) * count));
-            return new Result(true, "You have purchased " + count + " of " + productName);
+            return saveGameState(game)
+                .combine(Result.success( "You have purchased " + count + " of " + productName));
         }
     }
 
 
 
-    public static Result toolUpgrade(String name, StoreProduct p, Player player) {
+    public Result toolUpgrade(String name, StoreProduct p, Player player) {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
         BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
         if (trashCan != null) {
             TrashcanType type = trashCan.getTrashcan();
             player.setTrashcanType(type);
-            return new Result(true, "Trashcan successfully updated");
+            return saveGameState(game)
+                .combine(Result.success( "Trashcan successfully updated"));
         }
         else if (tool != null) {
             Quality q = tool.getTool();
             if (player.getItemInHand() instanceof Tool t) {
                 t.setQuality(q);
-                return new Result(true, "Tool successfully updated");
+                return saveGameState(game)
+                .combine(Result.success( "Tool successfully updated"));
             }
             else {
-                return new Result(false, "Your equipped item must be a tool");
+                return  Result.failure( "Your equipped item must be a tool");
             }
         }
-        return new Result(false, "Upgrade option not found");
+        return  Result.failure( "Upgrade option not found");
     }
 
     public Result exitStore() {
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         String name = App.getCurrentMenu().name();
         App.setCurrentMenu(Menu.GameMenu);
-        return new Result(true, "You leaved " + name);
+        return saveGameState(game)
+                .combine(Result.success( "You leaved " + name));
     }
 }

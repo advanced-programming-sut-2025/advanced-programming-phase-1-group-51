@@ -24,6 +24,11 @@ public class Result {
         return new Result(false, message);
     }
 
+    @Override
+    public String toString() {
+        return message; // Or format it however you prefer
+    }
+
     // Getters
     public boolean isSuccessful() { return success; }
     public String getMessage() { return message; }

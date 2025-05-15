@@ -1,5 +1,6 @@
 package Controllers.Activity;
 
+import Controllers.BaseController;
 import Models.*;
 import Models.Enums.Others.Season;
 import Models.Enums.Types.ObjectsOnMapType.CropType;
@@ -7,7 +8,7 @@ import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.*;
 
-public class Farming {
+public class Farming extends BaseController {
 
     public Result PlantSeed(String seed, String direction) {
         User user = App.getCurrentUser();
@@ -15,11 +16,11 @@ public class Farming {
         Player player = game.getCurrentPlayer();
         CropType cropSeedsType = CropType.findCropBySeed(seed);
         if (cropSeedsType == null) {
-            return new Result(false, "crop not found");
+            return  Result.failure( "crop not found");
         }
         if (!(direction.equals("up") || direction.equals("down") || direction.equals("left") || direction.equals("right") ||
                 direction.equals("up left") || direction.equals("up right") || direction.equals("down left") || direction.equals("down right") )) {
-            return new Result(false, "wrong direction.");
+            return  Result.failure( "wrong direction.");
         }
 
         Farm farm = player.getCurrentFarm(game);
@@ -31,20 +32,20 @@ public class Farming {
         Cells targetCell = farm.findCellFarm(targetCellX, targetCellY);
 
         if(targetCell == null) {
-            return new Result(false, "Cell not found");
+            return  Result.failure( "Cell not found");
         }
 
         if (!(targetCell.getObjectOnCell() instanceof BurntCell)) {
-            return new Result(false, "You can't plant on any cell other than empty ones");
+            return  Result.failure( "You can't plant on any cell other than empty ones");
         }
 
         if(!targetCell.isHasBeenPlowed()){
-            return new Result(false,"You have to first plow this cell");
+            return  Result.failure("You have to first plow this cell");
         }
 
         Loot loot = player.getInventory().findItemLoot(seed);
         if (loot == null) {
-            return new Result(false, "You don't have this seed in your inventory");
+            return  Result.failure( "You don't have this seed in your inventory");
         }
         loot.setCount(loot.getCount() - 1);
 
@@ -59,14 +60,15 @@ public class Farming {
             }
         }
         if (!check) {
-            return new Result(false, "This crop can not be planted in this season");
+            return  Result.failure( "This crop can not be planted in this season");
         }
 
         Crop crop = new Crop(cropSeedsType);
         targetCell.setObjectOnCell(crop);
 
 
-        return new Result(true,seed + " planted successfully in direction " + direction);
+        return saveGameState(game)
+                .combine(Result.success(seed + " planted successfully in direction " + direction));
     }
 
     public Result showPlants(int x, int y) {
@@ -75,21 +77,22 @@ public class Farming {
         Cells targetCell = farm.findCellFarm(x,y);
 
         if (targetCell == null) {
-            return new Result(false, "Cell not found");
+            return  Result.failure( "Cell not found");
         }
 
         ObjectOnMap cellObject = (ObjectOnMap) targetCell.getObjectOnCell();
 
         if (cellObject == null) {
-            return new Result(false, "Cell is empty");
+            return  Result.failure( "Cell is empty");
         }
 
-        if (!cellObject.getType().equals("plant")) {
-            return new Result(false, "Cell is not a plant");
+        if (!cellObject.type.equals("plant")) {
+            return  Result.failure( "Cell is not a plant");
         }
 
         Crop plant = (Crop) cellObject;
-        return new Result(true, plant.plantInformation());
+        return saveGameState(game)
+                .combine(Result.success( plant.plantInformation()));
     }
 
     public Result fertilization(String fertilizer, String direction) {
@@ -98,7 +101,7 @@ public class Farming {
 
         if (!(direction.equals("up") || direction.equals("down") || direction.equals("left") || direction.equals("right") ||
                 direction.equals("up left") || direction.equals("up right") || direction.equals("down left") || direction.equals("down right") )) {
-            return new Result(false, "wrong direction.");
+            return  Result.failure( "wrong direction.");
         }
 
         Farm farm = player.getCurrentFarm(game);
@@ -110,14 +113,14 @@ public class Farming {
         Cells targetCell = farm.findCellFarm(targetCellX, targetCellY);
 
         if (targetCell == null) {
-            return new Result(false, "Cell not found");
+            return  Result.failure( "Cell not found");
         }
         if (!(targetCell.getObjectOnCell() instanceof Crop) && !(targetCell.getObjectOnCell() instanceof Tree)) {
-            return new Result(false, "Target cell is not a crop or tree");
+            return  Result.failure( "Target cell is not a crop or tree");
         }
         Loot miscSlot = player.getInventory().findItemLoot(fertilizer);
         if (miscSlot == null) {
-            return new Result(false, "Fertilizer not in your inventory");
+            return  Result.failure( "Fertilizer not in your inventory");
         }
         miscSlot.setCount(miscSlot.getCount() - 1);
         if (miscSlot.getCount() <= 0) {
@@ -133,23 +136,28 @@ public class Farming {
 //            crop.setHasBeenDeluxeFertilized(true);
 //        }
 
-        return new Result(true, "Fertilization was successful");
+        return saveGameState(game)
+                .combine(Result.success( "Fertilization was successful"));
     }
 
     public Result howMuchWater() {
         Game game = App.getCurrentUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         int currentWater = player.getInventory().getWateringCan().getWaterReserve();
-        return new Result(true, "You have " +  currentWater + " water in your watering can");
+        return saveGameState(game)
+                .combine(Result.success( "You have " +  currentWater + " water in your watering can"));
     }
 
     public Result cropInfo(String name){
+        User user = App.getCurrentUser();
+        Game game = user.getCurrentGame();
         CropType cropType =  CropType.findCropByName(name);
 
         if(cropType == null){
-            return new Result(false, "Crop not found!");
+            return  Result.failure( "Crop not found!");
         }
-        return new Result(true, CropType.CropInfo(cropType));
+        return saveGameState(game)
+                .combine(Result.success( CropType.CropInfo(cropType)));
     }
 
 

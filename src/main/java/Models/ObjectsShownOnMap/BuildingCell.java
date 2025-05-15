@@ -18,9 +18,5 @@ public class BuildingCell extends ObjectOnMap{
         return super.toString();
     }
 
-    @Override
-    public String getType() {
-        return super.getType();
-    }
 
 }

@@ -1,10 +1,12 @@
 package Models;
 
+import Models.Buildings.House;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
-import Models.Maps.Farm;
-import Models.Maps.Map;
+import Models.Maps.*;
+import Models.ObjectsShownOnMap.Lake;
+import Models.ObjectsShownOnMap.Tree;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
@@ -40,7 +42,46 @@ public class Game {
         this.season = Season.SPRING;
         this.currentPlayer = null;
         this.map = Map.makeMap();
+        initializeMapObjects();
 
+    }
+
+
+    private void initializeMapObjects() {
+        // Initialize village
+        Village village = map.getVillage();
+
+        // Add village buildings
+        for (Store store : village.getStores()) {
+            Position storePos = new Position(store.getX(), store.getY());
+            village.getCells().add(new Cells(storePos, store));
+        }
+
+        // Add paths, lakes, etc.
+        // Example: add a lake
+        for (int x = 50; x < 55; x++) {
+            for (int y = 50; y < 55; y++) {
+                village.getCells().add(new Cells(new Position(x, y), new Lake()));
+            }
+        }
+
+        // Initialize farms with some random objects
+        for (Farm farm : map.getFarms()) {
+            initializeFarm(farm);
+        }
+    }
+
+    private void initializeFarm(Farm farm) {
+        // Add farmhouse at position (5,5) relative to farm
+        Position housePos = new Position(5, 5);
+        farm.getCells().add(new Cells(housePos, new House()));
+
+        // Add some random trees
+        for (int i = 0; i < 10; i++) {
+            int x = (int) (Math.random() * 20);
+            int y = (int) (Math.random() * 20);
+            farm.getCells().add(new Cells(new Position(x, y), new Tree()));
+        }
     }
 
     public Player getCurrentPlayer() {

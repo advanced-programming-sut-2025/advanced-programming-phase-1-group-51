@@ -9,6 +9,7 @@ import Models.Enums.Types.TrashcanType;
 import Models.Items.Item;
 import Models.Items.Tool;
 import Models.Maps.Farm;
+import Models.Maps.Position;
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;

@@ -39,6 +39,16 @@ public enum FishType implements ItemType{
         this.isLegendary = isLegendary;
     }
 
+    public static FishType findFishByName(String name) {
+        FishType[] values = FishType.values();
+        for (FishType value : values) {
+            if (value.name.equalsIgnoreCase(name)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public Loot createAmountOfItem(int amount, Quality quality) {

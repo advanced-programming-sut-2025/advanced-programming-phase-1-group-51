@@ -133,19 +133,18 @@ public enum FoodType implements ItemType{
     DRIED_FRUIT("Dried Fruit", 75,  null,new Buff(0,0,"")),
     PICKLES("Pickles", null, null,new Buff(0,0,"")),
     JELLY("Jelly", null,  null,new Buff(0,0,"")),
-    SMOKED_FISH("Smoked Fish", null,  null,new Buff(0,0,""))
-    ;
+    SMOKED_FISH("Smoked Fish", null,  null,new Buff(0,0,""));
 
     final public String name;
     final public Integer energy;
     final public Integer price;
-    final public Buff foodBuff;
+    final public Buff buff;
 
-    FoodType(String name, Integer energy, Integer price, Buff foodBuff) {
+    FoodType(String name, Integer energy, Integer price, Buff buff) {
         this.name = name;
         this.energy = energy;
         this.price = price;
-        this.foodBuff = foodBuff;
+        this.buff = buff;
     }
 
     public static int getEnergy(String foodName) {

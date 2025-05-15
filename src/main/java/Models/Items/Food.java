@@ -5,16 +5,30 @@ import Models.Enums.Others.Quality;
 import Models.Enums.Types.ItemTypes.FoodType;
 
 public class Food extends Item{
-    private FoodType foodTypes;
+    private FoodType foodType;
     private Buff buff;
 
-    /// To be used in enums only!
-    public Food(FoodType foodTypes) {
+
+    public Food(FoodType foodType) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, foodType.price, -foodType.energy, foodType.name);
+        this.foodType = foodType;
     }
 
     public Food(Quality quality, FoodType foodType) {
         super(quality, Integer.MAX_VALUE, foodType.price, -foodType.energy, foodType.name);
-        this.foodTypes = foodType;
+        this.foodType = foodType;
+        this.buff = foodType.buff;
+    }
+
+    public Food(Quality quality, FoodType foodType, int value) {
+        super(quality, Integer.MAX_VALUE, value, -foodType.energy, foodType.name);
+        this.foodType = foodType;
+        this.buff = foodType.buff;
+    }
+    public Food(Quality quality, FoodType foodTypes, int value, int energy) {
+        super(quality, Integer.MAX_VALUE, value, energy, foodTypes.name);
+        this.foodType = foodTypes;
+        this.buff = foodTypes.buff;
     }
 
     public Buff getBuff() {
@@ -26,11 +40,11 @@ public class Food extends Item{
     }
 
     public FoodType getFoodTypes() {
-        return foodTypes;
+        return foodType;
     }
 
     public void setFoodTypes(FoodType foodTypes) {
-        this.foodTypes = foodTypes;
+        this.foodType = foodTypes;
     }
 
     @Override

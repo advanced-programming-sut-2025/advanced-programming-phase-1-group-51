@@ -2,6 +2,7 @@ package Models.Maps;
 
 import Models.Enums.Types.StoresProductsTypes.*;
 import Models.NPCs.NPC;
+import Models.ObjectsShownOnMap.ArtisanCell;
 import Models.Store;
 import Models.StoreProduct;
 
@@ -81,7 +82,13 @@ public class Village {
         return cells;
     }
 
-
+    public ArtisanCell getArtisanCell(String artisanName) {
+        for (Cells cell : cells) {
+            if (cell.getObjectOnCell() instanceof ArtisanCell && ((ArtisanCell) cell.getObjectOnCell()).getArtisanType().name.equals(artisanName))
+                return (ArtisanCell) cell.getObjectOnCell();
+        }
+        return null;
+    }
 
     public Cells findCellVillage(int x, int y) {
         for (Cells cell : cells) {

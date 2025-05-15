@@ -2,6 +2,7 @@ package Models;
 
 import Models.Items.Item;
 import Models.Items.Tool;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class User {
+
 
     @JsonIgnore
     private Game currentGame; // Avoid circular reference
@@ -36,10 +38,15 @@ public class User {
         }
     }
     public static List<User> users = new ArrayList<>();
+    @JsonProperty("username")
     private String username;
+    @JsonProperty("password")
     private String password;
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("nickName")
     private String nickName;
+    @JsonProperty("gender")
     private String gender;
     private int securityQuestionNumber;
     private String securityAnswer;
@@ -47,13 +54,28 @@ public class User {
     private int id;
     private int maxMoneyEarnedInGame;
     private final ArrayList<Game> games = new ArrayList<>();
+    private boolean stayLoggedIn = false;
 
-    public User(String username, String password, String nickName,  String email, String gender) {
+
+    @JsonCreator
+    public User(@JsonProperty("username") String username,
+                @JsonProperty("password") String password,
+                @JsonProperty("nickName") String nickName,
+                @JsonProperty("email") String email,
+                @JsonProperty("gender") String gender) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.nickName = nickName;
         this.gender = gender;
+    }
+
+    public boolean shouldStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
     }
 
 

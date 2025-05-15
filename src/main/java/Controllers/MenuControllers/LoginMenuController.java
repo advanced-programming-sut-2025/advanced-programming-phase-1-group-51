@@ -5,39 +5,55 @@ import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Result;
 import Models.User;
+import Services.UserService;
 
 public class LoginMenuController {
 
+    private final UserService userService = new UserService();
+    private String recoveringUsername;
+
     public Result showCurrentMenu() {
-        return new Result(true, "Login Menu");
+        return Result.success("Login Menu");
     }
 
-    public Result login(String username, String password, String LoggedInFlag) {
+
+
+    public Result login(String username, String password, String loggedInFlag) {
         User user = findUserByUsername(username);
         if (user == null) {
-            return new Result(false, "username doesn't exist!");
+            return Result.failure("Username doesn't exist!");
         }
         if (!user.getPassword().equals(password)) {
-            return new Result(false, "password is incorrect!");
+            return Result.failure("Password is incorrect!");
         }
-        if(LoggedInFlag != null){
-            //TODO
-        }
+
+        // Handle persistent login flag
+        boolean stayLoggedIn = loggedInFlag != null && !loggedInFlag.isEmpty();
+        user.setStayLoggedIn(stayLoggedIn);
+
         App.setCurrentUser(user);
         App.setCurrentMenu(Menu.MainMenu);
-        return new Result(true, "User logged in successfully");
-    }
 
-    private String recoveringUsername;
+        // Save the active user if stay logged in is enabled
+        if (stayLoggedIn) {
+            Result saveResult = userService.saveActiveUser(user);
+            if (!saveResult.isSuccessful()) {
+                return saveResult;
+            }
+        }
+
+        return Result.success("User logged in successfully" +
+                (stayLoggedIn ? " (persistent session)" : ""));
+    }
 
     public Result forgetPassword(String username) {
         User user = findUserByUsername(username);
         if (user == null) {
-            return new Result(false, "Username doesn't exist!");
+            return Result.failure("Username doesn't exist!");
         }
 
         this.recoveringUsername = username;
-        return new Result(true, "Please answer your security question:\n" +
+        return Result.success("Please answer your security question:\n" +
                 getQuestionText(user.getSecurityQuestionNumber()));
     }
 
@@ -45,11 +61,11 @@ public class LoginMenuController {
     public Result checkAnswer(String answer) {
         User user = findUserByUsername(recoveringUsername);
         if (user == null) {
-            return new Result(false, "User not found!");
+            return  Result.failure( "User not found!");
         }
 
         if (!user.getSecurityAnswer().equals(answer)) {
-            return new Result(false, "Incorrect answer!");
+            return  Result.failure( "Incorrect answer!");
         }
 
         return new Result(true, "Answer correct! Enter your new password:");
@@ -58,28 +74,29 @@ public class LoginMenuController {
     public Result setNewPassword(String newPassword) {
         User user = findUserByUsername(recoveringUsername);
         if (user == null) {
-            return new Result(false, "User not found!");
+            return  Result.failure( "User not found!");
         }
 
         if (SignUpMenuCommands.PASSWORD_LENGTH.getMatcher(newPassword) == null) {
-            return new Result(false, "password must be longer that 8 characters!");
+            return  Result.failure( "password must be longer that 8 characters!");
         }
 
         if (SignUpMenuCommands.PASSWORD_LETTERS.getMatcher(newPassword) == null) {
-            return new Result(false, "password must contain at least one lowercase and one uppercase!");
+            return  Result.failure( "password must contain at least one lowercase and one uppercase!");
         }
 
         if (SignUpMenuCommands.PASSWORD_NUMBERS.getMatcher(newPassword) == null) {
-            return new Result(false, "password must contain at least one number!");
+            return  Result.failure( "password must contain at least one number!");
         }
 
         if (SignUpMenuCommands.PASSWORD_SPECIAL_CHARACTERS.getMatcher(newPassword) == null) {
-            return new Result(false, "password must contain at least one special character!");
+            return  Result.failure( "password must contain at least one special character!");
         }
 
         user.setPassword(newPassword);
         recoveringUsername = null; // Reset recovery state
-        return new Result(true, "Password changed successfully!");
+        return userService.saveAllUsers()
+                .combine(Result.success("Password changed successfully!"));
     }
 
     private String getQuestionText(int questionNumber) {
