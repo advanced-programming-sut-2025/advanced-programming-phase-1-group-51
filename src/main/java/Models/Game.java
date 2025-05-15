@@ -4,15 +4,20 @@ import Models.Buildings.House;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
+import Models.Enums.Types.ItemTypes.ForagingMineralType;
+import Models.Enums.Types.ObjectsOnMapType.ForagingCropType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
+import Models.Items.Mineral;
+import Models.Items.TreeSeed;
 import Models.Maps.*;
-import Models.ObjectsShownOnMap.Lake;
-import Models.ObjectsShownOnMap.Tree;
+import Models.ObjectsShownOnMap.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Game {
@@ -51,11 +56,6 @@ public class Game {
         // Initialize village
         Village village = map.getVillage();
 
-        // Add village buildings
-        for (Store store : village.getStores()) {
-            Position storePos = new Position(store.getX(), store.getY());
-            village.getCells().add(new Cells(storePos, store));
-        }
 
         // Add paths, lakes, etc.
         // Example: add a lake
@@ -72,15 +72,80 @@ public class Game {
     }
 
     private void initializeFarm(Farm farm) {
-        // Add farmhouse at position (5,5) relative to farm
-        Position housePos = new Position(5, 5);
-        farm.getCells().add(new Cells(housePos, new House()));
+        // Set fixed position for farmhouse (different for each farm)
+        Position housePos = getFarmHousePosition(farm.getFarmNumber());
+        farm.getCells().add(new Cells(housePos, new HouseCell()));
 
-        // Add some random trees
-        for (int i = 0; i < 10; i++) {
-            int x = (int) (Math.random() * 20);
-            int y = (int) (Math.random() * 20);
-            farm.getCells().add(new Cells(new Position(x, y), new Tree()));
+        // Add some random trees (both regular and foraging)
+        spawnRandomTrees(farm);
+
+        // Add random foraging items
+        spawnRandomForagingItems(farm);
+
+        // Add random minerals
+        spawnRandomMinerals(farm);
+    }
+
+    private Position getFarmHousePosition(int farmNumber) {
+        // Define fixed positions for each farm's house
+        switch (farmNumber) {
+            case 1: return new Position(10, 10);  // NW farm
+            case 2: return new Position(10, 90);  // NE farm
+            case 3: return new Position(90, 10);  // SW farm
+            case 4: return new Position(90, 90);  // SE farm
+            default: return new Position(10, 10);
+        }
+    }
+
+    private void spawnRandomTrees(Farm farm) {
+        Random random = new Random();
+        int treeCount = 10 + random.nextInt(10); // 10-20 trees
+
+        for (int i = 0; i < treeCount; i++) {
+            int x = random.nextInt(30); // Within farm bounds
+            int y = random.nextInt(30);
+
+            // 50% chance for regular tree, 50% for foraging tree
+            if (random.nextBoolean()) {
+                farm.getCells().add(new Cells(new Position(x, y), new Tree(TreeType.OAK_TREE))); // Regular tree
+            } else {
+                farm.getCells().add(new Cells(new Position(x, y), new ForagingTree()));
+            }
+        }
+    }
+
+    private void spawnRandomForagingItems(Farm farm) {
+        Random random = new Random();
+        Season currentSeason = this.season;
+
+        // Spawn foraging crops
+        for (int i = 0; i < 5 + random.nextInt(5); i++) {
+            int x = random.nextInt(30);
+            int y = random.nextInt(30);
+            ForagingCropType randomCrop = getRandomForagingCrop(currentSeason);
+            farm.getCells().add(new Cells(new Position(x, y), new ForagingCrop(randomCrop)));
+        }
+
+    }
+
+    private ForagingCropType getRandomForagingCrop(Season season) {
+        // Implement logic to return a random foraging crop type for the current season
+        // Example:
+        if (season == Season.SPRING) return ForagingCropType.SPRING_ONION;
+        if (season == Season.SUMMER) return ForagingCropType.GRAPE;
+        // ... other seasons
+        return ForagingCropType.WILD_HORSERADISH;
+    }
+
+    private void spawnRandomMinerals(Farm farm) {
+        Random random = new Random();
+        for (int i = 0; i < 5 + random.nextInt(5); i++) {
+            int x = random.nextInt(30);
+            int y = random.nextInt(30);
+            ForagingMineralType randomMineral = ForagingMineralType.values()[
+                    random.nextInt(ForagingMineralType.values().length)
+                    ];
+            farm.getCells().add(new Cells(new Position(x, y), new MineralCell(randomMineral)));
         }
     }
 

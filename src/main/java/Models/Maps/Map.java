@@ -52,8 +52,8 @@ public class Map {
         int endX = Math.min(width, x + size/2);
         int endY = Math.min(height, y + size/2);
 
-        for (int y = startY; y <= endY; y++) {
-            for (int x = startX; x <= endX; x++) {
+        for ( y = startY; y <= endY; y++) {
+            for ( x = startX; x <= endX; x++) {
                 Cells cell = findCell(x, y);
                 if (cell.getObjectOnCell() != null) {
                     System.out.print(cell.getObjectOnCell().toString() + " ");

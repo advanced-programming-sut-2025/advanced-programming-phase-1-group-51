@@ -7,6 +7,7 @@ import Models.Enums.Others.Quality;
 import Models.Enums.Others.Weather;
 import Models.Enums.Types.ItemTypes.ElseType;
 import Models.Enums.Types.ObjectsOnMapType.ForagingTreeType;
+import Models.Enums.Types.ObjectsOnMapType.TreeType;
 import Models.Maps.Cells;
 import Models.Maps.Farm;
 import Models.ObjectsShownOnMap.BurntCell;
@@ -32,7 +33,7 @@ public class OthersController  extends BaseController {
             Cells cell = farm.findCellFarm(x, y);
             if (cell != null) {
                 if (cell.getObjectOnCell() instanceof Tree) {
-                    cell.setObjectOnCell(new Tree(ForagingTreeType.BURNT_TREE));
+                    cell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
                 }
                 if (cell.getObjectOnCell() instanceof Crop) {
                     cell.setObjectOnCell(new BurntCell());

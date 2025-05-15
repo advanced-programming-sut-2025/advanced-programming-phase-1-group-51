@@ -561,9 +561,9 @@ public class InventoryController  extends BaseController {
             return  Result.failure( "Target cell is not a tree or wood");
         }
 
-        if (tree.getTreeType() == ForagingTreeType.NORMAL_TREE) {
+        if (tree.getTreeType() == TreeType.NORMAL_TREE) {
             int woodCount = (int) (Math.random() * 4 + 2);
-            targetCell.setObjectOnCell(new Tree(ForagingTreeType.TREE_BARK));
+            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK));
 
             BackPack backpack = player.getInventory();
             Loot loot = backpack.findItemLoot("Wood");
@@ -591,7 +591,7 @@ public class InventoryController  extends BaseController {
             }
         }
 
-        else if (tree.getTreeType() == ForagingTreeType.TREE_BARK) {
+        else if (tree.getTreeType() == TreeType.TREE_BARK) {
             int woodCount = (int) (Math.random() * 2 + 1);
             targetCell.setObjectOnCell(new BurntCell());
 
@@ -618,7 +618,7 @@ public class InventoryController  extends BaseController {
             }
         }
 
-        else if (tree.getTreeType() == ForagingTreeType.BURNT_TREE) {
+        else if (tree.getTreeType() == TreeType.BURNT_TREE) {
             targetCell.setObjectOnCell(new BurntCell());
 
             BackPack backpack = player.getInventory();
@@ -646,7 +646,7 @@ public class InventoryController  extends BaseController {
             targetCell.setObjectOnCell(new BurntCell());
 
             BackPack backpack = player.getInventory();
-            Loot loot = backpack.findItemLoot(TreeType.findTreeBySeed(tree.getTreeType().seed).name);
+            Loot loot = backpack.findItemLoot(TreeType.findTreeBySeed(tree.getTreeType().source).name);
 
             if (loot == null) {
                 if (backpack.getType().getCapacity() == backpack.getLoots().size()) {

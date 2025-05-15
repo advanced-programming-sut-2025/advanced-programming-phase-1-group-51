@@ -3,7 +3,7 @@ package Controllers.Others;
 import Controllers.BaseController;
 import Models.Result;
 
-public class NPCController  extends BaseController {
+public class NPCController extends BaseController {
 
     public Result NPCMeet(String NPCName) {
         return null;

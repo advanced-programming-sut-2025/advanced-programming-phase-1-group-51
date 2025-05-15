@@ -5,6 +5,9 @@ import Models.*;
 import Models.Enums.MenuCommands.Menu;
 import Models.Enums.Others.Season;
 import Models.Enums.Others.Weather;
+import Models.Maps.Cells;
+import Models.Maps.Farm;
+import Models.Maps.Position;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -97,20 +100,27 @@ public class TurnAndSaveGameController  extends BaseController {
         Game game = currentUser.getCurrentGame();
 
         if (game == null) {
-            return  Result.failure( "No saved game found.");
+            return Result.failure("No saved game found.");
         }
 
-        // Find the player corresponding to the current user
         Player currentPlayer = game.findPlayerByUser(currentUser);
         if (currentPlayer == null) {
-            return  Result.failure( "Error: Could not find your player in the game");
+            return Result.failure("Error: Could not find your player in the game");
         }
 
         game.setCurrentPlayer(currentPlayer);
+
+        // Set player position to their farmhouse
+        Farm playerFarm = currentPlayer.getFarm();
+        Cells farmHouse = playerFarm.findCellFarm(10, 10); // Or use getFarmHousePosition()
+        if (farmHouse != null) {
+            currentPlayer.setPosition(farmHouse.getPosition());
+        }
+
         App.setCurrentMenu(Menu.GameMenu);
 
         return saveGameState(game)
-                .combine(Result.success( "Game loaded successfully. Welcome to the game!"));
+                .combine(Result.success("Game loaded successfully. Welcome to the game!"));
     }
 
 

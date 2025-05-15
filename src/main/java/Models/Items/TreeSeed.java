@@ -1,12 +1,11 @@
 package Models.Items;
 
 import Models.Enums.Others.Quality;
-import Models.Enums.Types.ItemTypes.TreeSeedsType;
-import Models.Enums.Types.ObjectsOnMapType.TreeType;
+import Models.Enums.Types.ItemTypes.ForagingTreeSeedsType;
 
 public class TreeSeed extends Item{
 
-    private TreeSeedsType treeSeedsType;
+    private ForagingTreeSeedsType treeSeedsType;
 
     public TreeSeed() {
     }
@@ -26,16 +25,16 @@ public class TreeSeed extends Item{
 
     }
 
-    public TreeSeed(TreeSeedsType treeSeedsType) {
+    public TreeSeed(ForagingTreeSeedsType treeSeedsType) {
         super(Quality.DEFAULT, Integer.MAX_VALUE, treeSeedsType.value, 0, treeSeedsType.name);
         this.treeSeedsType = treeSeedsType;
     }
 
-    public TreeSeedsType getTreeSeedsType() {
+    public ForagingTreeSeedsType getTreeSeedsType() {
         return treeSeedsType;
     }
 
-    public void setTreeSeedsType(TreeSeedsType treeSeedsType) {
+    public void setTreeSeedsType(ForagingTreeSeedsType treeSeedsType) {
         this.treeSeedsType = treeSeedsType;
     }
 }

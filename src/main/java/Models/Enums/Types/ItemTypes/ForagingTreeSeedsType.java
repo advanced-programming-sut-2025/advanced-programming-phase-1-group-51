@@ -5,7 +5,7 @@ import Models.Enums.Others.Season;
 import Models.Items.TreeSeed;
 import Models.Loot;
 
-public enum TreeSeedsType implements ItemType{
+public enum ForagingTreeSeedsType implements ItemType{
     ACORNS(Season.values(), "Acorns", 0),
     MAPLE_SEEDS(Season.values(), "Maple Seeds", 0),
     PINE_CONES(Season.values(), "Pine Cones", 0),
@@ -27,20 +27,20 @@ public enum TreeSeedsType implements ItemType{
     public final String name;
     public final int value;
 
-    TreeSeedsType(Season[] season, String name, int value) {
+    ForagingTreeSeedsType(Season[] season, String name, int value) {
         this.growthSeasons = season;
         this.name = name;
         this.value = value;
     }
 
-    TreeSeedsType(Season season, String name, int value) {
+    ForagingTreeSeedsType(Season season, String name, int value) {
         this.growthSeasons = new Season[]{season};
         this.name = name;
         this.value = value;
     }
 
-    public static TreeSeedsType findTreeTypeByName(String name) {
-        for (TreeSeedsType tree : TreeSeedsType.values()) {
+    public static ForagingTreeSeedsType findTreeTypeByName(String name) {
+        for (ForagingTreeSeedsType tree : ForagingTreeSeedsType.values()) {
             if (tree.name.compareToIgnoreCase(name) == 0) {
                 return tree;
             }

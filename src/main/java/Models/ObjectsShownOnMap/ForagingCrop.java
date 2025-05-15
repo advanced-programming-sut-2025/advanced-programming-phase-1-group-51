@@ -8,19 +8,11 @@ public class ForagingCrop extends ObjectOnMap{
     private ForagingCropType foragingCropsType;
     private boolean canBeHarvested;
 
-    public ForagingCrop(ForagingCropType type, boolean canBeHarvested) {
+    public ForagingCrop(ForagingCropType type) {
         super(true, "plant", "green");
         this.foragingCropsType = type;
-        this.canBeHarvested = canBeHarvested;
     }
 
-    public boolean isCanBeHarvested() {
-        return canBeHarvested;
-    }
-
-    public void setCanBeHarvested(boolean canBeHarvested) {
-        this.canBeHarvested = canBeHarvested;
-    }
 
     public ForagingCropType getForagingCropsType() {
         return foragingCropsType;
