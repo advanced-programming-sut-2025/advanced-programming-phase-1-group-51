@@ -6,12 +6,17 @@ public class FriendShip {
 
     private int xp;
     private int level;
+    private Player playersInRelation;
+
+
     public int getXp() {
         return xp;
     }
 
-    public FriendShip() {
-
+    public FriendShip(Player playersInRelation) {
+        this.playersInRelation = playersInRelation;
+        this.xp = 0;
+        this.level = 0;
     }
 
     public void setXp(int xp) {
@@ -31,4 +36,12 @@ public class FriendShip {
         this.level = level;
     }
 
+
+    public void setPlayersInnRelation(Player playersInRelation) {
+        this.playersInRelation = playersInRelation;
+    }
+
+    public Player getPlayersInnRelation() {
+        return playersInRelation;
+    }
 }

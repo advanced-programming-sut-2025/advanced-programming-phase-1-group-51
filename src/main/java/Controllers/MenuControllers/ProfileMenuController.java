@@ -60,7 +60,7 @@ public class ProfileMenuController {
     public Result changeNickname(String newNickname) {
         User currentUser = App.getCurrentUser();
 
-        if (newNickname.equals(currentUser.getUsername())) {
+        if (newNickname.equals(currentUser.getNickName())) {
             return  Result.failure( "please enter a new nickname!");
         }
 
@@ -88,7 +88,7 @@ public class ProfileMenuController {
             return  Result.failure( "new email format is invalid!");
         }
 
-        currentUser.setUsername(newEmail);
+        currentUser.setEmail(newEmail);
         return userService.saveAllUsers()
                 .combine(Result.success("Email changed to " + newEmail));
     }
@@ -99,7 +99,7 @@ public class ProfileMenuController {
 
         User currentUser = App.getCurrentUser();
 
-        if (!oldPassword.equals(currentUser.getUsername())) {
+        if (!oldPassword.equals(currentUser.getPassword())) {
             return  Result.failure( "Old password is incorrect!");
         }
 

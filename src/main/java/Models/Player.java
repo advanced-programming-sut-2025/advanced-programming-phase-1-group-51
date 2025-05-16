@@ -12,6 +12,7 @@ import Models.Maps.Farm;
 import Models.Maps.Position;
 import Models.NPCs.NPCsFriendship;
 import Models.Skills.*;
+import Models.Game;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -60,6 +61,37 @@ public class Player {
     private int currentPlaceNumber;
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     public ArrayList<String> notifications = new ArrayList<>();
+    private ArrayList<Player> WhoSentMassage;
+    private ArrayList<Player> WhoSentGifts;
+    private ArrayList<Player> WhoWantsGetMarriage;
+
+    public ArrayList<Player> getWhoWantsGetMarriage() {
+        return WhoWantsGetMarriage;
+    }
+
+    public void setWhoWantsGetMarriage(Player player) {
+        WhoWantsGetMarriage.add(player);
+    }
+
+    public ArrayList<Player> getWhoSentGift() {
+        return WhoSentGifts;
+    }
+
+    public void AddWhoSentGift(Player whoSentGift) {
+        WhoSentGifts.add(whoSentGift);
+    }
+
+    public ArrayList<Player> getWhoSentMassage() {
+        return WhoSentMassage;
+    }
+
+    public void AddWhoSentMassage(Player whoSentMassage) {
+        WhoSentMassage.add(whoSentMassage);
+    }
+
+    public void RemoveWhoSentMassage() {
+        WhoSentMassage.clear();
+    }
 
 
     public Player(User user) {

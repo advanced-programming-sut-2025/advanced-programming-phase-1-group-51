@@ -36,6 +36,10 @@ public class SignUpMenuController {
             return  Result.failure( "username format is invalid!");
         }
 
+        if (!password.equals(confirmPassword)) {
+            return  Result.failure( "confirmPassword does not match password");
+        }
+
         if (SignUpMenuCommands.PASSWORD_LENGTH.getMatcher(password) == null) {
             return  Result.failure( "password must be longer that 8 characters!");
         }
@@ -48,6 +52,7 @@ public class SignUpMenuController {
             return  Result.failure( "password must contain at least one number!");
         }
 
+
         if (SignUpMenuCommands.PASSWORD_SPECIAL_CHARACTERS.getMatcher(password) == null) {
             return  Result.failure( "password must contain at least one special character!");
         }
@@ -56,13 +61,15 @@ public class SignUpMenuController {
             return  Result.failure( "email format is invalid!");
         }
 
+        if(email.contains("..")){
+            return  Result.failure("email format is invalid!");
+        }
+
         if (SignUpMenuCommands.GENDER.getMatcher(gender) == null) {
             return  Result.failure( "gender can only be male or female!");
         }
 
-        if (!password.equals(confirmPassword)) {
-            return  Result.failure( "confirmPassword does not match password");
-        }
+
 
         User newUser = new User(username, password, nickname, email, gender);
         User.users.add(newUser);

@@ -95,6 +95,33 @@ public class TurnHandlingController extends BaseController {
             advanceTime(game);
         }
 
+        StringBuilder stringBuilder = new StringBuilder();
+        if (game.getCurrentPlayer().getWhoSentMassage() != null) {
+
+            stringBuilder.append("its now next player's turn\n");
+            stringBuilder.append("You have new massage from : \n");
+            for (Player player : game.getCurrentPlayer().getWhoSentMassage()) {
+                stringBuilder.append(player.getUser().getUsername()).append("\n");
+            }
+            game.getCurrentPlayer().getWhoSentMassage().clear();
+        }
+        if (game.getCurrentPlayer().getWhoSentGift() != null) {
+            stringBuilder.append("\n");
+            stringBuilder.append("You have new gifts from : \n");
+            for (Player player : game.getCurrentPlayer().getWhoSentGift()) {
+                stringBuilder.append(player.getUser().getUsername()).append("\n");
+            }
+            game.getCurrentPlayer().getWhoSentGift().clear();
+        }
+        if (game.getCurrentPlayer().getWhoWantsGetMarriage() != null) {
+            stringBuilder.append("\n");
+            stringBuilder.append("You have request for marriage from : \n");
+            for (Player player : game.getCurrentPlayer().getWhoWantsGetMarriage()) {
+                stringBuilder.append(player.getUser().getUsername()).append("\n");
+            }
+        }
+
+
         return saveGameState(game)
                 .combine(Result.success( "It's now " + nextPlayer.getUser().getUsername() + "'s turn"));
     }
