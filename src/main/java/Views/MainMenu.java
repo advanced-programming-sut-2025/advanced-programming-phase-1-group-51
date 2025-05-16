@@ -29,7 +29,7 @@ public class MainMenu implements PlayMenu{
             System.out.println(controller.goToAvatarMenu());
         }
         else if(MainMenuCommands.GO_TO_PREGAME.getMatcher(input) != null){
-            System.out.println(controller.goToGameMenu());
+            System.out.println(controller.goToPreGameMenu());
         }
         else{
             System.out.println("Invalid Command!");

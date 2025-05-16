@@ -14,6 +14,7 @@ public enum Menu {
     MainMenu(new MainMenu()),
     ProfileMenu(new ProfileMenu()),
     AvatarMenu(new AvatarMenu()),
+    PreGameMenu(new PreGameMenu()),
     GameMenu(new GameMenu()),
     BlacksmithShopMenu(new BlacksmithShopMenus()),
     JojaMartShopMenu(new JojaMartShopMenus()),

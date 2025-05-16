@@ -7,10 +7,11 @@ public class Tree extends ObjectOnMap{
 
     private TreeType treeType;
     private boolean hasBeenWateredToday;
-
+    private boolean willBearFruitToday;
     public Tree(TreeType treeType) {
         super(false, "plant", "green");
         this.treeType = treeType;
+        this.willBearFruitToday = true;
     }
 
     public TreeType getTreeType() {
@@ -29,7 +30,11 @@ public class Tree extends ObjectOnMap{
         super(isWalkable, type, color);
     }
 
+    public boolean isWillBearFruitToday() {
+        return willBearFruitToday;
+    }
 
-
-
+    public void setWillBearFruitToday(boolean willBearFruitToday) {
+        this.willBearFruitToday = willBearFruitToday;
+    }
 }

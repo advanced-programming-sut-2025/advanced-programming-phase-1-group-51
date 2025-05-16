@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.util.*;
 
 import Models.App;
-import Services.UserService;
+import Controllers.Services.UserService;
 
 public class SignUpMenuController {
 

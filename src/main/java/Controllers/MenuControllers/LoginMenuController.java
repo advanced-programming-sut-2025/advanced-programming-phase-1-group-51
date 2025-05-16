@@ -5,7 +5,7 @@ import Models.Enums.MenuCommands.Menu;
 import Models.Enums.MenuCommands.SignUpMenuCommands;
 import Models.Result;
 import Models.User;
-import Services.UserService;
+import Controllers.Services.UserService;
 
 public class LoginMenuController {
 

@@ -80,6 +80,11 @@ public class Map {
         // Add more as needed
     }
 
+    public boolean isWithinBounds(Position pos) {
+        return pos.getX() >= 0 && pos.getX() < width &&
+                pos.getY() >= 0 && pos.getY() < height;
+    }
+
     public void addFarm(Farm farm) {
         farms.add(farm);
     }

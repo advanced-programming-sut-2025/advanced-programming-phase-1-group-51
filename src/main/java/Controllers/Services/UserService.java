@@ -1,4 +1,4 @@
-package Services;
+package Controllers.Services;
 
 import Models.App;
 import Models.Result;
@@ -6,6 +6,7 @@ import Models.User;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class UserService {
     public Result saveAllUsers() {
         try {
             ensureDirectoryExists();
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
             objectMapper.writeValue(new File(USERS_FILE), User.getUsers());
             return Result.success("User data saved successfully");
         } catch (IOException e) {

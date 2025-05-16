@@ -1,1 +1,37 @@
-[{"username":"mamad","password":"mamad85*A","nickName":"ali","email":"mma.ann@gmail.com","gender":"male","securityQuestionNumber":2,"securityAnswer":"ali","gamesPlayed":0,"id":0,"maxMoneyEarnedInGame":0,"games":[]},{"username":"alireza","password":"Mamad85*","nickName":"mamadoo","email":"mamad@gmail.com","gender":"male","securityQuestionNumber":0,"securityAnswer":null,"gamesPlayed":0,"id":0,"maxMoneyEarnedInGame":0,"games":[]}]
+[ {
+  "username" : "mamad",
+  "password" : "mamad85*A",
+  "nickName" : "ali",
+  "email" : "mma.ann@gmail.com",
+  "gender" : "male",
+  "securityQuestionNumber" : 2,
+  "securityAnswer" : "ali",
+  "gamesPlayed" : 0,
+  "id" : 0,
+  "maxMoneyEarnedInGame" : 0,
+  "games" : [ ]
+}, {
+  "username" : "alireza",
+  "password" : "Mamad85*",
+  "nickName" : "mamadoo",
+  "email" : "mamad@gmail.com",
+  "gender" : "male",
+  "securityQuestionNumber" : 0,
+  "securityAnswer" : null,
+  "gamesPlayed" : 0,
+  "id" : 0,
+  "maxMoneyEarnedInGame" : 0,
+  "games" : [ ]
+}, {
+  "username" : "Sourena-12",
+  "password" : "Sourena&1234",
+  "nickName" : "souren",
+  "email" : "Sourena@gmail.com",
+  "gender" : "male",
+  "securityQuestionNumber" : 2,
+  "securityAnswer" : "gorgan",
+  "gamesPlayed" : 0,
+  "id" : 0,
+  "maxMoneyEarnedInGame" : 0,
+  "games" : [ ]
+} ]

@@ -4,12 +4,16 @@ import Models.ObjectsShownOnMap.ObjectOnMap;
 
 public class Cells {
     private Position position;
-    private ObjectOnMap objectOnCell;
+    private ObjectOnMap objectOnCell; // Change type from Object to ObjectOnMap
     public boolean hasBeenPlowed = false;
 
     public Cells(Position position, ObjectOnMap objectOnCell) {
         this.position = position;
         this.objectOnCell = objectOnCell;
+    }
+
+    public boolean isWalkable() {
+        return objectOnCell == null || objectOnCell.isWalkable;
     }
 
     public char getDisplayChar() {

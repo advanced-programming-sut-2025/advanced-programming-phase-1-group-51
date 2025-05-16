@@ -4,14 +4,13 @@ import Controllers.Activity.*;
 import Controllers.Others.*;
 import Models.App;
 import Models.Enums.MenuCommands.GameMenuCommands;
-import Models.Enums.MenuCommands.ProfileMenuCommands;
-import Models.Game;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu implements PlayMenu{
 
-    private final TurnAndSaveGameController SavingNextTurnController = new TurnAndSaveGameController();
+    private final TurnHandlingController SavingNextTurnController = new TurnHandlingController();
     private final MovementAndMapController MovementAndMapController = new MovementAndMapController();
     private final EnergyController EnergyController = new EnergyController();
     private final InventoryController InventoryController = new InventoryController();
@@ -31,18 +30,8 @@ public class GameMenu implements PlayMenu{
         if((matcher = GameMenuCommands.SHOW_CURRENT_MENU.getMatcher(input)) != null){
             System.out.println(SavingNextTurnController.showCurrentMenu());
         }
-        else if(GameMenuCommands.GO_TO_MAIN.getMatcher(input) != null){
-             System.out.println(SavingNextTurnController.goToMain());
-         }
-        else if((matcher = GameMenuCommands.GAME_NEW.getMatcher(input)) != null){
-            System.out.println(SavingNextTurnController.newGame(matcher.group("username1").trim(),matcher.group("username2").trim(),
-                    matcher.group("username3").trim(),matcher.group("username4").trim()));
-        }
-        else if((matcher = GameMenuCommands.GAME_MAP.getMatcher(input)) != null){
-            System.out.println(SavingNextTurnController.gameMap(Integer.parseInt(matcher.group("mapNumber").trim())));
-        }
-        else if(GameMenuCommands.LOAD_GAME.getMatcher(input) != null){
-            System.out.println(SavingNextTurnController.loadGame());
+        else if(GameMenuCommands.GO_TO_MAIN.getMatcher(input) != null) {
+            System.out.println(SavingNextTurnController.goToMain());
         }
         else if((matcher = GameMenuCommands.EXIT_GAME.getMatcher(input)) != null){
             System.out.println(SavingNextTurnController.exitGame());

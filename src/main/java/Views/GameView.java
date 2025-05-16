@@ -2,9 +2,8 @@ package Views;
 
 import Models.App;
 import Models.Enums.MenuCommands.Menu;
-import Models.Game;
-import Services.GameStorageService;
-import Services.UserService;
+import Controllers.Services.GameStorageService;
+import Controllers.Services.UserService;
 
 import java.io.IOException;
 

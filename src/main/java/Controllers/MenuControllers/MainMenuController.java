@@ -27,19 +27,19 @@ public class MainMenuController {
 
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.LoginMenu);
-        return Result.success("Logged out successfully");
+        return Result.success("Logged out successfully, You are now in Login Menu!");
     }
     public Result goToAvatarMenu(){
          App.setCurrentMenu(Menu.AvatarMenu);
-        return new Result(true, "You are now in Avatar Menu");
+        return new Result(true, "You are now in Avatar Menu!");
     }
     public Result goToProfileMenu(){
          App.setCurrentMenu(Menu.ProfileMenu);
-        return new Result(true, "You are now in Profile Menu");
+        return new Result(true, "You are now in Profile Menu!");
     }
-    public Result goToGameMenu(){
-       App.setCurrentMenu(Menu.GameMenu);
-        return new Result(true, "You are now in Game menu Menu");
+    public Result goToPreGameMenu(){
+       App.setCurrentMenu(Menu.PreGameMenu);
+        return new Result(true, "You are now in PreGame menu Menu!");
     }
 
 }

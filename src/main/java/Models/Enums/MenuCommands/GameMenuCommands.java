@@ -102,7 +102,7 @@ public enum GameMenuCommands implements Command {
     BUY_ANIMALS("buy\\s+animal\\s+-a\\s+(?<animal>\\S+)\\s+-n\\s+(?<name>\\S+)"),
     PET("pet\\s+-n\\s+(?<name>\\S+)"),
     ANIMALS("animals"),
-    SHEPHERD("shepherd\\s+animals\\s+-n\\s+(?<animalName>\\S+>\\s+-l\\s+(?<x>\\S+)\\s+,\\s+(?<y>\\S+)"),
+    SHEPHERD("shepherd\\s+animals\\s+-n\\s+(?<animalName>\\S+)\\s+-l\\s+(?<x>\\S+)\\s+,\\s+(?<y>\\S+)"),
     FEED_HAY("feed\\s+hay\\s+-n\\s+(?<animalName>\\S+)"),
     PRODUCES("produces"),
     COLLECT_PRODUCE("collect\\s+produce\\s+-n\\s+(?<name>\\S+)"),
@@ -147,7 +147,7 @@ public enum GameMenuCommands implements Command {
     START_TRADE("start\\s+trade"),
     TRADE("trade\\s+-u\\s+(?<username>\\S+)\\s+-t\\s+(?<type>\\S+)\\s+-i\\s+(?<item>\\S+)\\s+-a\\s+(?<amount>\\S+)\\s+\\[-p\\s+(?<price>\\S+)\\]\\s+\\[-ti\\s+(?<targetItem>\\S+)\\s+-ta\\s+(?<targetAmount>\\S+)\\]"),
     TRADE_LIST("trade\\s+list"),
-    TRADE_RESPONSE("trade\\s+response\\s+(–accept|–reject)\\s+-i\\s+<id>"),
+    TRADE_RESPONSE("trade\\s+response\\s+(?<response>\\S+)\\s+-i\\s+<id>"),
     TRADE_HISTORY("trade\\s+history"),
 
     // NPCs

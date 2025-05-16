@@ -2,8 +2,8 @@ package Controllers;
 
 import Models.Game;
 import Models.Result;
-import Services.GameStorageService;
-import Services.UserService;
+import Controllers.Services.GameStorageService;
+import Controllers.Services.UserService;
 
 import java.io.IOException;
 

@@ -59,6 +59,7 @@ public class Player {
     private boolean isInHouse;
     private int currentPlaceNumber;
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
+    public ArrayList<String> notifications = new ArrayList<>();
 
 
     public Player(User user) {

@@ -1,18 +1,15 @@
-package Services;
+package Controllers.Services;
 
 import Models.Game;
-import Models.User;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class GameStorageService {
     private static final String SAVE_DIRECTORY = "saved_games/";

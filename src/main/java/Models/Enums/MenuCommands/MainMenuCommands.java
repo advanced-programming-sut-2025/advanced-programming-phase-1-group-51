@@ -6,7 +6,7 @@ public enum MainMenuCommands implements Command {
     LOGOUT("user\\s*logout"),
     GO_TO_AVATAR("menu\\s*enter\\s*avatar\\s*menu"),
     GO_TO_PROFILE("menu\\s*enter\\s*profile\\s*menu"),
-    GO_TO_PREGAME("menu\\s*enter\\s*game\\s*menu");
+    GO_TO_PREGAME("menu\\s*enter\\s*pregame\\s*menu");
 
     private final String pattern;
 
