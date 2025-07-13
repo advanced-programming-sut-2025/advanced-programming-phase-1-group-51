@@ -105,7 +105,7 @@ public class InventoryMenu extends BaseMenu {
                     itemTexture = createPlaceholderTexture();
                 }
                 Table itemCell = new Table();
-                 itemCell.setBackground(skin.getDrawable("window"));
+                itemCell.setBackground(skin.getDrawable("window"));
 
                 // Item image (placeholder - you'll replace with actual texture)
                 Image itemImage = new Image(new TextureRegionDrawable(

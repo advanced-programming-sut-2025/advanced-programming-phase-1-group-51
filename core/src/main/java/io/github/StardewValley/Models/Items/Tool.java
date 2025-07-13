@@ -19,4 +19,8 @@ public class Tool extends Item{
         super(quality, 1, 0, 5, type.name);
         this.type = type;;
     }
+
+    public ToolType getType() {
+        return type;
+    }
 }

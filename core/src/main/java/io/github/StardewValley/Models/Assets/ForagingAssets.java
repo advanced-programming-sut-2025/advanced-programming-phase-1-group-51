@@ -26,41 +26,33 @@ public class ForagingAssets implements Disposable {
     private Map<ForagingTreeType, Texture> treeTextures;
     private Map<ForagingCropType, Texture> cropTextures;
     private Map<ForagingMineralType, Texture> mineralTextures;
+    private Map<ToolType, Texture> toolTextures;
     // Add to ForagingAssets class
-    private Map<Item, Texture> itemTextures;
 
-    private void loadItemTextures() {
-        itemTextures = new HashMap<>();
+    private void loadToolTextures() {
+        toolTextures = new HashMap<>();
+        toolTextures.put(ToolType.HOE, loadTexture("items/tools/Hoe.png"));
+        toolTextures.put(ToolType.PICKAXE, loadTexture("items/tools/Pickaxe.png"));
+        toolTextures.put(ToolType.AXE, loadTexture("items/tools/Axe.png"));
+        toolTextures.put(ToolType.SCYTHE, loadTexture("items/tools/Scythe.png"));
+        toolTextures.put(ToolType.WATERING_CAN_DEFAULT, loadTexture("items/tools/watering_can.png"));
+        // ... other tools
+    }
 
-        // Load tool textures
-        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Hoe", ToolType.HOE),
-            loadTexture("items/tools/Hoe.png"));
-        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Pickaxe", ToolType.PICKAXE),
-            loadTexture("items/tools/Pickaxe.png"));
-        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolType.AXE),
-            loadTexture("items/tools/Axe.png"));
-        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolType.WATERING_CAN_DEFAULT),
-            loadTexture("items/tools/watering_can.png"));
-        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolType.SCYTHE),
-            loadTexture("items/tools/Scythe.png"));
-
-        // Load mineral textures
-//        itemTextures.put(new Mineral(Quality.DEFAULT, ForagingMineralType.WOOD),
-//            loadTexture("items/minerals/wood.png"));
-//        itemTextures.put(new Mineral(Quality.DEFAULT, ForagingMineralType.STONE),
-//            loadTexture("items/minerals/stone.png"));
-
-        // Add more items as needed
+    public Texture getToolTexture(ToolType type) {
+        return toolTextures.getOrDefault(type, createBlankTexture(32, 32));
     }
 
     public Texture getItemTexture(Item item) {
-        Texture tex = itemTextures.get(item);
-        return tex != null ? tex : createBlankTexture(32, 32);
+        if (item instanceof Tool) {
+            return getToolTexture(((Tool) item).getType());
+        }
+        // Add other item types here as needed
+        return createBlankTexture(32, 32);
     }
 
     private ForagingAssets() {
         loadTextures();
-        loadItemTextures();
     }
 
     public static ForagingAssets getInstance() {
@@ -84,6 +76,8 @@ public class ForagingAssets implements Disposable {
 
         // Load mineral textures
         loadMineralTextures();
+
+        loadToolTextures();
     }
 
     private void loadTreeTextures() {
