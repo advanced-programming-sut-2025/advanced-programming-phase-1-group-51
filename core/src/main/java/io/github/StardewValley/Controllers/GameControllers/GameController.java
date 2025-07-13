@@ -1,11 +1,13 @@
 package io.github.StardewValley.Controllers.GameControllers;
 
+import io.github.StardewValley.Models.App;
 import io.github.StardewValley.Models.Assets.GameAssetsManager;
 import io.github.StardewValley.Models.Game;
 import io.github.StardewValley.Models.Player;
 import io.github.StardewValley.Views.GameMenus.CheatMenu;
 import io.github.StardewValley.Views.GameMenus.GameMenu;
 import io.github.StardewValley.Main;
+import io.github.StardewValley.Views.GameMenus.InventoryMenu;
 
 import java.time.LocalTime;
 
@@ -14,6 +16,7 @@ public class GameController {
     private PlayerController playerController;
     private WorldController worldController;
     private CheatMenuController cheatMenuController;
+    private InventoryController inventoryController;
 
 
     private LocalTime MaxTime = LocalTime.of(22, 0);
@@ -23,9 +26,15 @@ public class GameController {
     public GameController() {
         this.cheatMenuController = new CheatMenuController();
         this.cheatMenuController.setGameController(this);
+        this.inventoryController = new InventoryController();
+        this.inventoryController.setGameController(this);
 
-        Player defaultPlayer = new Player();
-        this.playerController = new PlayerController(defaultPlayer, this);
+        // Initialize player with current game's player if available
+        Player player = App.getCurrentGame() != null ?
+            App.getCurrentGame().getCurrentPlayer() :
+            new Player(App.getCurrentUser());
+
+        this.playerController = new PlayerController(player, this);
         this.worldController = new WorldController(playerController);
     }
 
@@ -44,6 +53,23 @@ public class GameController {
 
         Main.getMain().setScreen(new CheatMenu(
             cheatMenuController,
+            GameAssetsManager.getInstance().getSkin()
+        ));
+    }
+
+    public void goToInventory() {
+        if (inventoryController == null) {
+            inventoryController = new InventoryController();
+            inventoryController.setGameController(this);
+        }
+
+        // Ensure player has an inventory
+        if (playerController.getPlayer().getInventory() == null) {
+            playerController.getPlayer().initializeInventory();
+        }
+
+        Main.getMain().setScreen(new InventoryMenu(
+            inventoryController,
             GameAssetsManager.getInstance().getSkin()
         ));
     }
@@ -88,14 +114,14 @@ public class GameController {
         switch (seasonNumber % 4) {
             case 1:
                 return "Spring";
-                case 2:
-                    return "Summer";
-                    case 3:
-                        return "Fall";
-                        case 0:
-                            return "Winter";
-                            default:
-                                return "???";
+            case 2:
+                return "Summer";
+            case 3:
+                return "Fall";
+            case 0:
+                return "Winter";
+            default:
+                return "???";
         }
     }
 

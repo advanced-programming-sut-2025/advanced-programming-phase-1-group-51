@@ -1,31 +1,38 @@
-    package io.github.StardewValley.Models.Graphics;
+package io.github.StardewValley.Models.Graphics;
 
-    public class CollisionRect {
-        float x, y;
-        float width, height;
-        public CollisionRect(float x, float y, float width, float height){
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
+public class CollisionRect {
+    float x, y;
+    float width, height;
 
-        public void move(float x, float y){
-            this.x = x;
-            this.y = y;
-        }
-
-        public boolean collidesWith(CollisionRect other) {
-            return x < other.x + other.width &&
-                x + width > other.x &&
-                y < other.y + other.height &&
-                y + height > other.y;
-        }
-
-
-        // Add to CollisionRect class:
-        public float getWidth() { return width; }
-        public float getHeight() { return height; }
-        public float getX() { return x; }
-        public float getY() { return y; }
+    public CollisionRect(float x, float y, float width, float height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
+
+    public void move(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean collidesWith(CollisionRect other) {
+        return x < other.x + other.width &&
+            x + width > other.x &&
+            y < other.y + other.height &&
+            y + height > other.y;
+    }
+
+    // Add this new method
+    public boolean contains(float pointX, float pointY) {
+        return pointX >= x &&
+            pointX <= x + width &&
+            pointY >= y &&
+            pointY <= y + height;
+    }
+
+    public float getWidth() { return width; }
+    public float getHeight() { return height; }
+    public float getX() { return x; }
+    public float getY() { return y; }
+}

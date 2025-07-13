@@ -28,13 +28,13 @@ public class GameMenu implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         controller.updateGame(delta);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            // Remove this line - the WorldController already handles player rendering
-            // controller.getPlayerController().getPlayer().render(batch);
+        // Remove this line - the WorldController already handles player rendering
+        // controller.getPlayerController().getPlayer().render(batch);
 
-            // This will render both world and HUD
-            controller.getWorldController().render(batch);
+        // This will render both world and HUD
+        controller.getWorldController().render(batch);
 
 
         // Render UI on top
@@ -81,35 +81,49 @@ public class GameMenu implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.SPACE) {
-            controller.goToCheatMenu();
-            return true;
-        }
-        if (keycode == Input.Keys.H) {
-            controller.ChangeTime('H');
-            return true;
-        }
-        if (keycode == Input.Keys.B) {
-            controller.ChangeTime('M');
-            return true;
-        }
-        if (keycode == Input.Keys.M) {
-            // open Map
-            return true;
-        }
-        if (keycode == Input.Keys.C) {
-            // use item or drop item
-            return true;
-        }
-        if (keycode == Input.Keys.X) {
-            // do something
-            return true;
-        }
-        if (keycode == Input.Keys.E) {
-            return true;
-        }
-        if (keycode == Input.Keys.F) {
-            return true;
+        try {
+            if (keycode == Input.Keys.ESCAPE) {
+                if (controller.getPlayerController() == null) {
+                    Gdx.app.error("GameMenu", "PlayerController is null!");
+                    return true;
+                }
+                if (controller.getPlayerController().getPlayer() == null) {
+                    Gdx.app.error("GameMenu", "Player is null!");
+                    return true;
+                }
+                controller.goToInventory();
+                return true;
+            }
+            if (keycode == Input.Keys.SPACE) {
+                controller.goToCheatMenu();
+                return true;
+            }
+            if (keycode == Input.Keys.H) {
+                controller.ChangeTime('H');
+                return true;
+            }
+            if (keycode == Input.Keys.B) {
+                controller.ChangeTime('M');
+                return true;
+            }
+            if (keycode == Input.Keys.M) {
+                // open Map
+                return true;
+            }
+            if (keycode == Input.Keys.C) {
+                // use item or drop item
+                return true;
+            }
+            if (keycode == Input.Keys.X) {
+                // do something
+                return true;
+            }
+            if (keycode == Input.Keys.F) {
+                return true;
+            }
+            // ... handle other keys ...
+        } catch (Exception e) {
+            Gdx.app.error("GameMenu", "Error handling key press", e);
         }
         return false;
     }

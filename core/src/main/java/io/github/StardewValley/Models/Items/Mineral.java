@@ -29,7 +29,7 @@ public class Mineral extends Item{
         this.type = type;
     }
 
-        public Mineral(ForagingMineralType mineralType) {
+    public Mineral(ForagingMineralType mineralType) {
         this( Quality.DEFAULT,mineralType);
     }
 

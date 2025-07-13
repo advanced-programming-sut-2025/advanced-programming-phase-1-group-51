@@ -23,15 +23,13 @@ public class Game {
 
     public Game(ArrayList<Player> players, Player currentPlayer) {
         this.players = players;
-        this.currentPlayer = currentPlayer;
+        this.currentPlayer = currentPlayer;  // Keep this assignment
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.weatherToday = Weather.SUNNY;
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
-        this.currentPlayer = null;
+        // Remove this line: this.currentPlayer = null;
         this.map = Map.makeMap();
-
-
     }
 
     public static int getCurrentSeason() {

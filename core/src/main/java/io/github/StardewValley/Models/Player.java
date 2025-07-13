@@ -7,16 +7,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import io.github.StardewValley.Models.Assets.GameAssetsManager;
 import io.github.StardewValley.Models.Assets.PlayerAssets;
+import io.github.StardewValley.Models.Enums.Others.Quality;
 import io.github.StardewValley.Models.Enums.Recipes.CookingRecipes;
 import io.github.StardewValley.Models.Enums.Recipes.CraftingRecipes;
+import io.github.StardewValley.Models.Enums.Types.BackpackType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
 import io.github.StardewValley.Models.Enums.Types.TrashcanType;
 import io.github.StardewValley.Models.FriendshipModels.Friendship;
 import io.github.StardewValley.Models.FriendshipModels.Marriage;
 import io.github.StardewValley.Models.Graphics.CollisionRect;
 import io.github.StardewValley.Models.Items.Item;
+import io.github.StardewValley.Models.Items.Tool;
 import io.github.StardewValley.Models.Maps.Farm;
 import io.github.StardewValley.Models.ObjectsOnMap.Animal;
-import io.github.StardewValley.Models.Skills.Skill;
+import io.github.StardewValley.Models.Skills.*;
 
 import java.util.ArrayList;
 
@@ -87,6 +91,10 @@ public class Player {
         );
 
         currentSprite.setPosition(position.x, position.y);
+        this.inventory = new BackPack(BackpackType.DEFAULT);
+        initializeInventory(); // Now this will work because inventory is initialized
+        initializeSkills();
+        initializeRecipes();
     }
 
     public Player(User user) {
@@ -193,6 +201,45 @@ public class Player {
         this.speed = 500;
     }
 
+
+    private void initializeRecipes() {
+        this.craftingRecipes.add(CraftingRecipes.FURNACE);
+        this.craftingRecipes.add(CraftingRecipes.SCARE_CROW);
+        this.craftingRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
+        this.cookingRecipes.add(CookingRecipes.FRIED_EGG);
+        this.cookingRecipes.add(CookingRecipes.BAKED_FISH);
+        this.cookingRecipes.add(CookingRecipes.SALAD);
+    }
+
+
+    public void initializeInventory() {
+        if (inventory == null) {
+            inventory = new BackPack(BackpackType.DEFAULT);
+        }
+
+        // Clear existing slots if any
+        inventory.getSLots().clear();
+
+        // Add default tools
+        inventory.getSLots().add(
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Hoe", ToolType.HOE), 1));
+        inventory.getSLots().add(
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Pickaxe", ToolType.PICKAXE), 1));
+        inventory.getSLots().add(
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolType.AXE), 1));
+        inventory.getSLots().add(
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolType.WATERING_CAN_DEFAULT), 1));
+        inventory.getSLots().add(
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolType.SCYTHE), 1));
+    }
+
+    private void initializeSkills() {
+        this.skills.add(new Farming());
+        this.skills.add(new Fishing());
+        this.skills.add(new Foraging());
+        this.skills.add(new Mining());
+    }
+
     public void setEnergyDrainRate(float modifier) {
         this.energyDrainRate = 0.2f * modifier; // Base rate * weather modifier
     }
@@ -211,9 +258,6 @@ public class Player {
         return position;
     }
 
-    public Vector2 getVelocity() {
-        return velocity;
-    }
 
     public CollisionRect getCollisionRect() {
         return collisionRect;
@@ -244,7 +288,6 @@ public class Player {
     }
 
 
-    // In Player.java
     public void setPosition(float x, float y) {
         this.position.set(x, y);
         this.collisionRect.move(x, y);
@@ -271,115 +314,13 @@ public class Player {
         return currentDirection;
     }
 
-    public float getStateTime() {
-        return stateTime;
-    }
 
-    public float getEnergyDrainRate() {
-        return energyDrainRate;
-    }
-
-    public boolean isPlayerInHouse() {
-        return isPlayerInHouse;
-    }
-
-    public ArrayList<Notif> getNotifications() {
-        return Notifications;
-    }
-
-    public ArrayList<Marriage> getMarriageRequests() {
-        return marriageRequests;
-    }
-
-    public ArrayList<Gift> getGifts() {
-        return gifts;
-    }
-
-    public ArrayList<Trade> getTradingHistory() {
-        return tradingHistory;
-    }
-
-    public ArrayList<Friendship> getFriendships() {
-        return friendships;
-    }
-
-    public TrashcanType getTrashcanType() {
-        return trashcanType;
-    }
-
-    public TrashCan getTrashcan() {
-        return trashcan;
-    }
-
-    public ArrayList<Animal> getAnimals() {
-        return animals;
-    }
-
-    public BackPack getInventory() {
-        return inventory;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public ArrayList<Skill> getSkills() {
-        return skills;
-    }
-
-    public ArrayList<CookingRecipes> getCookingRecipes() {
-        return cookingRecipes;
-    }
-
-    public ArrayList<CraftingRecipes> getCraftingRecipes() {
-        return craftingRecipes;
-    }
-
-    public boolean isPlayerFainted() {
-        return isPlayerFainted;
-    }
 
     public Item getItemInHand() {
         return itemInHand;
     }
 
-    public ArrayList<Slot> getRefrigeratorLoots() {
-        return refrigeratorLoots;
-    }
-
-    public double getCurrentTurnUsedEnergy() {
-        return currentTurnUsedEnergy;
-    }
-
-    public boolean isInVillage() {
-        return isInVillage;
-    }
-
-    public boolean isInFarm() {
-        return isInFarm;
-    }
-
-    public boolean isCloseToLake() {
-        return isCloseToLake;
-    }
-
-    public boolean isInHouse() {
-        return isInHouse;
-    }
-
-    public int getCurrentFarmNumber() {
-        return currentFarmNumber;
-    }
-
-    public int getMoneyTomorrow() {
-        return moneyTomorrow;
-    }
-
-    public ArrayList<Buff> getActiveBuffs() {
-        return activeBuffs;
-    }
-
-    public String getPartnerUsername() {
-        return partnerUsername;
+    public BackPack getInventory() {
+        return inventory;
     }
 }

@@ -4,20 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameAssetsManager {
     private static GameAssetsManager gameAssetsManager;
     private final ArrayList<PlayerAssets> playerAssets;
-    private ForagingAssetsManager foragingAssetsManager;
+    private ForagingAssets foragingAssetsManager;
     private final Skin skin;
 
     private GameAssetsManager() {
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         playerAssets = new ArrayList<>();
 
-        foragingAssetsManager = ForagingAssetsManager.getInstance();
+        foragingAssetsManager = ForagingAssets.getInstance();
     }
 
     public static GameAssetsManager getInstance() {
@@ -27,7 +25,7 @@ public class GameAssetsManager {
         return gameAssetsManager;
     }
 
-    public ForagingAssetsManager getForagingAssetsManager() {
+    public ForagingAssets getForagingAssetsManager() {
         return foragingAssetsManager;
     }
 

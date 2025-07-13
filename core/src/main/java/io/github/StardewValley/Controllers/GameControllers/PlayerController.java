@@ -4,15 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import io.github.StardewValley.Main;
+import io.github.StardewValley.Models.BackPack;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.MiscType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Graphics.CollisionRect;
-import io.github.StardewValley.Models.ObjectsOnMap.ForagingCrop;
-import io.github.StardewValley.Models.ObjectsOnMap.ForagingMineralBlock;
-import io.github.StardewValley.Models.ObjectsOnMap.ForagingTree;
-import io.github.StardewValley.Models.ObjectsOnMap.Wall;
+import io.github.StardewValley.Models.Items.Item;
+import io.github.StardewValley.Models.ObjectsOnMap.*;
 import io.github.StardewValley.Models.Player;
 
 import java.util.ArrayList;
@@ -154,12 +154,80 @@ public class PlayerController {
         return false;
     }
 
-    public void handleInteraction() {
+    // In PlayerController class
+    private void handleInteraction() {
         Player player = getPlayer();
+        Item itemInHand = player.getItemInHand();
         Vector2 interactPosition = getInteractPosition(player);
 
+        if (itemInHand == null) return;
+
         // Check for interactions with foraging items
-        checkForagingInteractions(interactPosition);
+        ForagingController foraging = gameController.getWorldController().getForagingController();
+
+        // Check trees
+        for (ForagingTree tree : foraging.getForagingTrees()) {
+            if (isInRange(player, tree)){
+                if (itemInHand.getName().contains("Axe")) {
+                    handleTreeInteraction(tree);
+                    return;
+                }
+            }
+        }
+
+        // Check crops
+        for (ForagingCrop crop : foraging.getForagingCrops()) {
+            if (isInRange(player, crop)) {
+                if (itemInHand.getName().contains("Scythe")) {
+                    handleCropInteraction(crop);
+                    return;
+                }
+            }
+        }
+
+        // Check minerals
+        for (ForagingMineralBlock mineral : foraging.getMineralBlocks()) {
+            if (isInRange(player, mineral)) {
+                if (itemInHand.getName().contains("Pickaxe")) {
+                    handleMineralInteraction(mineral);
+                    return;
+                }
+            }
+        }
+    }
+
+    private boolean isInRange(Player player, ObjectOnMap object) {
+        Vector2 interactPosition = getInteractPosition(player);
+        return object.getCollisionRect().contains(interactPosition.x, interactPosition.y);
+    }
+
+    private void handleTreeInteraction(ForagingTree tree) {
+        // Add wood to inventory
+        BackPack inventory = player.getInventory();
+        inventory.addItem(ForagingMineralType.WOOD, 5); // Each tree gives 5 wood
+
+        // Remove tree
+        gameController.getWorldController().getForagingController().getForagingTrees().remove(tree);
+//        Main.playSound(Main.getChopSound());
+    }
+
+    private void handleCropInteraction(ForagingCrop crop) {
+        // Add harvested item to inventory
+        ItemType harvestedItem = crop.getForagingCropType().getHarvestedItemType();
+        player.getInventory().addItem(harvestedItem, 1);
+
+        // Remove crop
+        gameController.getWorldController().getForagingController().getForagingCrops().remove(crop);
+//        Main.playSound(Main.getHarvestSound());
+    }
+
+    private void handleMineralInteraction(ForagingMineralBlock mineral) {
+        // Add mineral to inventory
+        player.getInventory().addItem(mineral.getForagingMineralType(), 1);
+
+        // Remove mineral block
+        gameController.getWorldController().getForagingController().getMineralBlocks().remove(mineral);
+//        Main.playSound(Main.getRockCrackSound());
     }
 
     private Vector2 getInteractPosition(Player player) {
@@ -213,59 +281,6 @@ public class PlayerController {
 //        }
     }
 
-    private void handleTreeInteraction(ForagingTree tree) {
-        // Check if player has axe equipped
-        if (player.getItemInHand() != null && player.getItemInHand().getName().contains("Axe")) {
-            // Add wood to inventory based on tree type
-            int woodAmount = 5; // base amount
-            if (tree.getForagingTreeType() == ForagingTreeType.MAHOGANY_TREE) {
-                woodAmount = 10;
-            }
-
-            // Add wood to inventory
-            // player.getInventory().addItem(MiscType.WOOD, woodAmount);
-
-            // Remove tree (or you could leave it for regrowth)
-            gameController.getWorldController().getForagingController().getForagingTrees().remove(tree);
-
-            // Play sound
-            // Main.playSound(Main.getChopSound());
-        }
-    }
-
-    private void handleCropInteraction(ForagingCrop crop) {
-        // Check if player has scythe equipped (for grass) or is empty handed (for spring onions)
-        if ((crop.getForagingCropType() == ForagingCropType.GRASS &&
-            player.getItemInHand() != null &&
-            player.getItemInHand().getName().contains("Scythe")) ||
-            (crop.getForagingCropType() != ForagingCropType.GRASS &&
-                player.getItemInHand() == null)) {
-
-            // Add item to inventory
-            ItemType harvestedItem = crop.getForagingCropType().getHarvestedItemType();
-           // player.getInventory().addItem(harvestedItem, 1);
-
-            // Remove crop
-            gameController.getWorldController().getForagingController().getForagingCrops().remove(crop);
-
-            // Play sound
-            // Main.playSound(Main.getHarvestSound());
-        }
-    }
-
-    private void handleMineralInteraction(ForagingMineralBlock mineral) {
-        // Check if player has pickaxe equipped
-        if (player.getItemInHand() != null && player.getItemInHand().getName().contains("Pickaxe")) {
-            // Add mineral to inventory
-           // player.getInventory().addItem(mineral.getForagingMineralType(), 1);
-
-            // Remove mineral block
-            gameController.getWorldController().getForagingController().getMineralBlocks().remove(mineral);
-
-            // Play sound
-           // Main.playSound(Main.getRockCrackSound());
-        }
-    }
 
 
     public Player getPlayer() {

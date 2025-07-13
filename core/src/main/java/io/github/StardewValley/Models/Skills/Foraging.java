@@ -1,4 +1,4 @@
 package io.github.StardewValley.Models.Skills;
 
-public class Foraging {
+public class Foraging extends Skill{
 }

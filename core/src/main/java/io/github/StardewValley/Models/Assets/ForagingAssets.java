@@ -5,28 +5,67 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
+import io.github.StardewValley.Models.Enums.Others.Quality;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.FoodType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
+import io.github.StardewValley.Models.Items.Food;
+import io.github.StardewValley.Models.Items.Item;
+import io.github.StardewValley.Models.Items.Mineral;
+import io.github.StardewValley.Models.Items.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ForagingAssetsManager implements Disposable {
-    private static ForagingAssetsManager instance;
+public class ForagingAssets implements Disposable {
+    private static ForagingAssets instance;
 
     // Individual textures for each type
     private Map<ForagingTreeType, Texture> treeTextures;
     private Map<ForagingCropType, Texture> cropTextures;
     private Map<ForagingMineralType, Texture> mineralTextures;
+    // Add to ForagingAssets class
+    private Map<Item, Texture> itemTextures;
 
-    private ForagingAssetsManager() {
-        loadTextures();
+    private void loadItemTextures() {
+        itemTextures = new HashMap<>();
+
+        // Load tool textures
+        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Hoe", ToolType.HOE),
+            loadTexture("items/tools/Hoe.png"));
+        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Pickaxe", ToolType.PICKAXE),
+            loadTexture("items/tools/Pickaxe.png"));
+        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolType.AXE),
+            loadTexture("items/tools/Axe.png"));
+        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolType.WATERING_CAN_DEFAULT),
+            loadTexture("items/tools/watering_can.png"));
+        itemTextures.put(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolType.SCYTHE),
+            loadTexture("items/tools/Scythe.png"));
+
+        // Load mineral textures
+//        itemTextures.put(new Mineral(Quality.DEFAULT, ForagingMineralType.WOOD),
+//            loadTexture("items/minerals/wood.png"));
+//        itemTextures.put(new Mineral(Quality.DEFAULT, ForagingMineralType.STONE),
+//            loadTexture("items/minerals/stone.png"));
+
+        // Add more items as needed
     }
 
-    public static ForagingAssetsManager getInstance() {
+    public Texture getItemTexture(Item item) {
+        Texture tex = itemTextures.get(item);
+        return tex != null ? tex : createBlankTexture(32, 32);
+    }
+
+    private ForagingAssets() {
+        loadTextures();
+        loadItemTextures();
+    }
+
+    public static ForagingAssets getInstance() {
         if (instance == null) {
-            instance = new ForagingAssetsManager();
+            instance = new ForagingAssets();
         }
         return instance;
     }
@@ -49,8 +88,8 @@ public class ForagingAssetsManager implements Disposable {
 
     private void loadTreeTextures() {
         // Load individual textures for each tree type
-          treeTextures.put(ForagingTreeType.OAK_TREE, loadTexture("foraging/trees/oak_tree.png"));
-          treeTextures.put(ForagingTreeType.PINE_TREE, loadTexture("foraging/trees/pine_tree.png"));
+        treeTextures.put(ForagingTreeType.OAK_TREE, loadTexture("foraging/trees/oak_tree.png"));
+        treeTextures.put(ForagingTreeType.PINE_TREE, loadTexture("foraging/trees/pine_tree.png"));
         //        treeTextures.put(ForagingTreeType.MAPLE_TREE, loadTexture("foraging/trees/maple_tree.png"));
 //        treeTextures.put(ForagingTreeType.MAHOGANY_TREE, loadTexture("foraging/trees/mahogany_tree.png"));
 //        treeTextures.put(ForagingTreeType.NORMAL_TREE, loadTexture("foraging/trees/normal_tree.png"));

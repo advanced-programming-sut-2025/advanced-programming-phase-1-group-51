@@ -1,4 +1,4 @@
 package io.github.StardewValley.Models.Skills;
 
-public class Mining {
+public class Mining extends Skill{
 }

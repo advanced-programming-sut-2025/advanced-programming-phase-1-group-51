@@ -12,7 +12,6 @@ public class User {
     private String securityQuestion;
     private String securityAnswer;
     private int numberOfGamesPlayed;
-    private int id;
     private int maxMoneyEarnedInGame;
     private Game currentGame;
     private final ArrayList<Game> games = new ArrayList<>();
@@ -59,10 +58,6 @@ public class User {
         return securityAnswer;
     }
 
-
-    public int getId() {
-        return id;
-    }
 
     public int getMaxMoneyEarnedInGame() {
         return maxMoneyEarnedInGame;
