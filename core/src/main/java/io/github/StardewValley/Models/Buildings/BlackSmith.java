@@ -19,34 +19,24 @@ public class BlackSmith {
     }
 
     private void createWalls() {
-        float wallSize = 50f; // Size of each wall segment
+
 
         // Back walls
-        walls.add(new Wall(960, 2345, wallSize, "back"));
-        walls.add(new Wall(960 + 480, 2345, wallSize, "back"));
+//        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
 
         // Bottom wall (with gap for door)
-        for (float i = x; i < x + 224; i += wallSize) {
-            walls.add(new Wall(i, y, wallSize, "horizontal"));
-        }
-        for (float i = x + 240 + 120; i < x + width; i += wallSize) {
-            walls.add(new Wall(i, y, wallSize, "horizontal"));
-        }
+        walls.add(new Wall(x, y,width ,20, "horizontal"));
 
         // Top wall
-        for (float i = x; i < x + width - 35; i += wallSize) {
-            walls.add(new Wall(i, y + height - 20, wallSize, "horizontal"));
-        }
+        walls.add(new Wall(x, y + height, width,20, "horizontal"));
 
         // Left wall
-        for (float j = y; j < y + height; j += wallSize) {
-            walls.add(new Wall(x, j, wallSize, "vertical"));
-        }
+        walls.add(new Wall(x , y, 20,height, "vertical"));
 
         // Right wall
-        for (float j = y; j < y + height; j += wallSize) {
-            walls.add(new Wall(x + width - 20, j, wallSize, "vertical"));
-        }
+        walls.add(new Wall(x + width, y, 20,515, "vertical"));
+
+        walls.add(new Wall(x + width, y + 650, 20,810, "vertical"));
     }
 
     public ArrayList<Wall> getWalls() {

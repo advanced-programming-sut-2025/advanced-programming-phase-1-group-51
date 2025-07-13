@@ -44,7 +44,7 @@ public class PlayerController {
             player.getCollisionRect().move(player.getPosition().x, player.getPosition().y);
 
             // Check X collision
-            if (checkWallCollisions()) {
+            if (checkWallCollisions() || checkForagingCollisions()) {
                 player.getPosition().x = oldPosition.x; // Revert X movement
                 player.getCollisionRect().move(player.getPosition().x, player.getPosition().y);
                 player.move(0, movement.y); // Reset X velocity
@@ -55,12 +55,13 @@ public class PlayerController {
             player.getCollisionRect().move(player.getPosition().x, player.getPosition().y);
 
             // Check Y collision
-            if (checkWallCollisions()) {
+            if (checkWallCollisions() || checkForagingCollisions()) {
                 player.getPosition().y = oldPosition.y; // Revert Y movement
                 player.getCollisionRect().move(player.getPosition().x, player.getPosition().y);
                 player.move(movement.x, 0); // Reset Y velocity
             }
-        } else {
+        }
+        else {
             // Stop movement when no input
             player.move(0, 0);
         }
@@ -116,10 +117,37 @@ public class PlayerController {
 
     private boolean checkWallCollisions() {
         CollisionRect playerRect = player.getCollisionRect();
-        ArrayList<Wall> walls = gameController.getWorldController().getHouseWalls();
+        ArrayList<Wall> walls = gameController.getWorldController().getAllWalls();
 
         for (Wall wall : walls) {
-            if (playerRect.collidesWith(wall.getCollisionRect())) {
+            if (playerRect.collidesWith(wall.getCollisionRect()) && !wall.getTypeWall().equals("floor_greenhouse")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkForagingCollisions() {
+        CollisionRect playerRect = player.getCollisionRect();
+        ArrayList<ForagingCrop> crops = gameController.getWorldController().getForagingController().getForagingCrops();
+        ArrayList<ForagingTree> trees = gameController.getWorldController().getForagingController().getForagingTrees();
+        ArrayList<ForagingMineralBlock> minerals = gameController.getWorldController().getForagingController().getMineralBlocks();
+
+        for (ForagingCrop crop : crops) {
+            if (playerRect.collidesWith(crop.getCollisionRect())) {
+                return true;
+            }
+        }
+
+        for (ForagingTree tree : trees) {
+            if (playerRect.collidesWith(tree.getCollisionRect())) {
+                return true;
+            }
+        }
+
+        for (ForagingMineralBlock mineral : minerals) {
+            if (playerRect.collidesWith(mineral.getCollisionRect())) {
                 return true;
             }
         }

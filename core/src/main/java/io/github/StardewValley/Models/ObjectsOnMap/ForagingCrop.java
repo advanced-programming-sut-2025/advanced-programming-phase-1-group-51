@@ -10,7 +10,7 @@ public class ForagingCrop extends ObjectOnMap {
     private ForagingCropType foragingCropType;
 
     public ForagingCrop(float x, float y, ForagingCropType foragingCropType) {
-        super(x, y, 42, 42, "foragingCrop");
+        super(x, y, 42, 42,30,30, "foragingCrop");
         this.foragingCropType = foragingCropType;
 
         try {
@@ -23,7 +23,7 @@ public class ForagingCrop extends ObjectOnMap {
             }
 
             this.sprite = new Sprite(texture);
-            this.sprite.setSize(width, height);
+            this.sprite.setSize(spriteWidth, spriteWidth);
             this.sprite.setPosition(x, y);
         } catch (Exception e) {
             Gdx.app.error("ForagingCrop", "Error creating sprite", e);

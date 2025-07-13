@@ -7,36 +7,65 @@ import io.github.StardewValley.Models.Graphics.CollisionRect;
 public class Wall extends ObjectOnMap {
     private static Texture verticalWallTexture;
     private static Texture horizontalWallTexture;
-    private static Texture backTexture;
+    private static Texture houseBackTexture;
+    private static Texture greenhouseBackTexture;
+    private static Texture greenhouseFloorTexture;
+    private String typeWall;
 
-    public Wall(float x, float y, float size, String type) {
-        super(x, y, size, size, "wall");
-        if (type.equals("vertical")) {
+
+    public Wall(float x, float y, float width, float height, String typeWall) {
+        super(x, y, width, height,width,height, "wall");
+        this.typeWall = typeWall;
+        if (typeWall.equals("vertical")) {
             if (verticalWallTexture == null) {
-                verticalWallTexture = new Texture("initials/vertical_woll.jpg");
+                verticalWallTexture = new Texture("initials/Vertical_Wall.png");
             }
-            this.collisionRect = new CollisionRect(x, y, 20, size);
+            this.collisionRect = new CollisionRect(x, y, width, height);
             this.sprite = new Sprite(verticalWallTexture);
-            this.sprite.setSize(20, size);
+            this.sprite.setSize(width, height);
             this.sprite.setPosition(x, y);
 
-        } else if (type.equals("horizontal")) {
+        }
+        else if (typeWall.equals("horizontal")) {
             if (horizontalWallTexture == null) {
-                horizontalWallTexture = new Texture("initials/horizontal_woll.jpg");
+                horizontalWallTexture = new Texture("initials/Horizontal_Wall.png");
             }
-            this.collisionRect = new CollisionRect(x, y, size, 20);
+            this.collisionRect = new CollisionRect(x, y, width, height);
             this.sprite = new Sprite(horizontalWallTexture);
-            this.sprite.setSize(size, 20);
+            this.sprite.setSize(width, height);
             this.sprite.setPosition(x, y);
 
-        } else {
-            if (backTexture == null) {
-                backTexture = new Texture("initials/back_wall.png");
+        }
+        else if(typeWall.equals("back_house")) {
+            if (houseBackTexture == null) {
+                houseBackTexture = new Texture("initials/back_wall.png");
             }
-            this.collisionRect = new CollisionRect(x, y, 480, 160);
-            this.sprite = new Sprite(backTexture);
-            this.sprite.setSize(480, 160);
+            this.collisionRect = new CollisionRect(x, y, width, height);
+            this.sprite = new Sprite(houseBackTexture);
+            this.sprite.setSize(width, height);
             this.sprite.setPosition(x, y);
         }
+        else if(typeWall.equals("back_greenhouse")) {
+            if (greenhouseBackTexture == null) {
+                greenhouseBackTexture = new Texture("initials/greenhouse_back_wall.png");
+            }
+            this.collisionRect = new CollisionRect(x, y, width, height);
+            this.sprite = new Sprite(greenhouseBackTexture);
+            this.sprite.setSize(width, height);
+            this.sprite.setPosition(x, y);
+        }
+        else if(typeWall.equals("floor_greenhouse")) {
+            if (greenhouseFloorTexture == null) {
+                greenhouseFloorTexture = new Texture("initials/greenhouse_floor.png");
+            }
+
+            this.sprite = new Sprite(greenhouseFloorTexture);
+            this.sprite.setSize(width, height);
+            this.sprite.setPosition(x, y);
+        }
+    }
+
+    public String getTypeWall() {
+        return typeWall;
     }
 }

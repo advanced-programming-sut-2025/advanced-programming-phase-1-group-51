@@ -83,7 +83,7 @@ public class Player {
             position.x,
             position.y,
             currentSprite.getWidth() - 30,
-            currentSprite.getHeight() - 15
+            currentSprite.getHeight() - 70
         );
 
         currentSprite.setPosition(position.x, position.y);
@@ -160,7 +160,9 @@ public class Player {
         }
 
         currentSprite.setRegion(frame);
-    }public void move(float x, float y) {
+    }
+
+    public void move(float x, float y) {
         velocity.set(x * speed, y * speed);
         isMoving = (x != 0 || y != 0);
 

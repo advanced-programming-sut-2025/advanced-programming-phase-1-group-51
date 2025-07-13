@@ -10,13 +10,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.StardewValley.Models.App;
 import io.github.StardewValley.Models.Assets.GameAssetsManager;
-import io.github.StardewValley.Models.Buildings.PlayerHouse;
+import io.github.StardewValley.Models.Buildings.*;
 import io.github.StardewValley.Models.Enums.Others.Weather;
 import io.github.StardewValley.Models.Game;
 import io.github.StardewValley.Models.ObjectsOnMap.ForagingTree;
 import io.github.StardewValley.Models.ObjectsOnMap.Wall;
 import io.github.StardewValley.Views.GameMenus.EnergyHUD;
 
+import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -31,7 +32,15 @@ public class WorldController {
     private OrthographicCamera hudCamera;
     private Viewport hudViewport;
     private PlayerHouse playerHouse;
-    private ArrayList<Wall> houseWalls;
+    private GreenHouse greenhouse;
+    private BlackSmith blackSmith;
+    private CarpenterShop carpenterShop;
+    private FishShop fishShop;
+    private JojaMart jojaMart;
+    private MarnieRanch marnieRanch;
+    private PierreGeneralStore pierreStore;
+    private StarDropSaloon starDropSaloon;
+    private ArrayList<Wall> allWalls;
     private ForagingController foragingController;
 
     public WorldController(PlayerController playerController) {
@@ -65,7 +74,24 @@ public class WorldController {
         font.setColor(Color.BLACK);
 
         playerHouse = new PlayerHouse(960, 1920, 960, 600);
-        houseWalls = playerHouse.getWalls();
+        greenhouse = new GreenHouse(240,1920,480, 600);
+        blackSmith = new BlackSmith(3120,3465,960, 1440);
+//        carpenterShop = new CarpenterShop(240,1920,480, 600);
+//        fishShop = new FishShop(240,1920,480, 600);
+//        jojaMart = new JojaMart(240,1920,480, 600);
+//        marnieRanch = new MarnieRanch(240,1920,480, 600);
+//        pierreStore = new PierreGeneralStore(240,1920,480, 600);
+//        starDropSaloon = new StarDropSaloon(240,1920,480, 600);
+        allWalls = new ArrayList<>();
+        allWalls.addAll(blackSmith.getWalls());
+//        allWalls.addAll(carpenterShop.getWalls());
+//        allWalls.addAll(fishShop.getWalls());
+        allWalls.addAll(greenhouse.getWalls());
+//        allWalls.addAll(jojaMart.getWalls());
+//        allWalls.addAll(marnieRanch.getWalls());
+//        allWalls.addAll(pierreStore.getWalls());
+        allWalls.addAll(playerHouse.getWalls());
+//        allWalls.addAll(starDropSaloon.getWalls());
 
     }
 
@@ -120,7 +146,7 @@ public class WorldController {
         batch.draw(backgroundTexture, 0, 0);
 
         // Render house walls
-        for (Wall wall : houseWalls) {
+        for (Wall wall : allWalls) {
             wall.render(batch);
         }
         foragingController.render(batch);
@@ -227,9 +253,8 @@ public class WorldController {
         }
     }
 
-    // In WorldController.java
-    public ArrayList<Wall> getHouseWalls() {
-        return houseWalls;
+    public ArrayList<Wall> getAllWalls() {
+        return allWalls;
     }
 
     public ForagingController getForagingController() {

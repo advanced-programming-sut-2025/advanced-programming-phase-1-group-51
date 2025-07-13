@@ -8,14 +8,14 @@ public class ForagingMineralBlock extends ObjectOnMap {
     private ForagingMineralType foragingMineralType;
 
     public ForagingMineralBlock(float x, float y, ForagingMineralType foragingMineralType) {
-        super(x, y, 45, 45, "foragingMineral");
+        super(x, y, 45, 45,30,30, "foragingMineral");
         this.foragingMineralType = foragingMineralType;
 
         // Initialize sprite
         this.sprite = new Sprite(GameAssetsManager.getInstance()
             .getForagingAssetsManager()
             .getMineralTexture(foragingMineralType));
-        this.sprite.setSize(width, height);
+        this.sprite.setSize(spriteWidth, spriteHeight);
         this.sprite.setPosition(x, y);
     }
 

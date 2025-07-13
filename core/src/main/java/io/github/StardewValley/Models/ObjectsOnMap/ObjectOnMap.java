@@ -10,15 +10,19 @@ public abstract class ObjectOnMap {
     protected Sprite sprite;
     protected CollisionRect collisionRect;
     protected Vector2 position;
-    protected float width;
-    protected float height;
+    protected float spriteWidth;
+    protected float spriteHeight;
+    protected float collisionWidth;
+    protected float collisionHeight;
 
-    public ObjectOnMap(float x, float y, float width, float height, String type) {
+    public ObjectOnMap(float x, float y, float spriteWidth, float spriteHeight, float collisionWidth,float collisionHeight, String type) {
         this.type = type;
         this.position = new Vector2(x, y);
-        this.width = width;
-        this.height = height;
-        this.collisionRect = new CollisionRect(x, y, width, height);
+        this.spriteWidth = spriteWidth;
+        this.spriteHeight = spriteHeight;
+        this.collisionWidth = collisionWidth;
+        this.collisionHeight = collisionHeight;
+        this.collisionRect = new CollisionRect(x, y, collisionWidth, collisionHeight);
     }
 
     public void render(SpriteBatch batch) {
@@ -59,5 +63,5 @@ public abstract class ObjectOnMap {
     public void setPosition(Vector2 position) {
         this.position = position;
     }
-    
+
 }

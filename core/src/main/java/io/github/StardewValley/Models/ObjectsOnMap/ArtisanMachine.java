@@ -8,7 +8,7 @@ public class ArtisanMachine extends ObjectOnMap{
     private ArtisanMachineType artisanMachineType;
 
     public ArtisanMachine(float x, float y,  ArtisanMachineType artisanMachineType) {
-        super(x, y, 50, 50, "foragingTree");
+        super(x, y, 50, 50,30,30, "foragingTree");
         this.artisanMachineType = artisanMachineType;
     }
 }
