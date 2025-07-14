@@ -16,7 +16,6 @@ public class GameController {
     private PlayerController playerController;
     private WorldController worldController;
     private CheatMenuController cheatMenuController;
-    private InventoryController inventoryController;
 
 
     private LocalTime MaxTime = LocalTime.of(22, 0);
@@ -26,8 +25,6 @@ public class GameController {
     public GameController() {
         this.cheatMenuController = new CheatMenuController();
         this.cheatMenuController.setGameController(this);
-        this.inventoryController = new InventoryController();
-        this.inventoryController.setGameController(this);
 
         // Initialize player with current game's player if available
         Player player = App.getCurrentGame() != null ?

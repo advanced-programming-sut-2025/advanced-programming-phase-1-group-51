@@ -1,26 +1,211 @@
 package io.github.StardewValley.Models.Assets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Disposable;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
+import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.CropType;
+import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
+import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
+import io.github.StardewValley.Models.Enums.Types.TrashcanType;
+import io.github.StardewValley.Models.Items.*;
 
-public class MapInitialAssets {
-    public TextureRegion stillTexture;
+import java.util.HashMap;
+import java.util.Map;
 
-    public MapInitialAssets(String initialName) {
+public class MapInitialAssets implements Disposable {
+    private static MapInitialAssets instance;
+
+    // Individual textures for each type
+    private Map<ForagingTreeType, Texture> treeTextures;
+    private Map<ForagingCropType, Texture> foragingCropTexture;
+    private Map<CropType, Texture>  cropTexture;
+    private Map<ForagingMineralType, Texture> mineralTextures;
+    private Map<ToolType, Texture> toolTextures;
+    private Map<TrashcanType, Texture> trashcanTexture;
+    // Add to ForagingAssets class
+
+    private MapInitialAssets() {
+        loadTextures();
+    }
+
+    public static MapInitialAssets getInstance() {
+        if (instance == null) {
+            instance = new MapInitialAssets();
+        }
+        return instance;
+    }
+
+    private void loadToolTextures() {
+        toolTextures = new HashMap<>();
+        toolTextures.put(ToolType.HOE, findTexture("items/tools/Hoe.png"));
+        toolTextures.put(ToolType.PICKAXE, findTexture("items/tools/Pickaxe.png"));
+        toolTextures.put(ToolType.AXE, findTexture("items/tools/Axe.png"));
+        toolTextures.put(ToolType.SCYTHE, findTexture("items/tools/Scythe.png"));
+        toolTextures.put(ToolType.WATERING_CAN_DEFAULT, findTexture("items/tools/watering_can.png"));
+        // ... other tools
+    }
+    private void loadTrashcanTextures() {
+        trashcanTexture = new HashMap<>();
+
+        trashcanTexture.put(TrashcanType.DEFAULT, findTexture("items/trashcan/Trash_Can_Steel.png"));
+    }
+
+    private void loadTextures() {
+
+        loadTreeTextures();
+
+        loadForagingCropTextures();
+
+        loadCropTextures();
+
+        loadMineralTextures();
+
+        loadToolTextures();
+
+        loadTrashcanTextures();
+    }
+
+    private Texture findTexture(String path) {
         try {
-            Texture texture = new Texture(Gdx.files.internal(String.format("Initials/%s.jpg", initialName)));
+            // First try to load the requested texture
+            Texture texture = new Texture(Gdx.files.internal(path));
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            this.stillTexture = new TextureRegion(texture);
+            return texture;
         } catch (Exception e) {
-            System.err.println("Failed to load texture for: " + initialName);
-            throw new RuntimeException("Could not load initial asset: " + initialName, e);
+            Gdx.app.error("ForagingAssetsManager", "Failed to load texture: " + path, e);
+
+            // Try to load a default placeholder
+            try {
+                return new Texture(Gdx.files.internal("foraging/placeholder.png"));
+            } catch (Exception e2) {
+                // If even placeholder fails, create a blank texture
+                Gdx.app.error("ForagingAssetsManager", "Failed to load placeholder texture", e2);
+                return createBlankTexture(32, 32); // Create a fallback
+            }
         }
     }
 
-    public void dispose() {
-        if (stillTexture != null && stillTexture.getTexture() != null) {
-            stillTexture.getTexture().dispose();
+    private Texture createBlankTexture(int width, int height) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.MAGENTA); // Easy-to-spot debug color
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
+    }
+
+    private void loadTreeTextures() {
+        treeTextures = new HashMap<>();
+
+        treeTextures.put(ForagingTreeType.OAK_TREE, findTexture("foraging/trees/oak_tree.png"));
+        treeTextures.put(ForagingTreeType.PINE_TREE, findTexture("foraging/trees/pine_tree.png"));
+//        treeTextures.put(ForagingTreeType.MAPLE_TREE, loadTexture("foraging/trees/maple_tree.png"));
+//        treeTextures.put(ForagingTreeType.MAHOGANY_TREE, loadTexture("foraging/trees/mahogany_tree.png"));
+//        treeTextures.put(ForagingTreeType.NORMAL_TREE, loadTexture("foraging/trees/normal_tree.png"));
+//        treeTextures.put(ForagingTreeType.BURNT_TREE, loadTexture("foraging/trees/burnt_tree.png"));
+//        treeTextures.put(ForagingTreeType.TREE_BARK, loadTexture("foraging/trees/tree_bark.png"));
+//        treeTextures.put(ForagingTreeType.APRICOT_TREE, loadTexture("foraging/trees/apricot_tree.png"));
+//        treeTextures.put(ForagingTreeType.CHERRY_TREE, loadTexture("foraging/trees/cherry_tree.png"));
+//        treeTextures.put(ForagingTreeType.BANANA_TREE, loadTexture("foraging/trees/banana_tree.png"));
+//        treeTextures.put(ForagingTreeType.MANGO_TREE, loadTexture("foraging/trees/mango_tree.png"));
+//        treeTextures.put(ForagingTreeType.ORANGE_TREE, loadTexture("foraging/trees/orange_tree.png"));
+//        treeTextures.put(ForagingTreeType.PEACH_TREE, loadTexture("foraging/trees/peach_tree.png"));
+//        treeTextures.put(ForagingTreeType.APPLE_TREE, loadTexture("foraging/trees/apple_tree.png"));
+//        treeTextures.put(ForagingTreeType.POMEGRANATE_TREE, loadTexture("foraging/trees/pomegranate_tree.png"));
+//        treeTextures.put(ForagingTreeType.MUSHROOM_TREE, loadTexture("foraging/trees/mushroom_tree.png"));
+//        treeTextures.put(ForagingTreeType.MYSTIC_TREE, loadTexture("foraging/trees/mystic_tree.png"));
+    }
+
+    private void loadForagingCropTextures() {
+        foragingCropTexture = new HashMap<>();
+
+        foragingCropTexture.put(ForagingCropType.GRASS, findTexture("foraging/crops/grass.png"));
+        foragingCropTexture.put(ForagingCropType.SPRING_ONION, findTexture("foraging/crops/spring_onion.png"));
+//        cropTextures.put(ForagingCropType.DAFFODIL, loadTexture("foraging/crops/daffodil.png"));
+//        cropTextures.put(ForagingCropType.DANDELION, loadTexture("foraging/crops/dandelion.png"));
+//        cropTextures.put(ForagingCropType.LEEK, loadTexture("foraging/crops/leek.png"));
+//        cropTextures.put(ForagingCropType.MOREL, loadTexture("foraging/crops/morel.png"));
+        // Add all other crop types...
+    }
+
+    private void loadCropTextures() {
+        cropTexture = new HashMap<>();
+
+//        cropTexture.put(CropType.BEET, loadTexture("foraging/crops/grass.png"));
+//        cropTexture.put(CropType.AMARANTH, loadTexture("foraging/crops/spring_onion.png"));
+//        cropTextures.put(ForagingCropType.DAFFODIL, loadTexture("foraging/crops/daffodil.png"));
+//        cropTextures.put(ForagingCropType.DANDELION, loadTexture("foraging/crops/dandelion.png"));
+//        cropTextures.put(ForagingCropType.LEEK, loadTexture("foraging/crops/leek.png"));
+//        cropTextures.put(ForagingCropType.MOREL, loadTexture("foraging/crops/morel.png"));
+        // Add all other crop types...
+    }
+
+    private void loadMineralTextures() {
+        mineralTextures = new HashMap<>();
+
+        mineralTextures.put(ForagingMineralType.STONE, findTexture("foraging/minerals/stone.png"));
+        mineralTextures.put(ForagingMineralType.WOOD, findTexture("foraging/minerals/wood.png"));
+//        mineralTextures.put(ForagingMineralType.QUARTZ, loadTexture("foraging/minerals/quartz.png"));
+//        mineralTextures.put(ForagingMineralType.EARTH_CRYSTAL, loadTexture("foraging/minerals/earth_crystal.png"));
+//        mineralTextures.put(ForagingMineralType.FROZEN_TEAR, loadTexture("foraging/minerals/frozen_tear.png"));
+        // Add all other mineral types...
+    }
+
+
+    public Texture getToolTexture(ToolType type) {
+        return toolTextures.getOrDefault(type, createBlankTexture(32, 32));
+    }
+
+    public Texture getItemTexture(Item item) {
+        if (item instanceof Tool) {
+            return getToolTexture(((Tool) item).getType());
         }
+        if (item instanceof Mineral) {
+            return getMineralTexture(((Mineral) item).getType());
+        }
+        if (item instanceof ForagingCrop) {
+            return getForagingCropTexture(((ForagingCrop) item).getType());
+        }
+        // Add other item types here as needed
+        return createBlankTexture(32, 32);
+    }
+
+    public Texture getTreeTexture(ForagingTreeType type) {
+        Texture tex = treeTextures.get(type);
+        return tex != null ? tex : createBlankTexture(32, 64); // Trees are taller
+    }
+
+    public Texture getForagingCropTexture(ForagingCropType type) {
+        Texture tex = foragingCropTexture.get(type);
+        return tex != null ? tex : createBlankTexture(32, 32);
+    }
+
+    public Texture getCropTexture(CropType type) {
+        Texture tex = cropTexture.get(type);
+        return tex != null ? tex : createBlankTexture(32, 32);
+    }
+
+    public Texture getMineralTexture(ForagingMineralType type) {
+        Texture tex = mineralTextures.get(type);
+        return tex != null ? tex : createBlankTexture(32, 32);
+    }
+
+    public Texture getTrashcanTexture(TrashcanType type) {
+        Texture tex = trashcanTexture.get(type);
+        return tex != null ? tex : createBlankTexture(32, 32);
+    }
+
+    @Override
+    public void dispose() {
+        // Dispose all textures
+        treeTextures.values().forEach(Texture::dispose);
+        foragingCropTexture.values().forEach(Texture::dispose);
+        mineralTextures.values().forEach(Texture::dispose);
+        cropTexture.values().forEach(Texture::dispose);
+
     }
 }

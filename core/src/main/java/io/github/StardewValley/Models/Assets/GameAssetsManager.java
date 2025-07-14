@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class GameAssetsManager {
     private static GameAssetsManager gameAssetsManager;
     private final ArrayList<PlayerAssets> playerAssets;
-    private ForagingAssets foragingAssetsManager;
+    private MapInitialAssets foragingAssetsManager;
     private final Skin skin;
 
     private GameAssetsManager() {
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         playerAssets = new ArrayList<>();
 
-        foragingAssetsManager = ForagingAssets.getInstance();
+        foragingAssetsManager = MapInitialAssets.getInstance();
     }
 
     public static GameAssetsManager getInstance() {
@@ -25,7 +25,7 @@ public class GameAssetsManager {
         return gameAssetsManager;
     }
 
-    public ForagingAssets getForagingAssetsManager() {
+    public MapInitialAssets getForagingAssetsManager() {
         return foragingAssetsManager;
     }
 

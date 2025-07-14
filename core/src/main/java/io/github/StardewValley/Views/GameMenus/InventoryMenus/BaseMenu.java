@@ -9,18 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.StardewValley.Controllers.GameControllers.GameController;
 import io.github.StardewValley.Main;
 import io.github.StardewValley.Models.App;
 import io.github.StardewValley.Models.Assets.GameAssetsManager;
-import io.github.StardewValley.Models.BackPack;
-import io.github.StardewValley.Models.Enums.Types.BackpackType;
 import io.github.StardewValley.Models.Player;
-import io.github.StardewValley.Models.Slot;
 
 public abstract class BaseMenu implements Screen {
     protected final Skin skin;
@@ -240,5 +235,9 @@ public abstract class BaseMenu implements Screen {
         if (stage != null) {
             stage.dispose();
         }
+    }
+
+    public void showError(String message) {
+        errorLabel.setText(message);
     }
 }

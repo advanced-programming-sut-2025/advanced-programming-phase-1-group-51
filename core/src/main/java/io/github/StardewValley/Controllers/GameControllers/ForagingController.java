@@ -12,8 +12,8 @@ import io.github.StardewValley.Models.ObjectsOnMap.*;
 import java.util.ArrayList;
 
 public class ForagingController {
-    private ArrayList<ForagingCrop> foragingCrops;
-    private ArrayList<ForagingTree> foragingTrees;
+    private ArrayList<ForagingCropBlock> foragingCrops;
+    private ArrayList<ForagingTreeBlock> foragingTrees;
     private ArrayList<ForagingMineralBlock> mineralBlocks;
     private final Vector2 minBounds = new Vector2(120, 120);
     private final Vector2 maxBounds = new Vector2(2640, 1680);
@@ -61,7 +61,7 @@ public class ForagingController {
 //                type = ForagingTreeType.MAHOGANY_TREE;
 //            }
 
-            foragingTrees.add(new ForagingTree(x, y, type));
+            foragingTrees.add(new ForagingTreeBlock(x, y, type));
         }
     }
 
@@ -71,7 +71,7 @@ public class ForagingController {
         for (int i = 0; i < grassCount; i++) {
             float x = MathUtils.random(minBounds.x, maxBounds.x);
             float y = MathUtils.random(minBounds.y, maxBounds.y);
-            foragingCrops.add(new ForagingCrop(x, y, ForagingCropType.GRASS));
+            foragingCrops.add(new ForagingCropBlock(x, y, ForagingCropType.GRASS));
         }
 
         // Spawn spring onions (only in spring)
@@ -80,7 +80,7 @@ public class ForagingController {
             for (int i = 0; i < onionCount; i++) {
                 float x = MathUtils.random(minBounds.x, maxBounds.x);
                 float y = MathUtils.random(minBounds.y, maxBounds.y);
-                foragingCrops.add(new ForagingCrop(x, y, ForagingCropType.SPRING_ONION));
+                foragingCrops.add(new ForagingCropBlock(x, y, ForagingCropType.SPRING_ONION));
             }
         }
     }
@@ -133,11 +133,11 @@ public class ForagingController {
 
     public void render(SpriteBatch batch) {
         // Render all foraging objects
-        for (ForagingCrop crop : foragingCrops) {
+        for (ForagingCropBlock crop : foragingCrops) {
             crop.render(batch);
         }
 
-        for (ForagingTree tree : foragingTrees) {
+        for (ForagingTreeBlock tree : foragingTrees) {
             tree.render(batch);
         }
 
@@ -146,11 +146,11 @@ public class ForagingController {
         }
     }
 
-    public ArrayList<ForagingCrop> getForagingCrops() {
+    public ArrayList<ForagingCropBlock> getForagingCrops() {
         return foragingCrops;
     }
 
-    public ArrayList<ForagingTree> getForagingTrees() {
+    public ArrayList<ForagingTreeBlock> getForagingTrees() {
         return foragingTrees;
     }
 

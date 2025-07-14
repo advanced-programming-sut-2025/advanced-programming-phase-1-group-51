@@ -13,11 +13,10 @@ import io.github.StardewValley.Models.Assets.GameAssetsManager;
 import io.github.StardewValley.Models.Buildings.*;
 import io.github.StardewValley.Models.Enums.Others.Weather;
 import io.github.StardewValley.Models.Game;
-import io.github.StardewValley.Models.ObjectsOnMap.ForagingTree;
+import io.github.StardewValley.Models.ObjectsOnMap.ForagingTreeBlock;
 import io.github.StardewValley.Models.ObjectsOnMap.Wall;
 import io.github.StardewValley.Views.GameMenus.EnergyHUD;
 
-import java.lang.reflect.Field;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -152,11 +151,12 @@ public class WorldController {
         foragingController.render(batch);
 
         // 3. Draw trees (which might be taller than player)
-        for (ForagingTree tree : foragingController.getForagingTrees()) {
+        for (ForagingTreeBlock tree : foragingController.getForagingTrees()) {
             tree.render(batch);
         }
 
         playerController.getPlayer().render(batch);
+//        playerController.renderDebug(batch);
         batch.end();
 
         // Render HUD (clock)

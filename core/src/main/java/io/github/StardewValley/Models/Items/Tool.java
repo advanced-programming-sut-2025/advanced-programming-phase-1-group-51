@@ -6,7 +6,7 @@ import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
 public class Tool extends Item{
     private ToolType type;
 
-    public Tool() {
+    public Tool(ToolType toolType) {
         super();
     }
 

@@ -85,14 +85,15 @@ public class Player {
         this.collisionRect = new CollisionRect(
             position.x,
             position.y,
-            currentSprite.getWidth() - 30,
-            currentSprite.getHeight() - 70
+            25,
+            25
         );
 
         currentSprite.setPosition(position.x, position.y);
         this.inventory = new BackPack(BackpackType.DEFAULT);
         this.trashcan = new TrashCan(TrashcanType.DEFAULT);
-        initializeInventory(); // Now this will work because inventory is initialized
+        this.itemInHand = new Tool(ToolType.AXE);
+        initializeInventory();
         initializeSkills();
         initializeRecipes();
     }
@@ -322,5 +323,9 @@ public class Player {
 
     public BackPack getInventory() {
         return inventory;
+    }
+
+    public void setItemInHand(Item itemInHand) {
+        this.itemInHand = itemInHand;
     }
 }

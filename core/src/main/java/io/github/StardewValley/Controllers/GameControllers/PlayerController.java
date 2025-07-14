@@ -2,14 +2,12 @@ package io.github.StardewValley.Controllers.GameControllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.StardewValley.Main;
 import io.github.StardewValley.Models.BackPack;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.MiscType;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Graphics.CollisionRect;
 import io.github.StardewValley.Models.Items.Item;
 import io.github.StardewValley.Models.ObjectsOnMap.*;
@@ -130,17 +128,17 @@ public class PlayerController {
 
     private boolean checkForagingCollisions() {
         CollisionRect playerRect = player.getCollisionRect();
-        ArrayList<ForagingCrop> crops = gameController.getWorldController().getForagingController().getForagingCrops();
-        ArrayList<ForagingTree> trees = gameController.getWorldController().getForagingController().getForagingTrees();
+        ArrayList<ForagingCropBlock> crops = gameController.getWorldController().getForagingController().getForagingCrops();
+        ArrayList<ForagingTreeBlock> trees = gameController.getWorldController().getForagingController().getForagingTrees();
         ArrayList<ForagingMineralBlock> minerals = gameController.getWorldController().getForagingController().getMineralBlocks();
 
-        for (ForagingCrop crop : crops) {
+        for (ForagingCropBlock crop : crops) {
             if (playerRect.collidesWith(crop.getCollisionRect())) {
                 return true;
             }
         }
 
-        for (ForagingTree tree : trees) {
+        for (ForagingTreeBlock tree : trees) {
             if (playerRect.collidesWith(tree.getCollisionRect())) {
                 return true;
             }
@@ -154,33 +152,58 @@ public class PlayerController {
         return false;
     }
 
-    // In PlayerController class
+
+
     private void handleInteraction() {
         Player player = getPlayer();
         Item itemInHand = player.getItemInHand();
-        Vector2 interactPosition = getInteractPosition(player);
 
         if (itemInHand == null) return;
 
-        // Check for interactions with foraging items
+        // Check for closest interactable object in range
+        ObjectOnMap closestObject = findClosestInteractable(player);
+        if (closestObject == null) return;
+
+        // Handle interaction based on object type and tool
+        if (closestObject instanceof ForagingTreeBlock && itemInHand.getName().contains("Axe")) {
+            handleTreeInteraction((ForagingTreeBlock) closestObject);
+        }
+        else if (closestObject instanceof ForagingCropBlock && itemInHand.getName().contains("Scythe")) {
+            handleCropInteraction((ForagingCropBlock) closestObject);
+        }
+        else if (closestObject instanceof ForagingMineralBlock && itemInHand.getName().contains("Pickaxe")) {
+            handleMineralInteraction((ForagingMineralBlock) closestObject);
+        }
+    }
+
+    private ObjectOnMap findClosestInteractable(Player player) {
         ForagingController foraging = gameController.getWorldController().getForagingController();
+        Vector2 playerPos = new Vector2(
+            player.getPosition().x + player.getCurrentSprite().getWidth()/2,
+            player.getPosition().y + player.getCurrentSprite().getHeight()/2
+        );
+
+        ObjectOnMap closest = null;
+        float closestDist = Float.MAX_VALUE;
 
         // Check trees
-        for (ForagingTree tree : foraging.getForagingTrees()) {
-            if (isInRange(player, tree)){
-                if (itemInHand.getName().contains("Axe")) {
-                    handleTreeInteraction(tree);
-                    return;
+        for (ForagingTreeBlock tree : foraging.getForagingTrees()) {
+            if (isInRange(player, tree)) {
+                float dist = playerPos.dst2(tree.getPosition().x, tree.getPosition().y);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = tree;
                 }
             }
         }
 
         // Check crops
-        for (ForagingCrop crop : foraging.getForagingCrops()) {
+        for (ForagingCropBlock crop : foraging.getForagingCrops()) {
             if (isInRange(player, crop)) {
-                if (itemInHand.getName().contains("Scythe")) {
-                    handleCropInteraction(crop);
-                    return;
+                float dist = playerPos.dst2(crop.getPosition().x, crop.getPosition().y);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = crop;
                 }
             }
         }
@@ -188,20 +211,35 @@ public class PlayerController {
         // Check minerals
         for (ForagingMineralBlock mineral : foraging.getMineralBlocks()) {
             if (isInRange(player, mineral)) {
-                if (itemInHand.getName().contains("Pickaxe")) {
-                    handleMineralInteraction(mineral);
-                    return;
+                float dist = playerPos.dst2(mineral.getPosition().x, mineral.getPosition().y);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = mineral;
                 }
             }
         }
+
+        return closest;
     }
 
     private boolean isInRange(Player player, ObjectOnMap object) {
-        Vector2 interactPosition = getInteractPosition(player);
-        return object.getCollisionRect().contains(interactPosition.x, interactPosition.y);
+        // Get player's collision rect
+        CollisionRect playerRect = player.getCollisionRect();
+
+        // Expand the player's rect by 50 pixels in all directions for interaction
+        float interactionRange = 50f;
+        CollisionRect interactionRect = new CollisionRect(
+            playerRect.getX() - interactionRange,
+            playerRect.getY() - interactionRange,
+            playerRect.getWidth() + 2 * interactionRange,
+            playerRect.getHeight() + 2 * interactionRange
+        );
+
+        // Check if object collides with this expanded rect
+        return interactionRect.collidesWith(object.getCollisionRect());
     }
 
-    private void handleTreeInteraction(ForagingTree tree) {
+    private void handleTreeInteraction(ForagingTreeBlock tree) {
         // Add wood to inventory
         BackPack inventory = player.getInventory();
         inventory.addItem(ForagingMineralType.WOOD, 5); // Each tree gives 5 wood
@@ -211,7 +249,7 @@ public class PlayerController {
 //        Main.playSound(Main.getChopSound());
     }
 
-    private void handleCropInteraction(ForagingCrop crop) {
+    private void handleCropInteraction(ForagingCropBlock crop) {
         // Add harvested item to inventory
         ItemType harvestedItem = crop.getForagingCropType().getHarvestedItemType();
         player.getInventory().addItem(harvestedItem, 1);
@@ -231,10 +269,16 @@ public class PlayerController {
     }
 
     private Vector2 getInteractPosition(Player player) {
-        // Calculate position in front of player based on direction
-        float interactDistance = 50f; // pixels in front of player
-        Vector2 position = new Vector2(player.getPosition());
+        // Base position is player center
+        Vector2 position = new Vector2(
+            player.getPosition().x + player.getCurrentSprite().getWidth()/2,
+            player.getPosition().y + player.getCurrentSprite().getHeight()/2
+        );
 
+        // Distance to project in front of player
+        float interactDistance = 80f; // Increased from 50
+
+        // Adjust based on direction
         switch (player.getCurrentDirection()) {
             case UP:
                 position.y += interactDistance;
@@ -253,33 +297,6 @@ public class PlayerController {
         return position;
     }
 
-    private void checkForagingInteractions(Vector2 interactPosition) {
-        ForagingController foraging = gameController.getWorldController().getForagingController();
-
-        // Check trees
-//        for (ForagingTree tree : foraging.getForagingTrees()) {
-//            if (tree.getCollisionRect().contains(interactPosition.x, interactPosition.y)) {
-//                handleTreeInteraction(tree);
-//                return;
-//            }
-//        }
-//
-//        // Check crops
-//        for (ForagingCrop crop : foraging.getForagingCrops()) {
-//            if (crop.getCollisionRect().contains(interactPosition.x, interactPosition.y)) {
-//                handleCropInteraction(crop);
-//                return;
-//            }
-//        }
-//
-//        // Check minerals
-//        for (ForagingMineralBlock mineral : foraging.getMineralBlocks()) {
-//            if (mineral.getCollisionRect().contains(interactPosition.x, interactPosition.y)) {
-//                handleMineralInteraction(mineral);
-//                return;
-//            }
-//        }
-    }
 
 
 
