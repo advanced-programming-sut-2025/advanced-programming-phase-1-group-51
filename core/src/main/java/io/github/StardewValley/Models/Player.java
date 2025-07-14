@@ -45,7 +45,6 @@ public class Player {
     private ArrayList<Gift> gifts = new ArrayList<>();
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
     private ArrayList<Friendship> friendships = new ArrayList<>();
-    private TrashcanType trashcanType;
     private TrashCan trashcan;
     private ArrayList<Animal> animals = new ArrayList<>();
     private BackPack inventory;
@@ -92,6 +91,7 @@ public class Player {
 
         currentSprite.setPosition(position.x, position.y);
         this.inventory = new BackPack(BackpackType.DEFAULT);
+        this.trashcan = new TrashCan(TrashcanType.DEFAULT);
         initializeInventory(); // Now this will work because inventory is initialized
         initializeSkills();
         initializeRecipes();

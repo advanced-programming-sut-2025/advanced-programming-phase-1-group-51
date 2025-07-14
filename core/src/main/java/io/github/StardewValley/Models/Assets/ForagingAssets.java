@@ -11,6 +11,7 @@ import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
+import io.github.StardewValley.Models.Enums.Types.TrashcanType;
 import io.github.StardewValley.Models.Items.Food;
 import io.github.StardewValley.Models.Items.Item;
 import io.github.StardewValley.Models.Items.Mineral;
@@ -27,6 +28,7 @@ public class ForagingAssets implements Disposable {
     private Map<ForagingCropType, Texture> cropTextures;
     private Map<ForagingMineralType, Texture> mineralTextures;
     private Map<ToolType, Texture> toolTextures;
+    private Map<TrashcanType, Texture> trashcanTexture;
     // Add to ForagingAssets class
 
     private void loadToolTextures() {
@@ -37,6 +39,9 @@ public class ForagingAssets implements Disposable {
         toolTextures.put(ToolType.SCYTHE, loadTexture("items/tools/Scythe.png"));
         toolTextures.put(ToolType.WATERING_CAN_DEFAULT, loadTexture("items/tools/watering_can.png"));
         // ... other tools
+    }
+    private void loadTrashcanTextures() {
+        trashcanTexture.put(TrashcanType.DEFAULT, loadTexture("items/trashcan/Trash_Can_Steel.png"));
     }
 
     public Texture getToolTexture(ToolType type) {

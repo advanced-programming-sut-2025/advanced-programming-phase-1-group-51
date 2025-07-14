@@ -1,34 +1,20 @@
 package io.github.StardewValley.Controllers.GameControllers;
 
 import io.github.StardewValley.Main;
-import io.github.StardewValley.Views.GameMenus.InventoryMenu;
+import io.github.StardewValley.Views.GameMenus.InventoryMenus.BackpackMenu;
 
 public class InventoryController {
-    private InventoryMenu view;
+    private BackpackMenu view;
     private GameController gameController;
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
-    public void setView(InventoryMenu view) {
+    public void setView(BackpackMenu view) {
         this.view = view;
     }
 
-    public void handleButtons() {
-        if (view != null) {
-            if (view.getBackButton().isPressed()) {
-                Main.playSound(Main.getButtonClickSound());
-                resumeGame();
-            }
-
-            if (view.getSkillsButton().isPressed()) {
-                Main.playSound(Main.getButtonClickSound());
-                view.setShowingSkills(!view.isShowingSkills());
-                view.show(); // Refresh the view
-            }
-        }
-    }
 
     public PlayerController getPlayerController() {
         return gameController.getPlayerController();

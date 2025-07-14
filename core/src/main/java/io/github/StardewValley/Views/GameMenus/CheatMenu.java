@@ -9,9 +9,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.StardewValley.Controllers.GameControllers.CheatMenuController;
 import io.github.StardewValley.Main;
 
-public class
-
-CheatMenu implements Screen {
+public class CheatMenu implements Screen {
     private Stage stage;
     private final Skin skin;
     private final TextButton submitButton;

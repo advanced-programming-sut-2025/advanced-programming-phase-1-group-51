@@ -7,7 +7,7 @@ import io.github.StardewValley.Models.Player;
 import io.github.StardewValley.Views.GameMenus.CheatMenu;
 import io.github.StardewValley.Views.GameMenus.GameMenu;
 import io.github.StardewValley.Main;
-import io.github.StardewValley.Views.GameMenus.InventoryMenu;
+import io.github.StardewValley.Views.GameMenus.InventoryMenus.BackpackMenu;
 
 import java.time.LocalTime;
 
@@ -58,18 +58,8 @@ public class GameController {
     }
 
     public void goToInventory() {
-        if (inventoryController == null) {
-            inventoryController = new InventoryController();
-            inventoryController.setGameController(this);
-        }
-
-        // Ensure player has an inventory
-        if (playerController.getPlayer().getInventory() == null) {
-            playerController.getPlayer().initializeInventory();
-        }
-
-        Main.getMain().setScreen(new InventoryMenu(
-            inventoryController,
+        Main.getMain().setScreen(new BackpackMenu(
+            this,
             GameAssetsManager.getInstance().getSkin()
         ));
     }
