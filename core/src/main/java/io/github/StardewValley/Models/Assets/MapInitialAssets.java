@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.CropType;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.CropType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingCropType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
 import io.github.StardewValley.Models.Enums.Types.TrashcanType;
@@ -129,6 +129,7 @@ public class MapInitialAssets implements Disposable {
 //        cropTextures.put(ForagingCropType.DANDELION, loadTexture("foraging/crops/dandelion.png"));
 //        cropTextures.put(ForagingCropType.LEEK, loadTexture("foraging/crops/leek.png"));
 //        cropTextures.put(ForagingCropType.MOREL, loadTexture("foraging/crops/morel.png"));
+
         // Add all other crop types...
     }
 

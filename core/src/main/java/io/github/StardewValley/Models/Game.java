@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class Game {
     private Map map;
-    private static LocalTime time = LocalTime.of(9, 0);
-    private static int currentDay = 1;
-    private static int currentSeason = 1;
+    private LocalTime time = LocalTime.of(9, 0);
+    private int currentDay = 1;
+    private int currentSeason = 1;
     public ArrayList<Player> players;
     private boolean isGameOver = false;
     private Season season;
@@ -32,27 +32,17 @@ public class Game {
         this.map = Map.makeMap();
     }
 
-    public static int getCurrentSeason() {
+    public int getCurrentSeason() {
         return currentSeason;
     }
 
-    public static void setCurrentSeason(int currentSeason) {
-        Game.currentSeason = currentSeason;
-    }
 
-    public static int getCurrentDay() {
+    public int getCurrentDay() {
         return currentDay;
     }
 
-    public static void setCurrentDay(int currentDay) {
-        Game.currentDay = currentDay;
-    }
 
-    public static void setTime(LocalTime time) {
-        Game.time = time;
-    }
-
-    public static LocalTime getTime() {
+    public  LocalTime getTime() {
         return time;
     }
 
@@ -84,5 +74,43 @@ public class Game {
         return currentPlayer;
     }
 
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 
+    public void setWeatherTomorrow(Weather weatherTomorrow) {
+        this.weatherTomorrow = weatherTomorrow;
+    }
+
+    public void setWeatherToday(Weather weatherToday) {
+        this.weatherToday = weatherToday;
+    }
+
+    public void setSeason(Season season) {
+        this.season = season;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public void setCurrentSeason(int currentSeason) {
+        this.currentSeason = currentSeason;
+    }
+
+    public void setCurrentDay(int currentDay) {
+        this.currentDay = currentDay;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
 }

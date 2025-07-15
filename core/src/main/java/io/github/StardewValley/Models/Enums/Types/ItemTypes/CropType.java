@@ -1,8 +1,10 @@
-package io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap;
+package io.github.StardewValley.Models.Enums.Types.ItemTypes;
 
+import io.github.StardewValley.Models.Enums.Others.Quality;
 import io.github.StardewValley.Models.Enums.Others.Season;
+import io.github.StardewValley.Models.Slot;
 
-public enum CropType {
+public enum CropType implements ItemType{
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
     CARROT("Carrot", "Carrot Seeds", 1, 1, 1, -1, -1, 3, true, -1, 35, true, 75, new Season[]{Season.SPRING}, false),
     CAULIFLOWER("Cauliflower", "Cauliflower Seeds", 1, 2, 4, 4, 1, 12, true, -1, 175, true, 75, new Season[]{Season.SPRING}, true),
@@ -99,5 +101,15 @@ public enum CropType {
             }
         }
         return null;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount, Quality quality) {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 }

@@ -1,14 +1,8 @@
 package io.github.StardewValley.Models;
 
 import io.github.StardewValley.Models.Enums.Others.Quality;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.MiscType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.FoodType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
-import io.github.StardewValley.Models.Items.Misc;
-import io.github.StardewValley.Models.Items.Food;
-import io.github.StardewValley.Models.Items.Item;
-import io.github.StardewValley.Models.Items.Mineral;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.*;
+import io.github.StardewValley.Models.Items.*;
 
 public class Slot {
     private Item item;
@@ -21,7 +15,17 @@ public class Slot {
         } else if (type instanceof MiscType) {
             item = new Misc((MiscType) type);
         } else if (type instanceof ForagingMineralType) {
-            item = new Mineral(Quality.DEFAULT, (ForagingMineralType) type);
+            item = new Mineral((ForagingMineralType) type);
+        } else if (type instanceof ForagingCropType) {
+            item = new ForagingCrop((ForagingCropType) type);
+        } else if (type instanceof CropType) {
+            item = new Crop((CropType) type);
+        } else if (type instanceof ForagingCropSeedType) {
+            item = new CropSeed((ForagingCropSeedType) type);
+        } else if (type instanceof FishType) {
+            item = new Fish((FishType) type);
+        } else if (type instanceof ForagingTreeSeedType) {
+            item = new TreeSeed((ForagingTreeSeedType) type);
         }
         this.item = item;
         this.count = count;

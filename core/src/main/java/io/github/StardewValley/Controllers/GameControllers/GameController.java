@@ -16,6 +16,7 @@ public class GameController {
     private PlayerController playerController;
     private WorldController worldController;
     private CheatMenuController cheatMenuController;
+    private Game game;
 
 
     private LocalTime MaxTime = LocalTime.of(22, 0);
@@ -23,6 +24,7 @@ public class GameController {
     private boolean gameEnded = false;
 
     public GameController() {
+        this.game = App.getCurrentGame();
         this.cheatMenuController = new CheatMenuController();
         this.cheatMenuController.setGameController(this);
 
@@ -62,7 +64,7 @@ public class GameController {
     }
 
     public void ChangeTime(char c) {
-        LocalTime newTime = Game.getTime();
+        LocalTime newTime = game.getTime();
 
         if (c == 'H') {
             newTime = newTime.plusHours(1);
@@ -74,8 +76,8 @@ public class GameController {
             newTime = MinTime;
 
             // Advance day and season if needed
-            int currentDay = Game.getCurrentDay() + 1;
-            int currentSeason = Game.getCurrentSeason();
+            int currentDay = game.getCurrentDay() + 1;
+            int currentSeason = game.getCurrentSeason();
 
             if (currentDay > 28) {
                 currentDay = 1;
@@ -85,16 +87,16 @@ public class GameController {
                     currentSeason = 1;
                 }
 
-                Game.setCurrentSeason(currentSeason);
+                game.setCurrentSeason(currentSeason);
                 System.out.println("Season changed to: " + getSeasonName(currentSeason));
             }
 
-            Game.setCurrentDay(currentDay);
+            game.setCurrentDay(currentDay);
             System.out.println("New Day: " + currentDay);
         }
 
-        Game.setTime(newTime);
-        System.out.println("Time: " + Game.getTime());
+        game.setTime(newTime);
+        System.out.println("Time: " + game.getTime());
     }
 
     private String getSeasonName(int seasonNumber) {

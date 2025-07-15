@@ -1,7 +1,7 @@
 package io.github.StardewValley.Models.Items;
 
 import io.github.StardewValley.Models.Enums.Others.Quality;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.CropType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.CropType;
 
 public class Crop extends Item{
     private CropType type;

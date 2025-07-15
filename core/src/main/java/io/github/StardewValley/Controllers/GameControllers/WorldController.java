@@ -41,9 +41,11 @@ public class WorldController {
     private StarDropSaloon starDropSaloon;
     private ArrayList<Wall> allWalls;
     private ForagingController foragingController;
+    private Game game;
 
     public WorldController(PlayerController playerController) {
         this.playerController = playerController;
+        this.game = App.getCurrentGame();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -177,7 +179,7 @@ public class WorldController {
             clockTexture.getWidth() * clockScale,
             clockTexture.getHeight() * clockScale);
 
-        LocalTime time = Game.getTime();
+        LocalTime time = game.getTime();
         int hour = time.getHour();
         int minute = time.getMinute();
 
@@ -209,7 +211,7 @@ public class WorldController {
         font.draw(batch, hourStr, textX, textY);
 
         // Draw weekday and day number
-        int day = Game.getCurrentDay();
+        int day = game.getCurrentDay();
         String dayOfWeek = getDayOfWeek(day);
         String dayStr = String.format("%s.%02d", dayOfWeek, day);
         font.getData().setScale(1.5f);

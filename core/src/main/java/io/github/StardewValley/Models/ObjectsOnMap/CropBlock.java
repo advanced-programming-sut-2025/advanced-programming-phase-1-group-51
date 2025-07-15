@@ -1,6 +1,6 @@
 package io.github.StardewValley.Models.ObjectsOnMap;
 
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.CropType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.CropType;
 
 public class CropBlock extends ObjectOnMap{
     private CropType cropType;

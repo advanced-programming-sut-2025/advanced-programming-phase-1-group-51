@@ -43,7 +43,7 @@ public class BackPack {
     }
 
     public void addItem(ForagingMineralType type, int count) {
-        addItem(new Mineral(Quality.DEFAULT, type), count);
+        addItem(new Mineral(type), count);
     }
 
     // Helper method

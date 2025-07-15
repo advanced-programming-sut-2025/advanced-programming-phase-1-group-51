@@ -3,8 +3,9 @@ package io.github.StardewValley.Controllers.GameControllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import io.github.StardewValley.Models.App;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
-import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingCropType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingCropType;
 import io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap.ForagingTreeType;
 import io.github.StardewValley.Models.Game;
 import io.github.StardewValley.Models.ObjectsOnMap.*;
@@ -75,7 +76,7 @@ public class ForagingController {
         }
 
         // Spawn spring onions (only in spring)
-        if (Game.getCurrentSeason() == 1) { // Spring
+        if (App.getCurrentGame().getCurrentSeason() == 1) { // Spring
             int onionCount = MathUtils.random(5, 15);
             for (int i = 0; i < onionCount; i++) {
                 float x = MathUtils.random(minBounds.x, maxBounds.x);

@@ -1,13 +1,12 @@
-package io.github.StardewValley.Models.Enums.Types.ObjectShownOnMap;
+package io.github.StardewValley.Models.Enums.Types.ItemTypes;
 
+import io.github.StardewValley.Models.Enums.Others.Quality;
 import io.github.StardewValley.Models.Enums.Others.Season;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.MiscType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.FoodType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
+import io.github.StardewValley.Models.Slot;
 
 import java.util.Arrays;
 
-public enum ForagingCropType {
+public enum ForagingCropType implements ItemType{
 
     GRASS(Season.values(), 0, 0, MiscType.FIBER, "Grass"),
     COMMON_MUSHROOM(Season.values(), 40, 38, FoodType.COMMON_MUSHROOM, "Common Mushroom"),
@@ -81,5 +80,15 @@ public enum ForagingCropType {
 
     public ItemType getHarvestedItemType() {
         return harvestedItemType;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount, Quality quality) {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 }
