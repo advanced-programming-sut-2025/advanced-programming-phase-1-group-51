@@ -4,14 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.StardewValley.Main;
 import io.github.StardewValley.Models.BackPack;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
 import io.github.StardewValley.Models.Graphics.CollisionRect;
 import io.github.StardewValley.Models.Items.Item;
+import io.github.StardewValley.Models.Notif;
 import io.github.StardewValley.Models.ObjectsOnMap.*;
 import io.github.StardewValley.Models.Player;
+import io.github.StardewValley.Models.Slot;
 
 import java.util.ArrayList;
 
@@ -93,6 +99,9 @@ public class PlayerController {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             handleInteraction();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            handleGreenhouseBuild();
+        }
 
         // Normalize diagonal movement
         if (movement.x != 0 && movement.y != 0) {
@@ -167,12 +176,15 @@ public class PlayerController {
         // Handle interaction based on object type and tool
         if (closestObject instanceof ForagingTreeBlock && itemInHand.getName().contains("Axe")) {
             handleTreeInteraction((ForagingTreeBlock) closestObject);
+            Main.playSound(Main.getTree());
         }
         else if (closestObject instanceof ForagingCropBlock && itemInHand.getName().contains("Scythe")) {
             handleCropInteraction((ForagingCropBlock) closestObject);
+            Main.playSound(Main.getCrop());
         }
         else if (closestObject instanceof ForagingMineralBlock && itemInHand.getName().contains("Pickaxe")) {
             handleMineralInteraction((ForagingMineralBlock) closestObject);
+            Main.playSound(Main.getMineral());
         }
     }
 
@@ -239,33 +251,38 @@ public class PlayerController {
         return interactionRect.collidesWith(object.getCollisionRect());
     }
 
+    // In PlayerController.java
     private void handleTreeInteraction(ForagingTreeBlock tree) {
-        // Add wood to inventory
         BackPack inventory = player.getInventory();
-        inventory.addItem(ForagingMineralType.WOOD, 5); // Each tree gives 5 wood
+        inventory.addItem(ForagingMineralType.WOOD, 5);
+        // Show notification
+        player.addNotification("You got 5 wood!");
 
         // Remove tree
         gameController.getWorldController().getForagingController().getForagingTrees().remove(tree);
-//        Main.playSound(Main.getChopSound());
     }
 
     private void handleCropInteraction(ForagingCropBlock crop) {
-        // Add harvested item to inventory
         ItemType harvestedItem = crop.getForagingCropType().getHarvestedItemType();
         player.getInventory().addItem(harvestedItem, 1);
 
+        // Show notification
+        player.addNotification("You got 1 " + harvestedItem.getName());
+
         // Remove crop
         gameController.getWorldController().getForagingController().getForagingCrops().remove(crop);
-//        Main.playSound(Main.getHarvestSound());
     }
 
     private void handleMineralInteraction(ForagingMineralBlock mineral) {
         // Add mineral to inventory
+
         player.getInventory().addItem(mineral.getForagingMineralType(), 1);
+
+        // Show notification
+        player.addNotification("You got 1 " + mineral.getForagingMineralType().name().toLowerCase());
 
         // Remove mineral block
         gameController.getWorldController().getForagingController().getMineralBlocks().remove(mineral);
-//        Main.playSound(Main.getRockCrackSound());
     }
 
     private Vector2 getInteractPosition(Player player) {
@@ -297,6 +314,59 @@ public class PlayerController {
         return position;
     }
 
+    private void handleGreenhouseBuild() {
+        String notif = "";
+        BackPack backPack = player.getInventory();
+        boolean hasEnoughWood = false;
+
+        // Check if player has enough wood
+        for (Slot slot : backPack.getSLots()) {
+            if (slot.getItem() != null && slot.getItem().getName().equals("Wood") && slot.getCount() >= 5) {
+                hasEnoughWood = true;
+                break;
+            }
+        }
+
+        if (hasEnoughWood) {
+            // Find and remove the ruined greenhouse
+            ArrayList<Wall> allWalls = gameController.getWorldController().getAllWalls();
+            Wall ruinedGreenhouse = null;
+
+            for (Wall wall : allWalls) {
+                if (wall.getTypeWall().equals("ruined_greenhouse")) {
+                    ruinedGreenhouse = wall;
+                    break;
+                }
+            }
+
+            if (ruinedGreenhouse != null) {
+                // Remove wood from inventory
+                for (Slot slot : backPack.getSLots()) {
+                    if (slot.getItem() != null && slot.getItem().getName().equals("Wood")) {
+                        slot.setCount(slot.getCount() - 5);
+                        break;
+                    }
+                }
+
+                // Remove the ruined greenhouse
+                allWalls.remove(ruinedGreenhouse);
+
+                // Create new walls and add them to the world
+                ArrayList<Wall> newWalls = gameController.getWorldController().getGreenhouse().createWallsAndFloor();
+                allWalls.addAll(newWalls);
+
+                notif = "Greenhouse built successfully!";
+            } else {
+                notif = "Greenhouse is already built!";
+            }
+        } else {
+            notif = "You don't have enough wood (need 5)!";
+        }
+
+        if (!notif.isEmpty()) {
+            player.addNotification(notif);
+        }
+    }
 
 
 
@@ -306,5 +376,9 @@ public class PlayerController {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public GameController getGameController() {
+        return gameController;
     }
 }

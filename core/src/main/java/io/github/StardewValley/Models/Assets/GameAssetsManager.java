@@ -9,6 +9,7 @@ public class GameAssetsManager {
     private static GameAssetsManager gameAssetsManager;
     private final ArrayList<PlayerAssets> playerAssets;
     private MapInitialAssets foragingAssetsManager;
+    private NotificationAssets notificationAssets;
     private final Skin skin;
 
     private GameAssetsManager() {
@@ -16,6 +17,13 @@ public class GameAssetsManager {
         playerAssets = new ArrayList<>();
 
         foragingAssetsManager = MapInitialAssets.getInstance();
+        notificationAssets = new NotificationAssets(); // Add this
+        notificationAssets.load(); // Load notification assets
+    }
+
+    // Add this method
+    public NotificationAssets getNotificationAssets() {
+        return notificationAssets;
     }
 
     public static GameAssetsManager getInstance() {

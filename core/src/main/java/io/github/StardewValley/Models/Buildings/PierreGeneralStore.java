@@ -5,7 +5,6 @@ import io.github.StardewValley.Models.ObjectsOnMap.Wall;
 import java.util.ArrayList;
 
 public class PierreGeneralStore {
-
     private ArrayList<Wall> walls;
     private float x, y;
     private float width, height;
@@ -20,34 +19,25 @@ public class PierreGeneralStore {
     }
 
     private void createWalls() {
-//        float wallSize = 50f; // Size of each wall segment
-//
-//        // Back walls
-//        walls.add(new Wall(960, 2345, wallSize, "back"));
-//        walls.add(new Wall(960 + 480, 2345, wallSize, "back"));
-//
-//        // Bottom wall (with gap for door)
-//        for (float i = x; i < x + 224; i += wallSize) {
-//            walls.add(new Wall(i, y, wallSize, "horizontal"));
-//        }
-//        for (float i = x + 240 + 120; i < x + width; i += wallSize) {
-//            walls.add(new Wall(i, y, wallSize, "horizontal"));
-//        }
-//
-//        // Top wall
-//        for (float i = x; i < x + width - 35; i += wallSize) {
-//            walls.add(new Wall(i, y + height - 20, wallSize, "horizontal"));
-//        }
-//
-//        // Left wall
-//        for (float j = y; j < y + height; j += wallSize) {
-//            walls.add(new Wall(x, j, wallSize, "vertical"));
-//        }
-//
-//        // Right wall
-//        for (float j = y; j < y + height; j += wallSize) {
-//            walls.add(new Wall(x + width - 20, j, wallSize, "vertical"));
-//        }
+
+
+        // Back wall
+//        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
+
+        // Bottom wall (with gap for door)
+        walls.add(new Wall(x, y,width ,20, "horizontal"));
+
+        // Top wall
+        walls.add(new Wall(x, y + height, width + 20,20, "horizontal"));
+
+        // Left wall
+        walls.add(new Wall(x , y, 20,600, "vertical"));
+
+        walls.add(new Wall(x , y + 800, 20,height - 800, "vertical"));
+
+        // Right wall
+        walls.add(new Wall(x + width, y, 20,height, "vertical"));
+
     }
 
     public ArrayList<Wall> getWalls() {

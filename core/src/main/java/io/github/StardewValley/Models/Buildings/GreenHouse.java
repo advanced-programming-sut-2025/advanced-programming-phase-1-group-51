@@ -15,30 +15,33 @@ public class GreenHouse {
         this.width = width;
         this.height = height;
         this.walls = new ArrayList<>();
-        createWallsAndFloor();
+        walls.add(new Wall(x- 25,y - 130,400,560,"ruined_greenhouse"));
     }
 
-    private void createWallsAndFloor() {
+    public ArrayList<Wall> createWallsAndFloor() {
+        ArrayList<Wall> newWalls = new ArrayList<>();
 
         //floor
-        walls.add(new Wall(x,y,360,420,"floor_greenhouse"));
+        newWalls.add(new Wall(x,y,360,320,"floor_greenhouse"));
 
         // Back walls
-        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
+        newWalls.add(new Wall(x, 2170, 360,160, "back_greenhouse"));
 
         // Bottom wall (with gap for door)
-            walls.add(new Wall(x, y- 4,160 ,20, "horizontal"));
-
-            walls.add(new Wall(x + 220, y - 4, 150,20, "horizontal"));
+        newWalls.add(new Wall(x, y- 4,160 ,20, "horizontal"));
+        newWalls.add(new Wall(x + 220, y - 4, 150,20, "horizontal"));
 
         // Top wall
-            walls.add(new Wall(x - 20, y + height - 110, 385,20, "horizontal"));
+        newWalls.add(new Wall(x - 20, y + height - 210, 385,20, "horizontal"));
 
         // Left wall
-            walls.add(new Wall(x - 20, y - 8, 20,515, "vertical"));
+        newWalls.add(new Wall(x - 20, y -8, 20,415, "vertical"));
 
         // Right wall
-            walls.add(new Wall(x + width - 125, y -8, 20,515, "vertical"));
+        newWalls.add(new Wall(x + width - 125, y -8, 20,415, "vertical"));
+
+        this.walls = newWalls; // Update the greenhouse's walls
+        return newWalls;
     }
 
 

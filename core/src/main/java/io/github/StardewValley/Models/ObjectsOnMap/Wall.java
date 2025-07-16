@@ -10,6 +10,9 @@ public class Wall extends ObjectOnMap {
     private static Texture houseBackTexture;
     private static Texture greenhouseBackTexture;
     private static Texture greenhouseFloorTexture;
+    private static Texture ruinedGreenhouseTexture;
+    private static Texture blackSmithBackTexture;
+    private static Texture fishShopBackTexture;
     private String typeWall;
 
 
@@ -63,6 +66,34 @@ public class Wall extends ObjectOnMap {
             this.sprite.setSize(width, height);
             this.sprite.setPosition(x, y);
         }
+        else if(typeWall.equals("ruined_greenhouse")) {
+            if (ruinedGreenhouseTexture == null) {
+                ruinedGreenhouseTexture = new Texture("initials/ruinedGreenhouse.png");
+            }
+
+            this.sprite = new Sprite(ruinedGreenhouseTexture);
+            this.sprite.setSize(width, height);
+            this.sprite.setPosition(x, y);
+        }
+        else if(typeWall.equals("blackSmith_back")) {
+            if (blackSmithBackTexture == null) {
+                blackSmithBackTexture = new Texture("initials/BlackSmith_Back.png");
+            }
+
+            this.sprite = new Sprite(blackSmithBackTexture);
+            this.sprite.setSize(width, height);
+            this.sprite.setPosition(x, y);
+        }
+        else if(typeWall.equals("fishShop_back")) {
+            if (fishShopBackTexture == null) {
+                fishShopBackTexture = new Texture("initials/FishShop_Back.png");
+            }
+
+            this.sprite = new Sprite(fishShopBackTexture);
+            this.sprite.setSize(width, height);
+            this.sprite.setPosition(x, y);
+        }
+
     }
 
     public String getTypeWall() {

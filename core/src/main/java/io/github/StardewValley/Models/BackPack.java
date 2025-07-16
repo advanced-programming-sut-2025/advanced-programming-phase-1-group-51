@@ -38,10 +38,6 @@ public class BackPack {
         }
     }
 
-    public void addItem(MiscType type, int count) {
-        addItem(new Misc(type), count);
-    }
-
     public void addItem(ForagingMineralType type, int count) {
         addItem(new Mineral(type), count);
     }

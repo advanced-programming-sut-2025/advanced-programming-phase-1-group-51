@@ -22,21 +22,21 @@ public class BlackSmith {
 
 
         // Back walls
-//        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
+        walls.add(new Wall(x, y+ height - 310, width,320, "blackSmith_back"));
 
         // Bottom wall (with gap for door)
         walls.add(new Wall(x, y,width ,20, "horizontal"));
 
         // Top wall
-        walls.add(new Wall(x, y + height, width,20, "horizontal"));
+        walls.add(new Wall(x, y + height, width + 20,20, "horizontal"));
 
         // Left wall
         walls.add(new Wall(x , y, 20,height, "vertical"));
 
         // Right wall
-        walls.add(new Wall(x + width, y, 20,515, "vertical"));
+        walls.add(new Wall(x + width, y, 20,150, "vertical"));
 
-        walls.add(new Wall(x + width, y + 650, 20,810, "vertical"));
+        walls.add(new Wall(x + width, y + 300, 20,height - 300, "vertical"));
     }
 
     public ArrayList<Wall> getWalls() {

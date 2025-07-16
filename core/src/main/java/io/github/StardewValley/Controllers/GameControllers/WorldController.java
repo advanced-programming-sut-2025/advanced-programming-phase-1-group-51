@@ -32,13 +32,13 @@ public class WorldController {
     private Viewport hudViewport;
     private PlayerHouse playerHouse;
     private GreenHouse greenhouse;
-    private BlackSmith blackSmith;
-    private CarpenterShop carpenterShop;
     private FishShop fishShop;
-    private JojaMart jojaMart;
+    private CarpenterShop carpenterShop;
     private MarnieRanch marnieRanch;
-    private PierreGeneralStore pierreStore;
+    private JojaMart jojaMart;
     private StarDropSaloon starDropSaloon;
+    private PierreGeneralStore pierreStore;
+    private BlackSmith blackSmith;
     private ArrayList<Wall> allWalls;
     private ForagingController foragingController;
     private Game game;
@@ -49,7 +49,7 @@ public class WorldController {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        backgroundTexture = new Texture("Flooring/store_map.png");
+        backgroundTexture = new Texture("Flooring/map (11).png");
 
         backgroundWidth = backgroundTexture.getWidth();
         backgroundHeight = backgroundTexture.getHeight();
@@ -68,7 +68,7 @@ public class WorldController {
 
         clockTexture = new Texture("Clock/clock-0.png");
         arrow = new Texture("Clock/arrow.png");
-        this.foragingController = new ForagingController();
+        this.foragingController = new ForagingController(playerController.getGameController());
 
         font = new BitmapFont();
         font.getData().setScale(2.5f);
@@ -76,23 +76,24 @@ public class WorldController {
 
         playerHouse = new PlayerHouse(960, 1920, 960, 600);
         greenhouse = new GreenHouse(240,1920,480, 600);
-        blackSmith = new BlackSmith(3120,3465,960, 1440);
-//        carpenterShop = new CarpenterShop(240,1920,480, 600);
-//        fishShop = new FishShop(240,1920,480, 600);
-//        jojaMart = new JojaMart(240,1920,480, 600);
-//        marnieRanch = new MarnieRanch(240,1920,480, 600);
-//        pierreStore = new PierreGeneralStore(240,1920,480, 600);
-//        starDropSaloon = new StarDropSaloon(240,1920,480, 600);
+        fishShop = new FishShop(3120,3720,720, 720);
+        carpenterShop = new CarpenterShop(4560,2520,1440, 840);
+        marnieRanch = new MarnieRanch(6600,3120,1080, 1440);
+        jojaMart = new JojaMart(3600,7305,1080, 960);
+        starDropSaloon = new StarDropSaloon(5280,7305,1200, 720);
+        pierreStore = new PierreGeneralStore(6600,5400,1080, 1440);
+        blackSmith = new BlackSmith(3120,5265,720, 720);
+
         allWalls = new ArrayList<>();
-        allWalls.addAll(blackSmith.getWalls());
-//        allWalls.addAll(carpenterShop.getWalls());
-//        allWalls.addAll(fishShop.getWalls());
+        allWalls.addAll(fishShop.getWalls());
+        allWalls.addAll(carpenterShop.getWalls());
+        allWalls.addAll(marnieRanch.getWalls());
         allWalls.addAll(greenhouse.getWalls());
-//        allWalls.addAll(jojaMart.getWalls());
-//        allWalls.addAll(marnieRanch.getWalls());
-//        allWalls.addAll(pierreStore.getWalls());
+        allWalls.addAll(jojaMart.getWalls());
+        allWalls.addAll(starDropSaloon.getWalls());
+        allWalls.addAll(pierreStore.getWalls());
         allWalls.addAll(playerHouse.getWalls());
-//        allWalls.addAll(starDropSaloon.getWalls());
+        allWalls.addAll(blackSmith.getWalls());
 
     }
 
@@ -158,11 +159,16 @@ public class WorldController {
         }
 
         playerController.getPlayer().render(batch);
-//        playerController.renderDebug(batch);
         batch.end();
+
 
         // Render HUD (clock)
         renderHUD(batch);
+
+        batch.setProjectionMatrix(hudCamera.combined);
+        batch.begin();
+        playerController.getPlayer().renderNotifications(batch);
+        batch.end();
     }
 
 
@@ -261,5 +267,10 @@ public class WorldController {
 
     public ForagingController getForagingController() {
         return foragingController;
+    }
+
+
+    public GreenHouse getGreenhouse() {
+        return greenhouse;
     }
 }

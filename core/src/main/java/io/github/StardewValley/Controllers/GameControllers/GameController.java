@@ -24,6 +24,7 @@ public class GameController {
     private boolean gameEnded = false;
 
     public GameController() {
+        GameAssetsManager.getInstance().getNotificationAssets().load();
         this.game = App.getCurrentGame();
         this.cheatMenuController = new CheatMenuController();
         this.cheatMenuController.setGameController(this);
@@ -37,9 +38,11 @@ public class GameController {
         this.worldController = new WorldController(playerController);
     }
 
+    // In GameController.java
     public void updateGame(float deltaTime) {
         if (!gameEnded && !Main.isGamePaused()) {
             playerController.update(deltaTime);
+            playerController.getPlayer().updateNotifications(deltaTime);
             worldController.update();
         }
     }

@@ -18,13 +18,16 @@ public class Main extends Game {
     private static SpriteBatch batch;
     private static boolean isGamePaused = false;
     private static Music currentMusic;
-    private static float musicVolume = 0.5f;
-    private static float sfxVolume = 0.8f;
+    private static float musicVolume = 0.3f;
+    private static float sfxVolume = 1.5f;
     private static boolean sfxEnabled = true;
     private static Pixmap cursorPixmap;
     private static Cursor customCursor;
     private static Sound buttonClickSound;
     private static Sound footstep;
+    private static Sound crop;
+    private static Sound tree;
+    private static Sound mineral;
 
     @Override
     public void create() {
@@ -55,6 +58,9 @@ public class Main extends Game {
         try {
             buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("sfx/button_click.wav"));
             footstep = Gdx.audio.newSound(Gdx.files.internal("sfx/footstep.wav"));
+            crop = Gdx.audio.newSound(Gdx.files.internal("sfx/cropCollecting.wav"));
+            tree = Gdx.audio.newSound(Gdx.files.internal("sfx/treeRemoval.wav"));
+            mineral = Gdx.audio.newSound(Gdx.files.internal("sfx/mining.wav"));
         }
         catch (Exception e) {
             Gdx.app.error("SFX", "Error loading sound effects", e);
@@ -142,6 +148,18 @@ public class Main extends Game {
 
     public static SpriteBatch getBatch() {
         return batch;
+    }
+
+    public static Sound getCrop() {
+        return crop;
+    }
+
+    public static Sound getTree() {
+        return tree;
+    }
+
+    public static Sound getMineral() {
+        return mineral;
     }
 
     public static boolean isGamePaused() {

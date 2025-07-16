@@ -18,8 +18,10 @@ public class ForagingController {
     private ArrayList<ForagingMineralBlock> mineralBlocks;
     private final Vector2 minBounds = new Vector2(120, 120);
     private final Vector2 maxBounds = new Vector2(2640, 1680);
+    private GameController gameController;
 
-    public ForagingController() {
+    public ForagingController(GameController gameController) {
+        this.gameController = gameController;
         this.foragingCrops = new ArrayList<>();
         this.foragingTrees = new ArrayList<>();
         this.mineralBlocks = new ArrayList<>();
@@ -145,6 +147,11 @@ public class ForagingController {
         for (ForagingMineralBlock mineral : mineralBlocks) {
             mineral.render(batch);
         }
+        for(Wall wall :  gameController.getWorldController().getAllWalls()){
+            wall.render(batch);
+        }
+
+
     }
 
     public ArrayList<ForagingCropBlock> getForagingCrops() {

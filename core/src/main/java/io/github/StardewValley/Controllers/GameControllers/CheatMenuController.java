@@ -5,6 +5,7 @@ import io.github.StardewValley.Models.App;
 import io.github.StardewValley.Models.Enums.Others.Season;
 import io.github.StardewValley.Models.Enums.Regexes.CheatCodesRegexes;
 import io.github.StardewValley.Models.Game;
+import io.github.StardewValley.Models.Player;
 import io.github.StardewValley.Views.GameMenus.CheatMenu;
 
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ import java.util.regex.Matcher;
 public class CheatMenuController {
     private CheatMenu view;
     private GameController gameController;
+    private Game game = App.getCurrentGame();
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
@@ -25,11 +27,10 @@ public class CheatMenuController {
     public void handleCheatMenuButtons() {
         if (view != null) {
             String cheatCode = view.getCheatCodeField().getText();
-            Game game = App.getCurrentGame();
 
             if (view.getSubmitButton().isPressed()) {
                 Main.playSound(Main.getButtonClickSound());
-                handleCheatCode(cheatCode, game);
+                handleCheatCode(cheatCode);
             } else if (view.getBackButton().isPressed()) {
                 Main.playSound(Main.getButtonClickSound());
                 resumeGame();
@@ -37,15 +38,23 @@ public class CheatMenuController {
         }
     }
 
-    private void handleCheatCode(String cheatCode, Game game) {
+    private void handleCheatCode(String cheatCode) {
         Matcher timeMatcher = CheatCodesRegexes.TIME_CHEAT.getMatcher(cheatCode);
         Matcher dateMatcher = CheatCodesRegexes.DATE_CHEAT.getMatcher(cheatCode);
+        Matcher energySet = CheatCodesRegexes.ENERGY_SET.getMatcher(cheatCode);
+        Matcher energyUnlimited = CheatCodesRegexes.ENERGY_UNLIMITED.getMatcher(cheatCode);
 
         if (timeMatcher != null && timeMatcher.matches()) {
-            handleTimeCheat(timeMatcher, game);
+            handleTimeCheat(timeMatcher);
         }
         else if (dateMatcher != null && dateMatcher.matches()) {
-            handleDateCheat(dateMatcher, game);
+            handleDateCheat(dateMatcher);
+        }
+        else if (energySet != null && energySet.matches()) {
+           handleEnergyCheat(energySet, false);
+        }
+        else if (energyUnlimited != null && energyUnlimited.matches()) {
+           handleEnergyCheat(energyUnlimited, true);
         }
         else {
             // Invalid cheat code
@@ -53,7 +62,7 @@ public class CheatMenuController {
         }
     }
 
-    private void handleTimeCheat(Matcher matcher, Game game) {
+    private void handleTimeCheat(Matcher matcher) {
         try {
             String hoursStr = matcher.group("X");
             int hours = Integer.parseInt(hoursStr);
@@ -64,7 +73,7 @@ public class CheatMenuController {
             // Wrap around if past midnight (22:00 is latest normal time)
             if (newTime.isAfter(LocalTime.of(22, 0))) {
                 newTime = LocalTime.of(9, 0); // Reset to morning
-                advanceDay(game); // Advance to next day
+                advanceDay(); // Advance to next day
             }
 
             game.setTime(newTime);
@@ -74,14 +83,14 @@ public class CheatMenuController {
         }
     }
 
-    private void handleDateCheat(Matcher matcher, Game game) {
+    private void handleDateCheat(Matcher matcher) {
         try {
             String daysStr = matcher.group("X");
             int days = Integer.parseInt(daysStr);
 
             // Advance the specified number of days
             for (int i = 0; i < days; i++) {
-                advanceDay(game);
+                advanceDay();
             }
 
             view.showError("Date advanced by " + days + " days!");
@@ -90,7 +99,7 @@ public class CheatMenuController {
         }
     }
 
-    private void advanceDay(Game game) {
+    private void advanceDay() {
         int currentDay = game.getCurrentDay();
         int currentSeason = game.getCurrentSeason();
 
@@ -119,6 +128,18 @@ public class CheatMenuController {
         // - Regrow crops
         // - Reset energy
         // - Process daily events
+    }
+
+    private void handleEnergyCheat(Matcher matcher, boolean isUnlimited) {
+        Player player = game.getCurrentPlayer();
+        if(!isUnlimited){
+            player.setCurrentEnergy(Float.parseFloat(matcher.group("value")));
+            view.showError("Energy set to " + matcher.group("value") + ".");
+        }
+        else{
+            player.setCurrentEnergy(Float.MAX_VALUE);
+            view.showError("Unlimited Energy set.");
+        }
     }
 
     private void resumeGame() {

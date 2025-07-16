@@ -64,8 +64,43 @@ public class Player {
     private int moneyTomorrow;
     private ArrayList<Buff> activeBuffs = new ArrayList<>();
     private String partnerUsername;
-    private ArrayList<Notif> notifications = new ArrayList<>();
     private ArrayList<Marriage> marriageRequests = new ArrayList<>();
+    // In Player.java
+    private ArrayList<Notif> notifications = new ArrayList<>();
+    private static final float NOTIFICATION_DISPLAY_TIME = 3f; // 3 seconds
+
+    public void addNotification(String message) {
+        notifications.add(new Notif(message, NOTIFICATION_DISPLAY_TIME, message.length() * 20));
+
+        // Limit number of notifications to prevent memory issues
+        if (notifications.size() > 5) {
+            notifications.remove(0);
+        }
+    }
+
+    public void updateNotifications(float delta) {
+        for (int i = notifications.size() - 1; i >= 0; i--) {
+            Notif notif = notifications.get(i);
+            notif.update(delta);
+            if (notif.isExpired()) {
+                notifications.remove(i);
+            }
+        }
+    }
+
+    // In Player.java
+    public void renderNotifications(SpriteBatch batch) {
+        if (batch == null || notifications.isEmpty()) return;
+
+        float startY = 50; // Position from bottom of screen
+        float spacing = 90; // Space between notifications
+        float x = 20; // Position from left of screen
+
+        // Render from bottom up
+        for (int i = 0; i < notifications.size(); i++) {
+            notifications.get(i).render(batch, x, startY + (i * spacing));
+        }
+    }
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -327,5 +362,9 @@ public class Player {
 
     public void setItemInHand(Item itemInHand) {
         this.itemInHand = itemInHand;
+    }
+
+    public void setCurrentEnergy(float currentEnergy) {
+        this.currentEnergy = currentEnergy;
     }
 }
