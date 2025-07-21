@@ -21,8 +21,6 @@ public class StarDropSaloon {
     private void createWalls() {
 
 
-        // Back wall
-//        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
 
         // Bottom wall (with gap for door)
         walls.add(new Wall(x, y,600 ,20, "horizontal"));
@@ -38,6 +36,10 @@ public class StarDropSaloon {
         // Right wall
         walls.add(new Wall(x + width, y, 20,height, "vertical"));
 
+
+        walls.add(new Wall(x + width - 1200 + 10, y + 460, 1190,height / 2 - 50, "starDrop_back"));
+
+        walls.add(new Wall(x + width - 1080, y +405, 650,height / 3 - 60, "starDrop_desk"));
     }
 
     public ArrayList<Wall> getWalls() {

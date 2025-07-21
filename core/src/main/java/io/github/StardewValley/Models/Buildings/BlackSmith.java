@@ -37,6 +37,8 @@ public class BlackSmith {
         walls.add(new Wall(x + width, y, 20,150, "vertical"));
 
         walls.add(new Wall(x + width, y + 300, 20,height - 300, "vertical"));
+
+        walls.add(new Wall(x + width -455, y + 150, 335,430, "blackSmith_furniture"));
     }
 
     public ArrayList<Wall> getWalls() {

@@ -12,14 +12,10 @@ import io.github.StardewValley.Models.Enums.Recipes.CookingRecipes;
 import io.github.StardewValley.Models.Enums.Recipes.CraftingRecipes;
 import io.github.StardewValley.Models.Enums.Types.BackpackType;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
-import io.github.StardewValley.Models.Enums.Types.TrashcanType;
-import io.github.StardewValley.Models.FriendshipModels.Friendship;
-import io.github.StardewValley.Models.FriendshipModels.Marriage;
 import io.github.StardewValley.Models.Graphics.CollisionRect;
 import io.github.StardewValley.Models.Items.Item;
 import io.github.StardewValley.Models.Items.Tool;
 import io.github.StardewValley.Models.Maps.Farm;
-import io.github.StardewValley.Models.ObjectsOnMap.Animal;
 import io.github.StardewValley.Models.Skills.*;
 
 import java.util.ArrayList;
@@ -39,35 +35,15 @@ public class Player {
     private float maxEnergy = 200;
     private float currentEnergy = maxEnergy;
     private float energyDrainRate = 0.2f; // Base drain rate per second
+    private float money;
     private boolean isExhausted = false;
-    private boolean isPlayerInHouse;
-    private ArrayList<Notif> Notifications = new ArrayList<>();
-    private ArrayList<Gift> gifts = new ArrayList<>();
-    public ArrayList<Trade> tradingHistory = new ArrayList<>();
-    private ArrayList<Friendship> friendships = new ArrayList<>();
-    private TrashCan trashcan;
-    private ArrayList<Animal> animals = new ArrayList<>();
     private BackPack inventory;
-    private int money;
     private ArrayList<Skill> skills = new ArrayList<>();
     private ArrayList<CookingRecipes> cookingRecipes = new ArrayList<>();
     private ArrayList<CraftingRecipes> craftingRecipes = new ArrayList<>();
-    private boolean isPlayerFainted = false;
     private Item itemInHand;
-    private ArrayList<Slot> refrigeratorLoots = new ArrayList<>();
-    private double currentTurnUsedEnergy;
-    private boolean isInVillage;
-    private boolean isInFarm;
-    private boolean isCloseToLake;
-    private boolean isInHouse;
-    private int currentFarmNumber;
-    private int moneyTomorrow;
-    private ArrayList<Buff> activeBuffs = new ArrayList<>();
-    private String partnerUsername;
-    private ArrayList<Marriage> marriageRequests = new ArrayList<>();
-    // In Player.java
     private ArrayList<Notif> notifications = new ArrayList<>();
-    private static final float NOTIFICATION_DISPLAY_TIME = 3f; // 3 seconds
+    private static final float NOTIFICATION_DISPLAY_TIME = 3f;
 
     public void addNotification(String message) {
         notifications.add(new Notif(message, NOTIFICATION_DISPLAY_TIME, message.length() * 20));
@@ -126,8 +102,8 @@ public class Player {
 
         currentSprite.setPosition(position.x, position.y);
         this.inventory = new BackPack(BackpackType.DEFAULT);
-        this.trashcan = new TrashCan(TrashcanType.DEFAULT);
         this.itemInHand = new Tool(ToolType.AXE);
+        this.money = 2000;
         initializeInventory();
         initializeSkills();
         initializeRecipes();
@@ -227,14 +203,14 @@ public class Player {
         currentEnergy = Math.min(currentEnergy + amount, maxEnergy);
         if (currentEnergy > maxEnergy * 0.2f) { // 20% threshold
             isExhausted = false;
-            this.speed = 500; // Restore normal speed
+//            this.speed = 500; // Restore normal speed
         }
     }
 
     public void sleep() {
         currentEnergy = maxEnergy;
         isExhausted = false;
-        this.speed = 500;
+//        this.speed = 500;
     }
 
 
@@ -264,7 +240,7 @@ public class Player {
         inventory.getSLots().add(
             new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolType.AXE), 1));
         inventory.getSLots().add(
-            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolType.WATERING_CAN_DEFAULT), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolType.WATERING_CAN), 1));
         inventory.getSLots().add(
             new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolType.SCYTHE), 1));
     }
@@ -294,13 +270,8 @@ public class Player {
         return position;
     }
 
-
     public CollisionRect getCollisionRect() {
         return collisionRect;
-    }
-
-    public boolean isMoving() {
-        return isMoving;
     }
 
     public Sprite getCurrentSprite() {
@@ -311,35 +282,12 @@ public class Player {
         return speed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public Farm getFarm() {
-        return farm;
-    }
-
-    public void setFarm(Farm farm) {
-        this.farm = farm;
-    }
-
-
-    public void setPosition(float x, float y) {
-        this.position.set(x, y);
-        this.collisionRect.move(x, y);
-        this.currentSprite.setPosition(x, y);
-    }
-
     public float getCurrentEnergy() {
         return currentEnergy;
     }
 
     public float getMaxEnergy() {
         return maxEnergy;
-    }
-
-    public boolean isExhausted() {
-        return isExhausted;
     }
 
     public PlayerAssets getAssets() {

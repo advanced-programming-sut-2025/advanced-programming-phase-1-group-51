@@ -22,18 +22,22 @@ public class CarpenterShop {
 
 
         // Back wall
-//        walls.add(new Wall(x, 2270, 360,160, "back_greenhouse"));
+        walls.add(new Wall(x, y + height - 250 ,width ,250, "Carpenter_back"));
+
+        walls.add(new Wall(x + 100, y + height - 800 ,350 ,150, "Carpenter_desk"));
+
+        walls.add(new Wall(x + 700, y + height - 800 ,350 ,150, "Carpenter_desk"));
 
         // Bottom wall (with gap for door)
         walls.add(new Wall(x, y,width ,20, "horizontal"));
 
         // Top wall
-        walls.add(new Wall(x, y + height, 600,20, "horizontal"));
-
-        walls.add(new Wall(x + 800 , y + height, width -780,20, "horizontal"));
+        walls.add(new Wall(x, y + height, width + 20,20, "horizontal"));
 
         // Left wall
-        walls.add(new Wall(x , y, 20,height, "vertical"));
+        walls.add(new Wall(x , y, 20,600, "vertical"));
+
+        walls.add(new Wall(x , y + 800, 20,height - 800, "vertical"));
 
         // Right wall
         walls.add(new Wall(x + width, y, 20,height, "vertical"));

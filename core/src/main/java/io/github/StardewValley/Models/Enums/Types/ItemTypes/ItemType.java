@@ -7,4 +7,5 @@ public interface ItemType {
     Slot createAmountOfItem(int amount, Quality quality);
     String getName();
     String name();
+
 }

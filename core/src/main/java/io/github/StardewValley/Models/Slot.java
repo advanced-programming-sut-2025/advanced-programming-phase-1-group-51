@@ -1,6 +1,5 @@
 package io.github.StardewValley.Models;
 
-import io.github.StardewValley.Models.Enums.Others.Quality;
 import io.github.StardewValley.Models.Enums.Types.ItemTypes.*;
 import io.github.StardewValley.Models.Items.*;
 
@@ -20,12 +19,12 @@ public class Slot {
             item = new ForagingCrop((ForagingCropType) type);
         } else if (type instanceof CropType) {
             item = new Crop((CropType) type);
-        } else if (type instanceof ForagingCropSeedType) {
-            item = new CropSeed((ForagingCropSeedType) type);
+        } else if (type instanceof CropSeedType) {
+            item = new CropSeed((CropSeedType) type);
         } else if (type instanceof FishType) {
             item = new Fish((FishType) type);
-        } else if (type instanceof ForagingTreeSeedType) {
-            item = new TreeSeed((ForagingTreeSeedType) type);
+        } else if (type instanceof TreeSeedType) {
+            item = new TreeSeed((TreeSeedType) type);
         }
         this.item = item;
         this.count = count;

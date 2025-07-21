@@ -6,15 +6,14 @@ import io.github.StardewValley.Models.Enums.Types.ItemTypes.FishType;
 public class Fish extends Item{
     double R;
     double M;
-    private FishType fishType;
-
-    public FishType getFishType() {
-        return fishType;
-    }
-
+    private FishType type;
 
     public Fish( FishType fishType) {
         super(Quality.DEFAULT, Integer.MAX_VALUE, fishType.price, 0, fishType.name);
-        this.fishType = fishType;
+        this.type = fishType;
+    }
+
+    public FishType getType() {
+        return type;
     }
 }

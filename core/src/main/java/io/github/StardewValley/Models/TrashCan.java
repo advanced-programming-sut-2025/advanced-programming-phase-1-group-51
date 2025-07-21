@@ -1,6 +1,6 @@
 package io.github.StardewValley.Models;
 
-import io.github.StardewValley.Models.Enums.Types.TrashcanType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.TrashcanType;
 
 public class TrashCan {
     private TrashcanType TrashCanType;

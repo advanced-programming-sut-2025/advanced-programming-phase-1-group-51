@@ -40,7 +40,7 @@ public enum FoodType implements ItemType{
     FARMERS_LUNCH("Farmer's Lunch", 200, 150,new Buff(0,5,"farming")),
     SURVIVAL_BURGER("Survival Burger", 125, 180,new Buff(0,5,"foraging")),
     DISH_OF_THE_SEA("Dish O' The Sea", 150,  220,new Buff(0,5,"fishing")),
-    SEAFORM_PUDDING("Seaform Pudding", 175, 300,new Buff(0,10,"fishing")),
+    SEAFOAM_PUDDING("Seafoam Pudding", 175, 300,new Buff(0,10,"fishing")),
     MINERS_TREAT("Miner's Treat", 125, 200,new Buff(0,5,"mining")),
     BLUE_JAZZ("Blue Jazz", 45,   50,new Buff(0,0,"")),
     CARROT("Carrot", 75,   35,new Buff(0,0,"")),

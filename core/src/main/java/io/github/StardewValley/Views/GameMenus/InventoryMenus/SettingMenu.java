@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.StardewValley.Controllers.GameControllers.GameController;
 import io.github.StardewValley.Main;
 
-public class SettingMenu extends BaseMenu {
+public class SettingMenu extends BaseInventoryMenu {
     private TextButton exitButton;
 
     public SettingMenu(GameController gameController, Skin skin) {

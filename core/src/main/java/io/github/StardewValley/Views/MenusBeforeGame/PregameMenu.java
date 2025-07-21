@@ -2,8 +2,10 @@ package io.github.StardewValley.Views.MenusBeforeGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,6 +49,31 @@ public class PregameMenu implements Screen {
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                event.stop(); // Important - stops event propagation
+                Main.playSound(Main.getButtonClickSound());
+                controller.handleBack();
+            }
+        });
+        newGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                event.stop(); // Important - stops event propagation
+                Main.playSound(Main.getButtonClickSound());
+                controller.handleNewGame();
+            }
+        });
+        loadGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                event.stop(); // Important - stops event propagation
+                Main.playSound(Main.getButtonClickSound());
+                controller.handleLoadGame();
+            }
+        });
 
         // Clear and setup table
         table.clear();
@@ -112,7 +139,6 @@ public class PregameMenu implements Screen {
         Main.getBatch().end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        controller.handlePregameMenuButtons();
     }
 
     @Override

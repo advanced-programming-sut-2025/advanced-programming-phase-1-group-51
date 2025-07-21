@@ -13,7 +13,7 @@ public class ForagingTreeBlock extends ObjectOnMap {
 
         // Initialize sprite
         this.sprite = new Sprite(GameAssetsManager.getInstance()
-            .getForagingAssetsManager()
+            .getInitialAssets()
             .getTreeTexture(foragingTreeType));
         this.sprite.setSize(spriteWidth, spriteHeight);
         this.sprite.setPosition(x, y);

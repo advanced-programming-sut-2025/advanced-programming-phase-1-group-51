@@ -1,28 +1,19 @@
 package io.github.StardewValley.Models.Items;
 
 import io.github.StardewValley.Models.Enums.Others.Quality;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingCropSeedType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.CropSeedType;
 
 public class CropSeed extends Item{
-    private ForagingCropSeedType cropSeedsType;
+    private CropSeedType type;
 
-    public CropSeed() {
-    }
-
-    public ForagingCropSeedType getCropType() {
-        return cropSeedsType;
-    }
-
-    public void setCropType(ForagingCropSeedType cropSeedsType) {
-        this.cropSeedsType = cropSeedsType;
-    }
-
-    public CropSeed(ForagingCropSeedType cropSeedsType) {
-        this.cropSeedsType = cropSeedsType;
-        this.name = cropSeedsType.source;
+    public CropSeed(CropSeedType cropSeedsType) {
+        this.type = cropSeedsType;
         this.quality = Quality.DEFAULT;
         this.maxSize = Integer.MAX_VALUE;
-        this.value = cropSeedsType.baseSellPrice;
         this.energyCost = 0;
+    }
+
+    public CropSeedType getType() {
+        return type;
     }
 }

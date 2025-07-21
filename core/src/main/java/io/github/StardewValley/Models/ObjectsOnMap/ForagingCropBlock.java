@@ -8,12 +8,12 @@ public class ForagingCropBlock extends ObjectOnMap {
     private ForagingCropType foragingCropType;
 
     public ForagingCropBlock(float x, float y, ForagingCropType foragingCropType) {
-        super(x, y, 45, 45,30,30, "foragingMineral");
+        super(x, y, 35, 35,30,30, "foragingMineral");
         this.foragingCropType = foragingCropType;
 
         // Initialize sprite
         this.sprite = new Sprite(GameAssetsManager.getInstance()
-            .getForagingAssetsManager()
+            .getInitialAssets()
             .getForagingCropTexture(foragingCropType));
         this.sprite.setSize(spriteWidth, spriteHeight);
         this.sprite.setPosition(x, y);

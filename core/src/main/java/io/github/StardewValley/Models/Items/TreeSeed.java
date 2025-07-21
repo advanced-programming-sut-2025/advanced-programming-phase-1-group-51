@@ -1,25 +1,21 @@
 package io.github.StardewValley.Models.Items;
 
 import io.github.StardewValley.Models.Enums.Others.Quality;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingTreeSeedType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.TreeSeedType;
 
 public class TreeSeed extends Item{
 
-    private ForagingTreeSeedType treeSeedsType;
+    private TreeSeedType type;
 
     public TreeSeed() {
     }
 
-    public TreeSeed(ForagingTreeSeedType treeSeedsType) {
+    public TreeSeed(TreeSeedType treeSeedsType) {
         super(Quality.DEFAULT, Integer.MAX_VALUE, treeSeedsType.value, 0, treeSeedsType.name);
-        this.treeSeedsType = treeSeedsType;
+        this.type = treeSeedsType;
     }
 
-    public ForagingTreeSeedType getTreeSeedsType() {
-        return treeSeedsType;
-    }
-
-    public void setTreeSeedsType(ForagingTreeSeedType treeSeedsType) {
-        this.treeSeedsType = treeSeedsType;
+    public TreeSeedType getType() {
+        return type;
     }
 }

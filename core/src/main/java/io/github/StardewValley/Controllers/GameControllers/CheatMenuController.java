@@ -1,9 +1,12 @@
 package io.github.StardewValley.Controllers.GameControllers;
 
+import com.badlogic.gdx.Gdx;
 import io.github.StardewValley.Main;
 import io.github.StardewValley.Models.App;
+import io.github.StardewValley.Models.BackPack;
 import io.github.StardewValley.Models.Enums.Others.Season;
 import io.github.StardewValley.Models.Enums.Regexes.CheatCodesRegexes;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.*;
 import io.github.StardewValley.Models.Game;
 import io.github.StardewValley.Models.Player;
 import io.github.StardewValley.Views.GameMenus.CheatMenu;
@@ -24,25 +27,12 @@ public class CheatMenuController {
         this.view = view;
     }
 
-    public void handleCheatMenuButtons() {
-        if (view != null) {
-            String cheatCode = view.getCheatCodeField().getText();
-
-            if (view.getSubmitButton().isPressed()) {
-                Main.playSound(Main.getButtonClickSound());
-                handleCheatCode(cheatCode);
-            } else if (view.getBackButton().isPressed()) {
-                Main.playSound(Main.getButtonClickSound());
-                resumeGame();
-            }
-        }
-    }
-
     private void handleCheatCode(String cheatCode) {
         Matcher timeMatcher = CheatCodesRegexes.TIME_CHEAT.getMatcher(cheatCode);
         Matcher dateMatcher = CheatCodesRegexes.DATE_CHEAT.getMatcher(cheatCode);
         Matcher energySet = CheatCodesRegexes.ENERGY_SET.getMatcher(cheatCode);
         Matcher energyUnlimited = CheatCodesRegexes.ENERGY_UNLIMITED.getMatcher(cheatCode);
+        Matcher addItem = CheatCodesRegexes.ADD_ITEM.getMatcher(cheatCode);
 
         if (timeMatcher != null && timeMatcher.matches()) {
             handleTimeCheat(timeMatcher);
@@ -55,6 +45,9 @@ public class CheatMenuController {
         }
         else if (energyUnlimited != null && energyUnlimited.matches()) {
            handleEnergyCheat(energyUnlimited, true);
+        }
+        else if (addItem != null && addItem.matches()) {
+            handleAddItem(addItem);
         }
         else {
             // Invalid cheat code
@@ -141,6 +134,87 @@ public class CheatMenuController {
             view.showError("Unlimited Energy set.");
         }
     }
+
+    private void handleAddItem(Matcher matcher) {
+        Player player = game.getCurrentPlayer();
+        BackPack backpack = player.getInventory();
+        String itemName = matcher.group("itemName").trim();
+        int count = Integer.parseInt(matcher.group("count"));
+
+        try {
+            // Try to find the item in all item type enums
+            ItemType itemType = findItemTypeByName(itemName);
+
+            if (itemType != null) {
+                backpack.addItem(itemType, count);
+                view.showError("Added " + count + " " + itemName + " to inventory!");
+            } else {
+                view.showError("Item not found: " + itemName);
+            }
+        } catch (Exception e) {
+            view.showError("Error adding item: " + e.getMessage());
+            Gdx.app.error("CheatMenu", "Error adding item", e);
+        }
+    }
+
+    private ItemType findItemTypeByName(String itemName) {
+        // Check all item type enums for a match
+
+        // Food items
+        FoodType foodType = FoodType.findFoodByName(itemName);
+        if (foodType != null) return foodType;
+
+        // Misc items
+        MiscType miscType = MiscType.getElseTypeByName(itemName);
+        if (miscType != null) return miscType;
+
+        // Minerals
+        for (ForagingMineralType mineral : ForagingMineralType.values()) {
+            if (mineral.getName().equalsIgnoreCase(itemName)) {
+                return mineral;
+            }
+        }
+
+        // Tools
+        ToolType toolType = ToolType.findToolTypeByName(itemName);
+        if (toolType != null) return toolType;
+
+        // Crops
+        CropType cropType = CropType.findCropByName(itemName);
+        if (cropType != null) return cropType;
+
+        // Crop seeds
+        CropSeedType cropSeedType = CropSeedType.findCropSeedTypeByName(itemName);
+        if (cropSeedType != null) return cropSeedType;
+
+        // Fish
+        FishType fishType = FishType.findFishByName(itemName);
+        if (fishType != null) return fishType;
+
+        // Tree seeds
+        TreeSeedType treeSeedType = TreeSeedType.findTreeSeedTypeByName(itemName);
+        if (treeSeedType != null) return treeSeedType;
+
+        // Foraging crops
+        for (ForagingCropType foragingCrop : ForagingCropType.values()) {
+            if (foragingCrop.name.equalsIgnoreCase(itemName)) {
+                return foragingCrop;
+            }
+        }
+
+        return null; // Item not found
+    }
+
+    public void handleSubmit() {
+        String cheatCode = view.getCheatCodeField().getText();
+        handleCheatCode(cheatCode);
+    }
+
+    public void handleBack() {
+        resumeGame();
+    }
+
+
 
     private void resumeGame() {
         gameController.resumeGame();

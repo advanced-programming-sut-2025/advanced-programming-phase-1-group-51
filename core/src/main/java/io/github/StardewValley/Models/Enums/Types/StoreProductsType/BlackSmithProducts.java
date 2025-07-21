@@ -2,24 +2,52 @@ package io.github.StardewValley.Models.Enums.Types.StoreProductsType;
 
 import io.github.StardewValley.Models.Enums.Others.Quality;
 import io.github.StardewValley.Models.Enums.Others.Season;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.MiscType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ForagingMineralType;
-import io.github.StardewValley.Models.Enums.Types.ItemTypes.ItemType;
-import io.github.StardewValley.Models.Enums.Types.TrashcanType;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.*;
+import io.github.StardewValley.Models.Enums.Types.ItemTypes.TrashcanType;
 
-public enum BlackSmithProducts implements StoreProducts{
+public enum BlackSmithProducts implements StoreProducts {
+    // Ores and basic materials
     COPPER_ORE("Copper Ore", "A common ore that can be smelted into bars.", ForagingMineralType.COPPER_ORE, 75, 75, Double.POSITIVE_INFINITY, Season.values()),
     IRON_ORE("Iron Ore", "A fairly common ore that can be smelted into bars.", ForagingMineralType.IRON_ORE, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     COAL("Coal", "A combustible rock that is useful for crafting and smelting.", ForagingMineralType.COAL, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     GOLD_ORE("Gold Ore", "A precious ore that can be smelted into bars.", ForagingMineralType.GOLD_ORE, 400, 400, Double.POSITIVE_INFINITY, Season.values()),
-    COPPER_TOOL("Copper Tool", MiscType.COPPER_BAR, 2000, 2000, 1, Season.values()),
-    STEEL_TOOL("Steel Tool", MiscType.IRON_BAR, 5000, 5000, 1, Season.values()),
-    GOLD_TOOL("Gold Tool", MiscType.GOLD_BAR, 10000, 10000, 1, Season.values()),
-    IRIDIUM_TOOL("Iridium Tool", MiscType.IRIDIUM_BAR, 25000, 25000, 1, Season.values()),
-    COPPER_TRASH_CAN("Copper Trash Can", MiscType.COPPER_BAR, 1000, 1000, 1, Season.values()),
-    STEEL_TRASH_CAN("Steel Trash Can", MiscType.COPPER_BAR, 2500, 2500, 1, Season.values()),
-    GOLD_TRASH_CAN("Gold Trash Can", MiscType.COPPER_BAR, 5000, 5000, 1, Season.values()),
-    IRIDIUM_TRASH_CAN("Iridium Trash Can", MiscType.COPPER_BAR, 12500, 12500, 1, Season.values());
+    IRIDIUM_ORE("Iridium Ore", "An exotic ore with many curious properties.", ForagingMineralType.IRIDIUM_ORE, 1000, 1000, Double.POSITIVE_INFINITY, Season.values()),
+
+    // Trash Can Upgrades (still using MiscType since they're not tools)
+    COPPER_TRASH_CAN("Copper Trash Can", TrashcanType.COPPER, 1000, 1000, 1, Season.values()),
+    STEEL_TRASH_CAN("Steel Trash Can", TrashcanType.STEEL, 2500, 2500, 1, Season.values()),
+    GOLD_TRASH_CAN("Gold Trash Can", TrashcanType.GOLD, 5000, 5000, 1, Season.values()),
+    IRIDIUM_TRASH_CAN("Iridium Trash Can", TrashcanType.IRIDIUM, 12500, 12500, 1, Season.values()),
+
+    // Hoe Upgrades (now using ToolType)
+    COPPER_HOE("Copper Hoe", ToolType.COPPER_HOE, 2000, 2000, 1, Season.values()),
+    STEEL_HOE("Steel Hoe", ToolType.STEEL_HOE, 5000, 5000, 1, Season.values()),
+    GOLD_HOE("Gold Hoe", ToolType.GOLD_HOE, 10000, 10000, 1, Season.values()),
+    IRIDIUM_HOE("Iridium Hoe", ToolType.IRIDIUM_HOE, 25000, 25000, 1, Season.values()),
+
+    // Pickaxe Upgrades (now using ToolType)
+    COPPER_PICKAXE("Copper Pickaxe", ToolType.COPPER_PICKAXE, 2000, 2000, 1, Season.values()),
+    STEEL_PICKAXE("Steel Pickaxe", ToolType.STEEL_PICKAXE, 5000, 5000, 1, Season.values()),
+    GOLD_PICKAXE("Gold Pickaxe", ToolType.GOLD_PICKAXE, 10000, 10000, 1, Season.values()),
+    IRIDIUM_PICKAXE("Iridium Pickaxe", ToolType.IRIDIUM_PICKAXE, 25000, 25000, 1, Season.values()),
+
+    // Axe Upgrades (now using ToolType)
+    COPPER_AXE("Copper Axe", ToolType.COPPER_AXE, 2000, 2000, 1, Season.values()),
+    STEEL_AXE("Steel Axe", ToolType.STEEL_AXE, 5000, 5000, 1, Season.values()),
+    GOLD_AXE("Gold Axe", ToolType.GOLD_AXE, 10000, 10000, 1, Season.values()),
+    IRIDIUM_AXE("Iridium Axe", ToolType.IRIDIUM_AXE, 25000, 25000, 1, Season.values()),
+
+    // Watering Can Upgrades (now using ToolType)
+    WATERING_CAN_COPPER("Copper Watering Can", ToolType.WATERING_CAN_COPPER, 2000, 2000, 1, Season.values()),
+    WATERING_CAN_STEEL("Steel Watering Can", ToolType.WATERING_CAN_STEEL, 5000, 5000, 1, Season.values()),
+    WATERING_CAN_GOLD("Gold Watering Can", ToolType.WATERING_CAN_GOLD, 10000, 10000, 1, Season.values()),
+    WATERING_CAN_IRIDIUM("Iridium Watering Can", ToolType.WATERING_CAN_IRIDIUM, 25000, 25000, 1, Season.values()),
+
+    // Scythe Upgrades (now using ToolType)
+    COPPER_SCYTHE("Copper Scythe", ToolType.COPPER_SCYTHE, 2000, 2000, 1, Season.values()),
+    STEEL_SCYTHE("Steel Scythe", ToolType.STEEL_SCYTHE, 5000, 5000, 1, Season.values()),
+    GOLD_SCYTHE("Gold Scythe", ToolType.GOLD_SCYTHE, 10000, 10000, 1, Season.values()),
+    IRIDIUM_SCYTHE("Iridium Scythe", ToolType.IRIDIUM_SCYTHE, 25000, 25000, 1, Season.values());
 
     private final String name;
     private String description = "";
@@ -27,27 +55,54 @@ public enum BlackSmithProducts implements StoreProducts{
     private final int price;
     private final double outOfSeasonPrice;
     private final double dailyLimit;
-    private ItemType ingredient = null;
-    private Season[] seasons;
+    private final Season[] seasons;
 
     BlackSmithProducts(String name, String description, ItemType itemType, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
         this.name = name;
         this.description = description;
+        this.itemType = itemType;
         this.price = price;
         this.outOfSeasonPrice = outOfSeasonPrice;
         this.dailyLimit = dailyLimit;
         this.seasons = seasons;
-        this.itemType = itemType;
     }
 
-    BlackSmithProducts(String name, ItemType ingredient, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
-        this.name = name;
-        this.ingredient = ingredient;
-        this.price = price;
-        this.outOfSeasonPrice = outOfSeasonPrice;
-        this.dailyLimit = dailyLimit;
-        this.seasons = seasons;
-        this.itemType = null;
+    BlackSmithProducts(String name, ItemType itemType, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
+        this(name, "", itemType, price, outOfSeasonPrice, dailyLimit, seasons);
+    }
+
+    BlackSmithProducts(String name, String description, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
+        this(name, description, null, price, outOfSeasonPrice, dailyLimit, seasons);
+    }
+
+    // ... (keep all existing getter methods)
+
+    public static BlackSmithProducts findToolUpgrade(String name) {
+        for (BlackSmithProducts product : values()) {
+            if (product.name.equalsIgnoreCase(name)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public Quality getToolQuality() {
+        if (name.contains("Copper")) return Quality.COPPER;
+        if (name.contains("Steel")) return Quality.SILVER;
+        if (name.contains("Gold")) return Quality.GOLD;
+        if (name.contains("Iridium")) return Quality.IRIDIUM;
+        return Quality.DEFAULT;
+    }
+
+    public ToolType getToolType() {
+        if (name.contains("Hoe")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Pickaxe")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Axe")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Watering Can")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Scythe")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Milk Pail")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        if (name.contains("Shears")) return ToolType.valueOf(name.toUpperCase().replace(" ", "_"));
+        return null;
     }
 
     public String getDescription() {
@@ -78,66 +133,4 @@ public enum BlackSmithProducts implements StoreProducts{
         return itemType;
     }
 
-    public ItemType getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(ItemType ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public static BlackSmithProducts findTrashCanUpgrade(String name) {
-        if (COPPER_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return COPPER_TRASH_CAN;
-        } else if (STEEL_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return STEEL_TRASH_CAN;
-        } else if (GOLD_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return GOLD_TRASH_CAN;
-        } else if (IRIDIUM_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return IRIDIUM_TRASH_CAN;
-        }
-        return null;
-    }
-
-    public static BlackSmithProducts findSteelToolUpgrade(String name) {
-        if (COPPER_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return COPPER_TOOL;
-        }
-        if (STEEL_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return STEEL_TOOL;
-        }
-        if (GOLD_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return GOLD_TOOL;
-        }
-        if (IRIDIUM_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return IRIDIUM_TOOL;
-        }
-        return null;
-    }
-
-    public TrashcanType getTrashcan() {
-        if (name.equals(COPPER_TRASH_CAN.name)) {
-            return TrashcanType.COPPER;
-        } else if (name.equals((STEEL_TRASH_CAN.name))) {
-            return TrashcanType.IRON;
-        } else if (name.equals(GOLD_TRASH_CAN.name)) {
-            return TrashcanType.GOLD;
-        } else if (name.equals(IRIDIUM_TRASH_CAN.name)) {
-            return TrashcanType.IRON;
-        }
-        return null;
-    }
-
-    public Quality getTool() {
-        if (name.equals(COPPER_TOOL.name)) {
-            return Quality.COPPER;
-        } else if (name.equals(STEEL_TOOL.name)) {
-            return Quality.SILVER;
-        } else if (name.equals(GOLD_TOOL.name)) {
-            return Quality.GOLD;
-        } else if (name.equals(IRIDIUM_TOOL.name)) {
-            return Quality.IRIDIUM;
-        }
-        return null;
-    }
 }

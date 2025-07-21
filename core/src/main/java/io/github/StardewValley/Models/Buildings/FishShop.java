@@ -38,6 +38,9 @@ public class FishShop {
 
         walls.add(new Wall(x + width, y + 300, 20,height - 300, "vertical"));
 
+        walls.add(new Wall(x + 120, y+ height - 340 , width /2 - 50,140,"horizontal_desk_fishShop"));
+        walls.add(new Wall(x +60, y+ height - 310 -  320 + 80 + 100 - 10, width / 8 - 5,280,"vertical_desk_fishShop"));
+        walls.add(new Wall(x +360, y+ height - 310 -  320 + 80 + 100 - 10, width / 8 - 5,280,"vertical_desk_fishShop"));
 
 
     }

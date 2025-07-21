@@ -19,86 +19,78 @@ public class PregameMenuController {
         this.view = view;
     }
 
-    public void handlePregameMenuButtons() {
-        if(view != null){
+    public void handleNewGame(){
+        String username1 = view.getUsername1().getText();
+        String username2 = view.getUsername2().getText();
+        String username3 = view.getUsername3().getText();
+            ArrayList<String> usernames = new ArrayList<>();
 
-            String username1 = view.getUsername1().getText();
-            String username2 = view.getUsername2().getText();
-            String username3 = view.getUsername3().getText();
-
-            if(view.getNewGameButton().isPressed()){
-                Main.playSound(Main.getButtonClickSound());
-                ArrayList<String> usernames = new ArrayList<>();
-
-                if(!username1.isEmpty()){
-                    usernames.add(username1);
-                }
-                if(!username2.isEmpty()){
-                    usernames.add(username2);
-                }
-                if(!username3.isEmpty()){
-                    usernames.add(username3);
-                }
-
-                ArrayList<Player> players = new ArrayList<>();
-                players.add(new Player(App.getCurrentUser()));
-
-                boolean check = true;
-
-                for (String username : usernames) {
-                    if (username.isEmpty() || username.equals(App.getCurrentUser().getUsername())) {
-                        continue;
-                    }
-
-                    User user = App.findUserByUsername(username);
-                    if (user == null) {
-                        view.showError("User " + username + " not found");
-                        check = false;
-                    }
-                    else if (user.getCurrentGame() != null) {
-                        view.showError("User " + username + " is already in a game");
-                        check = false;
-                    }
-                    else if (username.equals(App.getCurrentUser().getUsername())) {
-                        view.showError("You can't add yourself.");
-                        check = false;
-                    }
-                    else {
-                        Player player = new Player(user);
-                        players.add(player);
-                    }
-                }
-                if(check){
-                    Game game = new Game(players, players.get(0));
-
-                    StringBuilder message = new StringBuilder();
-                    message.append("Game created successfully with < You, ");
-                    for(String username : usernames){
-                        message.append(username).append(", ");
-                    }
-                    message.append(">");
-                    view.showError(message.toString());
-                    for (Player player : players) {
-                        player.getUser().setCurrentGame(game);
-                    }
-                    App.setCurrentGame(game);
-                }
-
+            if(!username1.isEmpty()){
+                usernames.add(username1);
             }
-            else if(view.getLoadGameButton().isPressed()){
-                Main.playSound(Main.getButtonClickSound());
-                if(App.getCurrentGame() == null){
-                    view.showError("You have to create a new game first!");
+            if(!username2.isEmpty()){
+                usernames.add(username2);
+            }
+            if(!username3.isEmpty()){
+                usernames.add(username3);
+            }
+
+            ArrayList<Player> players = new ArrayList<>();
+            players.add(new Player(App.getCurrentUser()));
+
+            boolean check = true;
+
+            for (String username : usernames) {
+                if (username.isEmpty() || username.equals(App.getCurrentUser().getUsername())) {
+                    continue;
                 }
-                else{
-                    navigateToGame();
+
+                User user = App.findUserByUsername(username);
+                if (user == null) {
+                    view.showError("User " + username + " not found");
+                    check = false;
+                }
+                else if (user.getCurrentGame() != null) {
+                    view.showError("User " + username + " is already in a game");
+                    check = false;
+                }
+                else if (username.equals(App.getCurrentUser().getUsername())) {
+                    view.showError("You can't add yourself.");
+                    check = false;
+                }
+                else {
+                    Player player = new Player(user);
+                    players.add(player);
                 }
             }
-            else if(view.getBackButton().isPressed()){
-                Main.playSound(Main.getButtonClickSound());
-                navigateToMain();
+            if(check){
+                Game game = new Game(players, players.get(0));
+
+                StringBuilder message = new StringBuilder();
+                message.append("Game created successfully with < You, ");
+                for(String username : usernames){
+                    message.append(username).append(", ");
+                }
+                message.append(">");
+                view.showError(message.toString());
+                for (Player player : players) {
+                    player.getUser().setCurrentGame(game);
+                }
+                App.setCurrentGame(game);
             }
+
+    }
+    public void handleLoadGame(){
+        if(App.getCurrentGame() == null){
+            view.showError("You have to create a new game first!");
         }
+        else{
+            navigateToGame();
+        }
+    }
+
+    public void handleBack(){
+        navigateToMain();
     }
 
     public void navigateToMain() {

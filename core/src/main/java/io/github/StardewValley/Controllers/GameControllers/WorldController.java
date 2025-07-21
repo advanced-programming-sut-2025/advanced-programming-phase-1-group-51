@@ -33,11 +33,11 @@ public class WorldController {
     private PlayerHouse playerHouse;
     private GreenHouse greenhouse;
     private FishShop fishShop;
+    private PierreGeneralStore pierreGeneralStore;
     private CarpenterShop carpenterShop;
-    private MarnieRanch marnieRanch;
     private JojaMart jojaMart;
     private StarDropSaloon starDropSaloon;
-    private PierreGeneralStore pierreStore;
+    private MarnieRanch marnieRanch;
     private BlackSmith blackSmith;
     private ArrayList<Wall> allWalls;
     private ForagingController foragingController;
@@ -77,21 +77,21 @@ public class WorldController {
         playerHouse = new PlayerHouse(960, 1920, 960, 600);
         greenhouse = new GreenHouse(240,1920,480, 600);
         fishShop = new FishShop(3120,3720,720, 720);
-        carpenterShop = new CarpenterShop(4560,2520,1440, 840);
-        marnieRanch = new MarnieRanch(6600,3120,1080, 1440);
+        pierreGeneralStore = new PierreGeneralStore(4560,2520,1080, 960);
+        carpenterShop = new CarpenterShop(6600,3600,1080, 1080);
         jojaMart = new JojaMart(3600,7305,1080, 960);
         starDropSaloon = new StarDropSaloon(5280,7305,1200, 720);
-        pierreStore = new PierreGeneralStore(6600,5400,1080, 1440);
+        marnieRanch = new MarnieRanch(6600,5760,1080, 1080);
         blackSmith = new BlackSmith(3120,5265,720, 720);
 
         allWalls = new ArrayList<>();
         allWalls.addAll(fishShop.getWalls());
+        allWalls.addAll(pierreGeneralStore.getWalls());
         allWalls.addAll(carpenterShop.getWalls());
-        allWalls.addAll(marnieRanch.getWalls());
         allWalls.addAll(greenhouse.getWalls());
         allWalls.addAll(jojaMart.getWalls());
         allWalls.addAll(starDropSaloon.getWalls());
-        allWalls.addAll(pierreStore.getWalls());
+        allWalls.addAll(marnieRanch.getWalls());
         allWalls.addAll(playerHouse.getWalls());
         allWalls.addAll(blackSmith.getWalls());
 

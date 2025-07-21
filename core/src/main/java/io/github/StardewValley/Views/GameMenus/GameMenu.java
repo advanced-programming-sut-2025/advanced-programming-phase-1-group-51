@@ -94,6 +94,18 @@ public class GameMenu implements Screen, InputProcessor {
                 controller.goToInventory();
                 return true;
             }
+            if (keycode == Input.Keys.O) {
+                if (controller.getPlayerController() == null) {
+                    Gdx.app.error("GameMenu", "PlayerController is null!");
+                    return true;
+                }
+                if (controller.getPlayerController().getPlayer() == null) {
+                    Gdx.app.error("GameMenu", "Player is null!");
+                    return true;
+                }
+                controller.openStoreMenu();
+                return true;
+            }
             if (keycode == Input.Keys.SPACE) {
                 controller.goToCheatMenu();
                 return true;

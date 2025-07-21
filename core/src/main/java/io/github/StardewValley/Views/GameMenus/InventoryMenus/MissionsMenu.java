@@ -3,7 +3,7 @@ package io.github.StardewValley.Views.GameMenus.InventoryMenus;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import io.github.StardewValley.Controllers.GameControllers.GameController;
 
-public class MissionsMenu extends BaseMenu {
+public class MissionsMenu extends BaseInventoryMenu {
 
     public MissionsMenu(GameController gameController, Skin skin) {
         super(gameController, skin, "Missions");

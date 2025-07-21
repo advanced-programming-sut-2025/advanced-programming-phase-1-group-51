@@ -56,7 +56,7 @@ public enum CookingRecipes {
         new Slot[]{new Slot(new Food(FoodType.BREAD), 1), new Slot(new Food(FoodType.CARROT), 1), new Slot(new Food(FoodType.EGGPLANT), 1)}),
     DISH_OF_THE_SEA("Dish 'O The Sea", 0, 0, 0, 2, FoodType.DISH_OF_THE_SEA,
         new Slot[]{new Slot(new Fish(FishType.SARDINE), 2), new Slot(new Food(FoodType.HASH_BROWNS), 1)}),
-    SEAFORM_PUDDING("Seaform Pudding", 0, 0, 0, 3, FoodType.SEAFORM_PUDDING,
+    SEAFORM_PUDDING("Seaform Pudding", 0, 0, 0, 3, FoodType.SEAFOAM_PUDDING,
         new Slot[]{new Slot(new Fish(FishType.FLOUNDER), 1), new Slot(new Fish(FishType.MIDNIGHT_CARP), 1)}),
     MINERS_TREAT("Miner's Treat", 0, 1, 0, 0, FoodType.MINERS_TREAT,
         new Slot[]{new Slot(new Misc(MiscType.MILK), 1), new Slot(new Food(FoodType.SUGAR), 1), new Slot(new Food(FoodType.CARROT), 2)});

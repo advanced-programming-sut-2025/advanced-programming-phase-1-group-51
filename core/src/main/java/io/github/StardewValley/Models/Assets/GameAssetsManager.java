@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class GameAssetsManager {
     private static GameAssetsManager gameAssetsManager;
     private final ArrayList<PlayerAssets> playerAssets;
-    private MapInitialAssets foragingAssetsManager;
+    private MapInitialAssets initialAssets;
     private NotificationAssets notificationAssets;
     private final Skin skin;
 
@@ -16,7 +16,7 @@ public class GameAssetsManager {
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         playerAssets = new ArrayList<>();
 
-        foragingAssetsManager = MapInitialAssets.getInstance();
+        initialAssets = MapInitialAssets.getInstance();
         notificationAssets = new NotificationAssets(); // Add this
         notificationAssets.load(); // Load notification assets
     }
@@ -33,8 +33,8 @@ public class GameAssetsManager {
         return gameAssetsManager;
     }
 
-    public MapInitialAssets getForagingAssetsManager() {
-        return foragingAssetsManager;
+    public MapInitialAssets getInitialAssets() {
+        return initialAssets;
     }
 
     public PlayerAssets getPlayerAssets() {
@@ -56,7 +56,7 @@ public class GameAssetsManager {
             assets.dispose();
         }
 
-        foragingAssetsManager.dispose();
+        initialAssets.dispose();
 
     }
 }

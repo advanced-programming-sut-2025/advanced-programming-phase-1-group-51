@@ -2,8 +2,10 @@ package io.github.StardewValley.Views.GameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.StardewValley.Controllers.GameControllers.CheatMenuController;
@@ -39,6 +41,24 @@ public class CheatMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        submitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                event.stop(); // Important - stops event propagation
+                Main.playSound(Main.getButtonClickSound());
+                controller.handleSubmit();
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                event.stop(); // Important - stops event propagation
+                Main.playSound(Main.getButtonClickSound());
+                controller.handleBack();
+            }
+        });
+
         table.setFillParent(true);
         table.center();
         menuTitle.setStyle(skin.get("title", Label.LabelStyle.class));
@@ -64,7 +84,6 @@ public class CheatMenu implements Screen {
         Main.getBatch().end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        controller.handleCheatMenuButtons();
     }
 
     @Override

@@ -7,10 +7,10 @@ import io.github.StardewValley.Models.Enums.Types.ItemTypes.ToolType;
 
 public enum FishShopProducts implements StoreProducts{
     TROUT_SOUP("Trout Soup", "Pretty salty.", FoodType.TROUT_SOUP, 250, 250, 1, null, Season.values()),
-    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", ToolType.FISHING_ROD, 500, 500, 1, null, Season.values()),
-    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", ToolType.FISHING_ROD, 25, 25, 1, null, Season.values()),
-    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", ToolType.FISHING_ROD, 1800, 1800, 1, 2, Season.values()),
-    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", ToolType.FISHING_ROD, 7500, 7500, 1, 4, Season.values());
+    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", ToolType.BAMBOO_POLE, 500, 500, 1, null, Season.values()),
+    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", ToolType.TRAINING_ROD, 25, 25, 1, null, Season.values()),
+    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", ToolType.FIBERGLASS_ROD, 1800, 1800, 1, 2, Season.values()),
+    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", ToolType.IRIDIUM_ROD, 7500, 7500, 1, 4, Season.values());
 
     private final String name;
     private final String description;

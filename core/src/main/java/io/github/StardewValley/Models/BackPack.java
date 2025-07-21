@@ -38,27 +38,6 @@ public class BackPack {
         }
     }
 
-    public void addItem(ForagingMineralType type, int count) {
-        addItem(new Mineral(type), count);
-    }
-
-    // Helper method
-    private void addItem(Item item, int count) {
-        // Similar logic as above but with Item object
-        for (Slot slot : slots) {
-            if (slot != null && slot.getItem() != null &&
-                slot.getItem().getName().equals(item.getName())) {
-                slot.setCount(slot.getCount() + count);
-                return;
-            }
-        }
-
-        if (slots.size() < backpackType.getCapacity()) {  // Fixed typo here (was getcCapacity)
-            slots.add(new Slot(item, count));
-        } else {
-            System.out.println("Inventory full!");
-        }
-    }
 
     public BackpackType getType() {
         return backpackType;
